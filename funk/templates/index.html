@@ -1,0 +1,53 @@
+<!doctype html>
+
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="viewport" content="width=device-width">
+	<title>Ex: Top Secret</title>
+	<link rel="stylesheet" type="text/css" href="static/jsPlumbToolkit-defaults.css">
+	<link rel="stylesheet" type="text/css" href="static/mycss.css">
+</head>
+<body>
+	<div class="permission-demo jtk-surface" id="canvas">
+	</div>
+	<script type="text/javascript" src="static/jquery-3.1.1.min.js"></script>
+	<script type="text/javascript" src="static/jsPlumb-2.1.7-min.js"></script>
+	<script type="text/javascript" src="static/af_nodetypes.js"></script>
+	<script type="text/javascript" src="static/af_lib.js"></script>
+	<script type="text/javascript">
+		jsPlumb.ready(function () {
+
+			var instance = getInstance();
+
+			// suspend drawing and initialise.
+			instance.batch(function () {
+
+				addNode(instance, 'alice', 'Alice', af_nodeTypes.actor, ['7em', '5em']);
+				addNode(instance, 'get_attr', 'Get Attribute', af_nodeTypes.get_attr_actor, ['10em', '20em']);
+				connectEndpoints(instance, 'ep_alice_Out','ep_get_attr_Actor');
+
+				addNode(instance, 'access_level', '"Access Level"', af_nodeTypes.const_string, ['15em', '5em']);
+				connectEndpoints(instance, 'ep_access_level_Out','ep_get_attr_Attribute Name');
+
+				addNode(instance, 'eq_string1', 'Is Equal', af_nodeTypes.eq_string, ['20em', '25em']);
+				connectEndpoints(instance, 'ep_get_attr_Result','ep_eq_string1_Value 1');
+
+				addNode(instance, 'top_secret', '"Top Secret"', af_nodeTypes.const_string, ['20em', '5em']);
+				connectEndpoints(instance, 'ep_top_secret_Out','ep_eq_string1_Value 2');
+
+				addNode(instance, 'read', 'Read', af_nodeTypes.permission, ['5em', '20em']);
+				connectEndpoints(instance, 'ep_alice_Out','ep_read_Actor');
+
+				addNode(instance, 'perm_if', 'Permit', af_nodeTypes.permission_if, ['10em', '40em']);
+				connectEndpoints(instance, 'ep_read_Resource','ep_perm_if_Out');
+				connectEndpoints(instance, 'ep_eq_string1_Result','ep_perm_if_If');
+
+				addNode(instance, 'folder', 'Critical Folder', af_nodeTypes.resource, ['5em', '55em']);
+				connectEndpoints(instance, 'ep_perm_if_Resource','ep_folder_Out');
+
+			});
+
+		});
+	</script>
+</body>
