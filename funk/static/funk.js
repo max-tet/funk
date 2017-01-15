@@ -106,9 +106,9 @@ var _addEndpoint = function (instance, node_id, tr, attr, side) {
 		scope: attr.type,
 		'anchor': anchor, 
 		data: {
-			type_color: af_dataTypes[attr.type],
-			type_color_light: shadeColor(af_dataTypes[attr.type], 0.4),
-			type_color_dark: shadeColor(af_dataTypes[attr.type], -0.4)
+			type_color: dataTypes[attr.type],
+			type_color_light: shadeColor(dataTypes[attr.type], 0.4),
+			type_color_dark: shadeColor(dataTypes[attr.type], -0.4)
 		}
 	});
 };
@@ -183,7 +183,7 @@ var load = function (instance, json) {
 		var data = JSON.parse(json);
 		for (var i = 0; i < data.nodes.length; i++) {
 			var node = data.nodes[i];
-			addNode(instance, node.id, node.name, af_nodeTypes[node.type], [node.top, node.left]);
+			addNode(instance, node.id, node.name, nodeTypes[node.type], [node.top, node.left]);
 		}
 		for (var i = 0; i < data.connections.length; i++) {
 			var connection = data.connections[i];

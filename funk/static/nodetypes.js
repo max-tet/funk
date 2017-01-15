@@ -1,4 +1,4 @@
-var af_colors = {
+var colors = {
 	green: '#8fbc8f',
 	yellow: '#deb887',
 	purple: '#A58DD2',
@@ -6,7 +6,7 @@ var af_colors = {
 	pink: '#DB92AF'
 };
 
-var af_dataTypes = {
+var dataTypes = {
 	actor: '#297E13',
 	bool: '#D66326',
 	integer: '#153D61',
@@ -15,10 +15,10 @@ var af_dataTypes = {
 	timeseries: '#923158'
 };
 
-var af_nodeTypes = {
+var nodeTypes = {
 	actor: {
 		type: 'actor',
-		color: af_colors.green,
+		color: colors.green,
 		attr_l: [],
 		attr_r: [
 			{name: 'Out', type: 'actor', direction: 'out'}
@@ -26,7 +26,7 @@ var af_nodeTypes = {
 	},
 	actor_any: {
 		type: 'actor_any',
-		color: af_colors.green,
+		color: colors.green,
 		attr_l: [
 			{name: 'Actor 1', type: 'actor', direction: 'in'},
 			{name: 'Actor 2', type: 'actor', direction: 'in'}
@@ -35,7 +35,7 @@ var af_nodeTypes = {
 	},
 	actor_all: {
 		type: 'actor_all',
-		color: af_colors.green,
+		color: colors.green,
 		attr_l: [
 			{name: 'Actor 1', type: 'actor', direction: 'in'},
 			{name: 'Actor 2', type: 'actor', direction: 'in'}
@@ -44,13 +44,13 @@ var af_nodeTypes = {
 	},
 	has_attr: {
 		type: 'has_attr',
-		color: af_colors.green,
+		color: colors.green,
 		attr_l: [{name: 'Actor', type: 'actor', direction: 'in'}],
 		attr_r: [{name: 'Result', type: 'bool', direction: 'out'}]
 	},
 	get_attr_actor: {
 		type: 'get_attr_actor',
-		color: af_colors.green,
+		color: colors.green,
 		attr_l: [
 			{name: 'Actor', type: 'actor', direction: 'in'},
 			{name: 'Attribute Name', type: 'string', direction: 'in'}
@@ -59,7 +59,7 @@ var af_nodeTypes = {
 	},
 	get_attr_resource: {
 		type: 'get_attr_resource',
-		color: af_colors.purple,
+		color: colors.purple,
 		attr_l: [{name: 'Attribute Name', type: 'string', direction: 'in'}],
 		attr_r: [
 			{name: 'Resource', type: 'resource', direction: 'in'},
@@ -68,19 +68,19 @@ var af_nodeTypes = {
 	},
 	resource: {
 		type: 'resource',
-		color: af_colors.purple,
+		color: colors.purple,
 		attr_l: [{name: 'Out', type: 'resource', direction: 'out'}],
 		attr_r: []
 	},
 	permission: {
 		type: 'permission',
-		color: af_colors.purple,
+		color: colors.purple,
 		attr_l: [{name: 'Actor', type: 'actor', direction: 'in'}],
 		attr_r: [{name: 'Resource', type: 'resource', direction: 'in'}]
 	},
 	permission_if: {
 		type: 'permission_if',
-		color: af_colors.purple,
+		color: colors.purple,
 		attr_l: [
 			{name: 'Out', type: 'resource', direction: 'out'},
 			{name: 'If', type: 'bool', direction: 'in'}
@@ -89,19 +89,19 @@ var af_nodeTypes = {
 	},
 	resource_to_timeseries: {
 		type: 'resource_to_timeseries',
-		color: af_colors.pink,
+		color: colors.pink,
 		attr_l: [{name: 'Out', type: 'timeseries', direction: 'out'}],
 		attr_r: [{name: 'In', type: 'resource', direction: 'in'}]
 	},
 	timeseries_to_resource: {
 		type: 'timeseries_to_resource',
-		color: af_colors.pink,
+		color: colors.pink,
 		attr_l: [{name: 'Out', type: 'resource', direction: 'out'}],
 		attr_r: [{name: 'In', type: 'timeseries', direction: 'in'}]
 	},
 	merge_timeseries: {
 		type: 'merge_timeseries',
-		color: af_colors.pink,
+		color: colors.pink,
 		attr_l: [{name: 'Result', type: 'timeseries', direction: 'out'}],
 		attr_r: [
 			{name: 'In 1', type: 'timeseries', direction: 'in'},
@@ -110,7 +110,7 @@ var af_nodeTypes = {
 	},
 	change_resolution_timeseries: {
 		type: 'change_resolution_timeseries',
-		color: af_colors.pink,
+		color: colors.pink,
 		attr_l: [
 			{name: 'Result', type: 'timeseries', direction: 'out'},
 			{name: 'Resolution', type: 'integer', direction: 'in'}
@@ -119,19 +119,19 @@ var af_nodeTypes = {
 	},
 	const_string: {
 		type: 'const_string',
-		color: af_colors.yellow,
+		color: colors.yellow,
 		attr_l: [],
 		attr_r: [{name: 'Out', type: 'string', direction: 'out'}]
 	},
 	string_to_integer: {
 		type: 'string_to_integer',
-		color: af_colors.yellow,
+		color: colors.yellow,
 		attr_l: [{name: 'In', type: 'string', direction: 'in'}],
 		attr_r: [{name: 'Out', type: 'integer', direction: 'out'}]
 	},
 	eq_string: {
 		type: 'eq_string',
-		color: af_colors.yellow,
+		color: colors.yellow,
 		attr_l: [
 			{name: 'Value 1', type: 'string', direction: 'in'},
 			{name: 'Value 2', type: 'string', direction: 'in'}
@@ -140,13 +140,13 @@ var af_nodeTypes = {
 	},
 	const_integer: {
 		type: 'const_integer',
-		color: af_colors.yellow,
+		color: colors.yellow,
 		attr_l: [],
 		attr_r: [{name: 'Out', type: 'integer', direction: 'out'}]
 	},
 	compare_integer: {
 		type: 'compare_integer',
-		color: af_colors.yellow,
+		color: colors.yellow,
 		attr_l: [
 			{name: 'Value 1', type: 'integer', direction: 'in'},
 			{name: 'Value 2', type: 'integer', direction: 'in'}
@@ -155,7 +155,7 @@ var af_nodeTypes = {
 	},
 	between_integer: {
 		type: 'between_integer',
-		color: af_colors.yellow,
+		color: colors.yellow,
 		attr_l: [
 			{name: 'Minimum', type: 'integer', direction: 'in'},
 			{name: 'Value', type: 'integer', direction: 'in'},
@@ -165,19 +165,19 @@ var af_nodeTypes = {
 	},
 	time_of_day: {
 		type: 'time_of_day',
-		color: af_colors.yellow,
+		color: colors.yellow,
 		attr_l: [],
 		attr_r: [{name: 'Out', type: 'integer', direction: 'out'}]
 	},
 	const_bool: {
 		type: 'const_bool',
-		color: af_colors.yellow,
+		color: colors.yellow,
 		attr_l: [],
 		attr_r: [{name: 'Out', type: 'bool', direction: 'out'}]
 	},
 	and_bool: {
 		type: 'and_bool',
-		color: af_colors.yellow,
+		color: colors.yellow,
 		attr_l: [
 			{name: 'Value 1', type: 'bool', direction: 'in'},
 			{name: 'Value 2', type: 'bool', direction: 'in'}
