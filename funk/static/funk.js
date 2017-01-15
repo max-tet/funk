@@ -113,12 +113,12 @@ var _addEndpoint = function (instance, node_id, tr, attr, side) {
 	});
 };
 
-var getInstance = function () {
+var getInstance = function (containerId) {
 
 	var instance = window.jsp = jsPlumb.getInstance({
 		// default drag options
 		DragOptions: { cursor: 'pointer', zIndex: 2000 },
-		Container: "canvas"
+		Container: containerId
 	});
 
 	instance.bind('beforeDrop', function(params) {
@@ -171,16 +171,12 @@ var serialize = function (instance) {
 	return JSON.stringify(json);
 };
 
-var load = function (instance, json) {
+var load = function (instance, data) {
+    var containerId = $(instance.getContainer()).attr('id');
 	instance.reset();
 	$('.node').remove();
-	instance = getInstance();
-	// instance.batch(function () {
-	// 	$('.node').each(function(i) {instance.removeAllEndpoints(this, true)});
-	// 	$('.node').remove();
-	// });
+	instance = getInstance(containerId);
 	instance.batch(function () {
-		var data = JSON.parse(json);
 		for (var i = 0; i < data.nodes.length; i++) {
 			var node = data.nodes[i];
 			addNode(instance, node.id, node.name, nodeTypes[node.type], [node.top, node.left]);
@@ -191,6 +187,13 @@ var load = function (instance, json) {
 		}
 	});
 	return instance;
+};
+
+var funk_init = function (containerId) {
+    var instance = getInstance(containerId);
+    $.get('static/top_secret.json', function (data) {
+        instance = load(instance, data);
+    });
 };
 
 function shadeColor(color, percent) {   

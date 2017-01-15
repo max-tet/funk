@@ -18,35 +18,7 @@
 	<script type="text/javascript">
 		jsPlumb.ready(function () {
 
-			var instance = getInstance();
-
-			// suspend drawing and initialise.
-			instance.batch(function () {
-
-				addNode(instance, 'alice', 'Alice', nodeTypes.actor, ['7em', '5em']);
-				addNode(instance, 'get_attr', 'Get Attribute', nodeTypes.get_attr_actor, ['10em', '20em']);
-				connectEndpoints(instance, 'ep_alice_Out','ep_get_attr_Actor');
-
-				addNode(instance, 'access_level', '"Access Level"', nodeTypes.const_string, ['15em', '5em']);
-				connectEndpoints(instance, 'ep_access_level_Out','ep_get_attr_Attribute Name');
-
-				addNode(instance, 'eq_string1', 'Is Equal', nodeTypes.eq_string, ['20em', '25em']);
-				connectEndpoints(instance, 'ep_get_attr_Result','ep_eq_string1_Value 1');
-
-				addNode(instance, 'top_secret', '"Top Secret"', nodeTypes.const_string, ['20em', '5em']);
-				connectEndpoints(instance, 'ep_top_secret_Out','ep_eq_string1_Value 2');
-
-				addNode(instance, 'read', 'Read', nodeTypes.permission, ['5em', '20em']);
-				connectEndpoints(instance, 'ep_alice_Out','ep_read_Actor');
-
-				addNode(instance, 'perm_if', 'Permit', nodeTypes.permission_if, ['10em', '40em']);
-				connectEndpoints(instance, 'ep_read_Resource','ep_perm_if_Out');
-				connectEndpoints(instance, 'ep_eq_string1_Result','ep_perm_if_If');
-
-				addNode(instance, 'folder', 'Critical Folder', nodeTypes.resource, ['5em', '55em']);
-				connectEndpoints(instance, 'ep_perm_if_Resource','ep_folder_Out');
-
-			});
+			funk_init('canvas');
 
 		});
 	</script>
