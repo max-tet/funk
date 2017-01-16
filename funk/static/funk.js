@@ -1,3 +1,5 @@
+var funkInstance = {};
+
 var connectorPaintStyle = {
 	lineWidth: 2,
 	strokeStyle: '${type_color}',
@@ -171,7 +173,7 @@ var serialize = function (instance) {
 	return JSON.stringify(json);
 };
 
-var load = function (instance, data) {
+var loadFromString = function (instance, data) {
     var containerId = $(instance.getContainer()).attr('id');
 	instance.reset();
 	$('.node').remove();
@@ -189,10 +191,20 @@ var load = function (instance, data) {
 	return instance;
 };
 
+var save = function () {
+    $.post('api/graph/topsecret', {data:serialize(funkInstance.jsPlumbInstance)});
+};
+
+var load = function () {
+    $.get('api/graph/topsecret', function (data) {
+        funkInstance.jsPlumbInstance = loadFromString(funkInstance.jsPlumbInstance, data);
+    });
+};
+
 var funk_init = function (containerId) {
-    var instance = getInstance(containerId);
+    funkInstance.jsPlumbInstance = getInstance(containerId);
     $.get('static/top_secret.json', function (data) {
-        instance = load(instance, data);
+        funkInstance.jsPlumbInstance = loadFromString(funkInstance.jsPlumbInstance, data);
     });
 };
 
