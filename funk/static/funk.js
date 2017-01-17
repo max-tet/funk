@@ -192,20 +192,20 @@ var loadFromString = function (instance, data) {
 };
 
 var save = function () {
-    $.post('api/graph/topsecret', {data:serialize(funkInstance.jsPlumbInstance)});
+    $.post('/api/graph/' + funkInstance.graphname, {data:serialize(funkInstance.jsPlumbInstance)});
 };
 
 var load = function () {
-    $.get('api/graph/topsecret', function (data) {
+    $.get('/api/graph/' + funkInstance.graphname, function (data) {
         funkInstance.jsPlumbInstance = loadFromString(funkInstance.jsPlumbInstance, data);
     });
 };
 
 var funk_init = function (containerId) {
     funkInstance.jsPlumbInstance = getInstance(containerId);
-    $.get('static/top_secret.json', function (data) {
-        funkInstance.jsPlumbInstance = loadFromString(funkInstance.jsPlumbInstance, data);
-    });
+    var pathname = window.location.pathname;
+    funkInstance.graphname = pathname.split('/')[2];
+    load();
 };
 
 function shadeColor(color, percent) {   

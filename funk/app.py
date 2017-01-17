@@ -8,14 +8,19 @@ app = Flask(__name__)
 graphs = {}
 
 
-@app.route('/')
-def root():
+@app.route('/graph/<graph_name>')
+def graph(graph_name):
     return render_template('index.html')
 
 
 @app.route('/api/nodetypes')
 def types():
     return nodetypes.from_static('nodetypes.js')
+
+
+@app.route('/api/graph/top_secret')
+def get_top_secret():
+    return Response(render_template('top_secret.json'), mimetype='application/json')
 
 
 @app.route('/api/graph/<graph_name>')
