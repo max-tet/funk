@@ -1,11 +1,22 @@
 from flask import Flask, abort, request, Response
 from flask.templating import render_template
 
-from funk import nodetypes
+from funk import nodetypes, model
 
 app = Flask(__name__)
 
 graphs = {}
+
+
+@app.before_request
+def _db_connect():
+    model.database.connect()
+
+
+@app.teardown_request
+def _db_close(exc):
+    if not model.database.is_closed():
+        model.database.close()
 
 
 @app.route('/graph/<graph_name>')
