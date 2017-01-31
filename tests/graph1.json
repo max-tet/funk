@@ -8,11 +8,11 @@
       "left": "0px"
     },
     {
-      "nodeid": "node_id_1",
-      "name": "node_name_1",
-      "type": "node_type_1",
-      "top": "1px",
-      "left": "1px"
+      "nodeid": "node_id_2",
+      "name": "node_name_2",
+      "type": "node_type_2",
+      "top": "2px",
+      "left": "2px"
     }
   ]
 }

@@ -14,7 +14,7 @@ class Graph(BaseModel):
 
 class Node(BaseModel):
     graph = ForeignKeyField(Graph, related_name='nodes')
-    id = CharField()
+    nodeid = CharField()
     name = CharField()
     type = CharField()
     top = CharField()

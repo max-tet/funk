@@ -7,9 +7,14 @@ def save_graph(graph_name: str, graph: str):
     graph_json = json.loads(graph)
 
     g, _ = Graph.get_or_create(name=graph_name)
-    new_nodes_dict = {n['id']: n for n in graph_json['nodes']}
+    new_nodes_dict = {n['nodeid']: n for n in graph_json['nodes']}
 
-    for nid, n in new_nodes_dict.items():
-        Node.insert(graph=g, id=nid, name=n['name'], type=n['type'], top=n['top'], left=n['left']).upsert().execute()
+    for n in Node.select().where(Node.graph == g):
+        try:
+            n.update(**new_nodes_dict[n.id])
+            del new_nodes_dict[n.id]
+        except KeyError:
+            n.delete_instance()
 
-    Node.delete().where(Node.graph == g and Node.id not in new_nodes_dict)
+    for n in new_nodes_dict.values():
+        Node.create(graph=g, **n)
