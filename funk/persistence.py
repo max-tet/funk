@@ -1,6 +1,6 @@
 import json
 
-from funk.model import Graph, Node
+from funk.model import Graph, Node, Connection
 
 
 def save_graph(graph_name: str, graph: str):
@@ -18,3 +18,10 @@ def save_graph(graph_name: str, graph: str):
 
     for n in new_nodes_dict.values():
         Node.create(graph=g, **n)
+
+
+def delete_graph(graph_name: str):
+    g = Graph.select().where(Graph.name == graph_name).get()
+    Node.delete().where(Node.graph == g).execute()
+    Connection.delete().where(Connection.graph == g).execute()
+    g.delete_instance()
