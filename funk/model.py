@@ -1,6 +1,6 @@
-from peewee import Model, CharField, ForeignKeyField, IntegerField, SqliteDatabase
+from peewee import Model, CharField, ForeignKeyField, SqliteDatabase
 
-database = SqliteDatabase('graphs.db')
+database = SqliteDatabase(None)
 
 
 class BaseModel(Model):
@@ -17,8 +17,8 @@ class Node(BaseModel):
     id = CharField()
     name = CharField()
     type = CharField()
-    posx = IntegerField()
-    posy = IntegerField()
+    top = CharField()
+    left = CharField()
 
 
 class Connection(BaseModel):
@@ -29,4 +29,10 @@ class Connection(BaseModel):
     out_connector = CharField()
 
 
-database.create_tables([Graph, Node, Connection], safe=True)
+def init_db(db_path: str):
+    database.init(db_path)
+    return database
+
+
+def create_tables(db):
+    db.create_tables([Graph, Node, Connection], safe=True)

@@ -1,0 +1,18 @@
+{
+  "nodes": [
+    {
+      "id": "alice",
+      "name": "Alice",
+      "type": "actor",
+      "top": "100.8px",
+      "left": "72px"
+    },
+    {
+      "id": "get_attr",
+      "name": "Get Attribute",
+      "type": "get_attr_actor",
+      "top": "144px",
+      "left": "288px"
+    }
+  ]
+}
