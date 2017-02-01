@@ -33,6 +33,22 @@ def test_update_graph(database):
     assert 'node_id_2' in node_ids
 
 
+def test_two_graphs(database):
+    with open('graph0.json') as f:
+        graph_json = ' '.join(f.readlines())
+    graph0_name = 'test_graph_0'
+    graph1_name = 'test_graph_1'
+    save_graph(graph0_name, graph_json)
+    save_graph(graph1_name, graph_json)
+
+    assert Graph.select().count() == 2
+    assert Node.select().count() == 4
+    g0 = Graph.select().where(Graph.name == graph0_name).get()
+    g1 = Graph.select().where(Graph.name == graph1_name).get()
+    assert Node.select().where(Node.graph == g0).count() == 2
+    assert Node.select().where(Node.graph == g1).count() == 2
+
+
 def test_delete_graph(database):
     with open('graph0.json') as f:
         graph0_json = ' '.join(f.readlines())
@@ -43,7 +59,6 @@ def test_delete_graph(database):
     assert Graph.select().count() == 0
     assert Node.select().count() == 0
     assert Connection.select().count() == 0
-
 
 
 def test_empty_db(database):
