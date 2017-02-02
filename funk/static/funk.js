@@ -96,7 +96,7 @@ var _addEndpoint = function (instance, node_id, tr, attr, side) {
     // the tabledata
 	var td = $('<td/>', {class: 'funk-attr-' + side}).appendTo(tr);
 	td
-		.attr('id', node_id + '-' + attr.name)
+		.attr('id', node_id + '-' + attr.id)
 		.addClass('funk-type-'+attr.type)
 		.append(attr.name);
 
@@ -106,7 +106,7 @@ var _addEndpoint = function (instance, node_id, tr, attr, side) {
 	if (side == 'l') {anchor = [0, 0.5, -1, 0, -7, 0];}
 	else {anchor = [1, 0.5, 1, 0, 7, 0];}
 	instance.addEndpoint(td, endpoint_style, {
-		uuid: 'funk-connector-' + node_id + '-' + attr.name,
+		uuid: 'funk-connector-' + node_id + '-' + attr.id,
 		scope: attr.type,
 		'anchor': anchor, 
 		data: {
