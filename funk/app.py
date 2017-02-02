@@ -7,6 +7,11 @@ app = Flask(__name__)
 
 graphs = {}
 
+db = model.init_db('graphs.db')
+db.connect()
+model.create_tables(db)
+db.close()
+
 
 @app.before_request
 def _db_connect():

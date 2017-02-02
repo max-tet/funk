@@ -24,7 +24,7 @@ var endpoint_out = {
 	connector: [ "Bezier" ],
 	connectorStyle: connectorPaintStyle,
 	connectorHoverStyle: connectorHoverStyle,
-	cssClass: 'gf_out'
+	cssClass: 'funk-endpoint-out'
 };
 var endpoint_in = {
 	endpoint: "Dot",
@@ -41,18 +41,19 @@ var endpoint_in = {
 	connector: [ "Bezier" ],
 	connectorStyle: connectorPaintStyle,
 	connectorHoverStyle: connectorHoverStyle,
-	cssClass: 'gf_in'
+	cssClass: 'funk-endpoint-in'
 };
 
 var addNode = function (instance, node_id, name, type, position) {
 
 	// node main div
-	var node = $('<div/>', {id: node_id, class: 'node'})
-		.attr('node-type', type.type)
+	var node = $('<div/>', {id: node_id, class: 'funk-node'})
+		.attr('funk-node-type', type.type)
 		.css('background-color', type.color)
 		.css('border-color', shadeColor(type.color, -0.2))
 		.css('top', position[0])
-		.css('left', position[1]);
+		.css('left', position[1])
+		.appendTo('#funk-canvas');
 
 	// node name
 	$('<strong/>').append(name).appendTo(node);
@@ -61,10 +62,10 @@ var addNode = function (instance, node_id, name, type, position) {
 	var tab = $('<table/>').appendTo(node);
 	var attr_l = type.attr_l;
 	var attr_r = type.attr_r;
+
 	var nrOfLines = Math.max(attr_l.length, attr_r.length)
 	for (var row = 0; row < nrOfLines; row++) {
 
-		// a single line
 		var tr = $('<tr/>').appendTo(tab);
 
 		if (row < attr_l.length) {
@@ -80,7 +81,6 @@ var addNode = function (instance, node_id, name, type, position) {
 		}
 	}
 
-	node.appendTo('#canvas');
 	instance.draggable(node);
 };
 
@@ -93,18 +93,20 @@ var connectEndpoints = function (instance, ep1, ep2) {
 var _addEndpoint = function (instance, node_id, tr, attr, side) {
 	// side is 'l' or 'r'
 
-	var td = $('<td/>', {class: 'attr_' + side}).appendTo(tr);
+    // the tabledata
+	var td = $('<td/>', {class: 'funk-attr-' + side}).appendTo(tr);
 	td
-		.attr('id', node_id + '_' + attr.name)
-		.addClass('type_'+attr.type)
+		.attr('id', node_id + '-' + attr.name)
+		.addClass('funk-type-'+attr.type)
 		.append(attr.name);
-	// the endpoint for connections
+
+	// the jsPlumb endpoint for connections
 	if (attr.direction == 'in') {endpoint_style = endpoint_in;} 
 	else {endpoint_style = endpoint_out;}
 	if (side == 'l') {anchor = [0, 0.5, -1, 0, -7, 0];}
 	else {anchor = [1, 0.5, 1, 0, 7, 0];}
 	instance.addEndpoint(td, endpoint_style, {
-		uuid: 'ep_' + node_id + '_' + attr.name,
+		uuid: 'funk-connector-' + node_id + '-' + attr.name,
 		scope: attr.type,
 		'anchor': anchor, 
 		data: {
@@ -124,8 +126,8 @@ var getInstance = function (containerId) {
 	});
 
 	instance.bind('beforeDrop', function(params) {
-		var source_is_out = params.connection.endpoints[0].hasClass('gf_out');
-		var target_is_out = params.dropEndpoint.hasClass('gf_out');
+		var source_is_out = params.connection.endpoints[0].hasClass('funk-endpoint-out');
+		var target_is_out = params.dropEndpoint.hasClass('funk-endpoint-out');
 		if ( (source_is_out && target_is_out) || (!source_is_out && !target_is_out) ) {
 			return false;
 		}
@@ -145,13 +147,13 @@ var getInstance = function (containerId) {
 var serialize = function (instance) {
 	var json = {nodes: [], connections: []};
 	
-	var nodes = $('.node');
+	var nodes = $('.funk-node');
 	for (var n = 0; n < nodes.length; n++) {
 		var node = $(nodes[n])
 		var node_json = {
 			id: node.attr('id'),
 			name: node.children('strong').text(),
-			type: node.attr('node-type'),
+			type: node.attr('funk-node-type'),
 			top: node.css('top'),
 			left: node.css('left')
 		};
@@ -176,7 +178,7 @@ var serialize = function (instance) {
 var loadFromString = function (instance, data) {
     var containerId = $(instance.getContainer()).attr('id');
 	instance.reset();
-	$('.node').remove();
+	$('.funk-node').remove();
 	instance = getInstance(containerId);
 	instance.batch(function () {
 		for (var i = 0; i < data.nodes.length; i++) {
@@ -185,7 +187,7 @@ var loadFromString = function (instance, data) {
 		}
 		for (var i = 0; i < data.connections.length; i++) {
 			var connection = data.connections[i];
-			connectEndpoints(instance, 'ep_'+connection.a, 'ep_'+connection.b);
+			connectEndpoints(instance, 'funk-connector-'+connection.a, 'funk-connector-'+connection.b);
 		}
 	});
 	return instance;
