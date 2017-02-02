@@ -163,11 +163,14 @@ var serialize = function (instance) {
 	var connections = instance.getConnections('*');
 	for (var c = 0; c < connections.length; c++) {
 		var connection = connections[c];
-		var node0 = $(connection.endpoints[0].getElement());
-		var node1 = $(connection.endpoints[1].getElement());
+		var ids_in = $(connection.endpoints[0].getElement()).attr('id').split('-');
+		var ids_out = $(connection.endpoints[1].getElement()).attr('id').split('-');
+
 		var connection_json = {
-			a: node0.attr('id'),
-			b: node1.attr('id')
+		    out_node: ids_out[0],
+		    out_connector: ids_out[1],
+		    in_node: ids_in[0],
+		    in_connector: ids_in[1],
 		};
 		json.connections = json.connections.concat(connection_json);
 	}
@@ -187,7 +190,9 @@ var loadFromString = function (instance, data) {
 		}
 		for (var i = 0; i < data.connections.length; i++) {
 			var connection = data.connections[i];
-			connectEndpoints(instance, 'funk-connector-'+connection.a, 'funk-connector-'+connection.b);
+			connector_id_out = 'funk-connector-' + connection.out_node + '-' + connection.out_connector;
+			connector_id_in = 'funk-connector-' + connection.in_node + '-' + connection.in_connector;
+			connectEndpoints(instance, connector_id_out, connector_id_in);
 		}
 	});
 	return instance;

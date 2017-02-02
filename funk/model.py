@@ -23,10 +23,10 @@ class Node(BaseModel):
 
 class Connection(BaseModel):
     graph = ForeignKeyField(Graph, related_name='connections')
-    in_node = ForeignKeyField(Node, related_name='in_connections')
-    in_connector = CharField()
     out_node = ForeignKeyField(Node, related_name='out_connections')
     out_connector = CharField()
+    in_node = ForeignKeyField(Node, related_name='in_connections')
+    in_connector = CharField()
 
 
 def init_db(db_path: str):
