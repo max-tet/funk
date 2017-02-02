@@ -60,22 +60,22 @@ var addNode = function (instance, node_id, name, type, position) {
 
 	// attribute table
 	var tab = $('<table/>').appendTo(node);
-	var attr_l = type.attr_l;
-	var attr_r = type.attr_r;
+	var connector_l = type.connector_l;
+	var connector_r = type.connector_r;
 
-	var nrOfLines = Math.max(attr_l.length, attr_r.length)
+	var nrOfLines = Math.max(connector_l.length, connector_r.length)
 	for (var row = 0; row < nrOfLines; row++) {
 
 		var tr = $('<tr/>').appendTo(tab);
 
-		if (row < attr_l.length) {
-			_addEndpoint(instance, node_id, tr, attr_l[row], 'l');
+		if (row < connector_l.length) {
+			_addEndpoint(instance, node_id, tr, connector_l[row], 'l');
 		} else {
 			$('<td/>').appendTo(tr);
 		}
 
-		if (row < attr_r.length) {
-			_addEndpoint(instance, node_id, tr, attr_r[row], 'r');
+		if (row < connector_r.length) {
+			_addEndpoint(instance, node_id, tr, connector_r[row], 'r');
 		} else {
 			$('<td/>').appendTo(tr);
 		}
