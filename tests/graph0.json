@@ -14,5 +14,13 @@
       "top": "1px",
       "left": "1px"
     }
+  ],
+  "connections": [
+    {
+      "out_node": "node_id_0",
+      "out_connector": "actor",
+      "in_node": "node_id_1",
+      "in_connector": "out"
+    }
   ]
 }

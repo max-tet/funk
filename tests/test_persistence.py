@@ -12,6 +12,7 @@ def test_save_graph(database):
     assert Node.select().count() == 2
     g = Graph.select().where(Graph.name == graph_name).get()
     assert len(g.nodes) == 2
+    assert len(g.connections) == 1
 
 
 def test_update_graph(database):
@@ -31,6 +32,7 @@ def test_update_graph(database):
     node_ids = [n.nodeid for n in nodes]
     assert 'node_id_0' in node_ids
     assert 'node_id_2' in node_ids
+    assert len(g.connections) == 1
 
 
 def test_two_graphs(database):
@@ -43,10 +45,13 @@ def test_two_graphs(database):
 
     assert Graph.select().count() == 2
     assert Node.select().count() == 4
+    assert Connection.select().count() == 2
     g0 = Graph.select().where(Graph.name == graph0_name).get()
     g1 = Graph.select().where(Graph.name == graph1_name).get()
     assert Node.select().where(Node.graph == g0).count() == 2
     assert Node.select().where(Node.graph == g1).count() == 2
+    assert Connection.select().where(Connection.graph == g0).count() == 1
+    assert Connection.select().where(Connection.graph == g1).count() == 1
 
 
 def test_delete_graph(database):
