@@ -1,5 +1,10 @@
+import json
+
+import pytest
+from peewee import DoesNotExist
+
 from funk.model import Graph, Node, Connection
-from funk.persistence import save_graph, delete_graph
+from funk.persistence import save_graph, delete_graph, load_graph
 
 
 def test_save_graph(database):
@@ -68,3 +73,17 @@ def test_delete_graph(database):
 
 def test_empty_db(database):
     assert Graph.select().count() == 0
+
+
+def test_load_graph(database):
+    with open('graph0.json') as f:
+        graph0_json = ' '.join(f.readlines())
+    graph_name = 'test_graph'
+    save_graph(graph_name, graph0_json)
+
+    assert json.loads(load_graph(graph_name)) == json.loads(graph0_json)
+
+
+def test_load_graph_nonexisting(database):
+    with pytest.raises(DoesNotExist):
+        load_graph('nonexisting_name')
