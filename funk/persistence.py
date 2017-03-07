@@ -1,11 +1,23 @@
 import json
 
+from peewee import IntegrityError, DoesNotExist
+
 from funk.model import Graph, Node, Connection
+
+
+def create_empty_graph(graph_name: str):
+    try:
+        Graph.create(name=graph_name)
+    except IntegrityError as e:
+        raise GraphAlreadyExistsError('graph {} already exist'.format(graph_name)) from e
 
 
 def save_graph(graph_name: str, graph: str):
     graph_json = json.loads(graph)
-    graph, _ = Graph.get_or_create(name=graph_name)
+    try:
+        graph = Graph.select().where(Graph.name == graph_name).get()
+    except DoesNotExist as e:
+        raise GraphDoesNotExistError('graph {} does not exist'.format(graph_name)) from e
     _update_nodes(graph, graph_json)
     _update_connections(graph, graph_json)
 
@@ -37,17 +49,31 @@ def _update_connections(graph, graph_json):
 
 
 def delete_graph(graph_name: str):
-    g = Graph.select().where(Graph.name == graph_name).get()
+    try:
+        g = Graph.select().where(Graph.name == graph_name).get()
+    except DoesNotExist as e:
+        raise GraphDoesNotExistError('graph {} does not exist'.format(graph_name)) from e
     Node.delete().where(Node.graph == g).execute()
     Connection.delete().where(Connection.graph == g).execute()
     g.delete_instance()
 
 
 def load_graph(graph_name: str) -> str:
-    graph = Graph.select().where(Graph.name == graph_name).get()
+    try:
+        graph = Graph.select().where(Graph.name == graph_name).get()
+    except DoesNotExist as e:
+        raise GraphDoesNotExistError('graph {} does not exist'.format(graph_name)) from e
     nodes = Node.select().where(Node.graph == graph).execute()
     connections = Connection.select().where(Connection.graph == graph).execute()
     return json.dumps({
         'nodes': [node.to_json() for node in nodes],
         'connections': [connection.to_json() for connection in connections]
     })
+
+
+class GraphDoesNotExistError(Exception):
+    pass
+
+
+class GraphAlreadyExistsError(Exception):
+    pass
