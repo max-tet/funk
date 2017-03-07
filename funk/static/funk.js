@@ -202,17 +202,32 @@ var save = function () {
     $.post('/api/graph/' + funkInstance.graphname, {data:serialize(funkInstance.jsPlumbInstance)});
 };
 
-var load = function () {
-    $.get('/api/graph/' + funkInstance.graphname, function (data) {
-        funkInstance.jsPlumbInstance = loadFromString(funkInstance.jsPlumbInstance, data);
-    });
+var load_graph = function () {
+    $.get('/api/graph/' + funkInstance.graphname)
+        .done(function (data) {
+            funkInstance.jsPlumbInstance = loadFromString(funkInstance.jsPlumbInstance, data);
+        })
+        .fail(function (response) {
+            if (response.status == 404) {
+                var modal = $('#new_graph_modal')
+                modal.modal({backdrop: 'static', keyboard: false});
+                modal.find('.modal-body strong').text(funkInstance.graphname);
+                modal.find('button').on('click', function () {
+                    $.post('/api/graph/' + funkInstance.graphname)
+                        .done(function () {
+                            load_graph();
+                            $('#new_graph_modal').modal('hide');
+                        });
+                });
+            }
+        });
 };
 
 var funk_init = function (containerId) {
     funkInstance.jsPlumbInstance = getInstance(containerId);
     var pathname = window.location.pathname;
     funkInstance.graphname = pathname.split('/')[2];
-    load();
+    load_graph();
 };
 
 function shadeColor(color, percent) {   

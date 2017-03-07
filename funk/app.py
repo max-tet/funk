@@ -1,7 +1,8 @@
-from flask import Flask, abort, request, Response
+from flask import Flask, Response
 from flask.templating import render_template
 
-from funk import nodetypes, model
+from funk import nodetypes, model, persistence
+from funk.persistence import GraphDoesNotExistError, create_empty_graph, GraphAlreadyExistsError
 
 app = Flask(__name__)
 
@@ -24,6 +25,16 @@ def _db_close(exc):
         model.database.close()
 
 
+@app.errorhandler(GraphDoesNotExistError)
+def handle_graph_does_not_exist_error(e: GraphDoesNotExistError):
+    return str(e), 404
+
+
+@app.errorhandler(GraphAlreadyExistsError)
+def handle_graph_already_exists_error(e: GraphAlreadyExistsError):
+    return str(e), 409
+
+
 @app.route('/graph/<graph_name>')
 def graph(graph_name):
     return render_template('index.html')
@@ -41,13 +52,11 @@ def get_top_secret():
 
 @app.route('/api/graph/<graph_name>')
 def get_graph(graph_name):
-    try:
-        return Response(graphs[graph_name], mimetype='application/json')
-    except KeyError:
-        abort(404)
+    graph = persistence.load_graph(graph_name)
+    return Response(graph, mimetype='application/json')
 
 
 @app.route('/api/graph/<graph_name>', methods=['POST'])
 def post_graph(graph_name):
-    graphs[graph_name] = request.form['data']
+    create_empty_graph(graph_name)
     return ''

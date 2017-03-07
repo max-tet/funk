@@ -7,12 +7,38 @@
 	<title>Ex: Top Secret</title>
 	<link rel="stylesheet" type="text/css" href="/static/jsPlumbToolkit-defaults.css">
 	<link rel="stylesheet" type="text/css" href="/static/funk.css">
+	<link rel="stylesheet" type="text/css" href="/static/css/bootstrap.css">
 </head>
 <body>
+    <div class="modal fade" id="new_graph_modal" tabindex="-1" role="dialog">
+      <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title" id="new_graph_modal_label">New Graph</h4>
+          </div>
+          <div class="modal-body">
+            A graph named <strong>name</strong> does not exist yet. Do you want to create it?
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary">Create Graph</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
 	<div class="permission-demo jtk-surface" id="funk-canvas">
+
+
+
+
+
+
+
 	</div>
 	<script type="text/javascript" src="/static/jquery-3.1.1.min.js"></script>
 	<script type="text/javascript" src="/static/jsPlumb-2.1.7-min.js"></script>
+	<script type="text/javascript" src="/static/js/bootstrap.js"></script>
 	<script type="text/javascript" src="/api/nodetypes"></script>
 	<script type="text/javascript" src="/static/funk.js"></script>
 	<script type="text/javascript">
