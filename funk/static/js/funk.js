@@ -1,4 +1,6 @@
-var funkInstance = {};
+var funkInstance = {
+    isDirty: false
+};
 
 var connectorPaintStyle = {
 	lineWidth: 2,
@@ -81,13 +83,16 @@ var addNode = function (instance, node_id, name, type, position) {
 		}
 	}
 
-	instance.draggable(node);
+	instance.draggable(node, {stop: function () {funkInstance.isDirty = true;}});
+
+	funkInstance.isDirty = true;
 };
 
 var connectEndpoints = function (instance, ep1, ep2) {
 	source_ep = instance.getEndpoint(ep1);
 	target_ep = instance.getEndpoint(ep2);
 	instance.connect({source: source_ep, target: target_ep});
+	funkInstance.isDirty = true;
 };
 
 var _addEndpoint = function (instance, node_id, tr, attr, side) {
@@ -138,7 +143,13 @@ var getInstance = function (containerId) {
 			return false;
 		}
 
+        funkInstance.isDirty = true;
 		return true;
+	});
+
+	instance.bind('beforeDetach', function(connection) {
+	    funkInstance.isDirty = true;
+	    return true;
 	});
 
 	return instance;
@@ -203,7 +214,8 @@ var save = function () {
         url: '/api/graph/' + funkInstance.graphname,
         type: 'PUT',
         contentType: 'application/json',
-        data: serialize(funkInstance.jsPlumbInstance)
+        data: serialize(funkInstance.jsPlumbInstance),
+        success: function () {funkInstance.isDirty = false;}
     });
 };
 
@@ -211,6 +223,7 @@ var load_graph = function () {
     $.get('/api/graph/' + funkInstance.graphname)
         .done(function (data) {
             funkInstance.jsPlumbInstance = loadFromString(funkInstance.jsPlumbInstance, data);
+            funkInstance.isDirty = false;
         })
         .fail(function (response) {
             if (response.status == 404) {
@@ -240,3 +253,10 @@ function shadeColor(color, percent) {
     return "#"+(0x1000000+(Math.round((t-R)*p)+R)*0x10000+(Math.round((t-G)*p)+G)*0x100+(Math.round((t-B)*p)+B)).toString(16).slice(1);
 }
 
+buttonSave = new Vue({
+    el: '#funk-button-save',
+    data: {
+        save: save,
+        funkInstance: funkInstance
+    }
+});

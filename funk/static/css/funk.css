@@ -64,6 +64,12 @@ body {
     background-size: 100px 100px, 100px 100px, 20px 20px, 20px 20px;
 }
 
+#funk-button-save {
+    position: absolute;
+    right: 30px;
+    top: 30px;
+}
+
 .funk-node {
     border: 1px solid #50A162;
     box-shadow: 2px 2px 19px #aaa;

@@ -1,12 +1,16 @@
 <!doctype html>
 
-<head>
+<head xmlns:v-on="http://www.w3.org/1999/xhtml" xmlns:v-on="http://www.w3.org/1999/xhtml"
+      xmlns:v-on="http://www.w3.org/1999/xhtml" xmlns:v-on="http://www.w3.org/1999/xhtml"
+      xmlns:v-on="http://www.w3.org/1999/xhtml" xmlns:v-on="http://www.w3.org/1999/xhtml"
+      xmlns:v-on="http://www.w3.org/1999/xhtml" xmlns:v-bind="http://www.w3.org/1999/xhtml"
+      xmlns:v-bind="http://www.w3.org/1999/xhtml">
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 	<meta name="viewport" content="width=device-width">
 	<title>Ex: Top Secret</title>
-	<link rel="stylesheet" type="text/css" href="/static/jsPlumbToolkit-defaults.css">
-	<link rel="stylesheet" type="text/css" href="/static/funk.css">
+	<link rel="stylesheet" type="text/css" href="/static/css/jsPlumbToolkit-defaults.css">
+	<link rel="stylesheet" type="text/css" href="/static/css/funk.css">
 	<link rel="stylesheet" type="text/css" href="/static/css/bootstrap.css">
 </head>
 <body>
@@ -29,18 +33,19 @@
 
 	<div class="permission-demo jtk-surface" id="funk-canvas">
 
-
+        <button id="funk-button-save" class="btn btn-default" v-bind:class="{disabled: !funkInstance.isDirty}" type="submit" v-on:click="save()">Save</button>
 
 
 
 
 
 	</div>
-	<script type="text/javascript" src="/static/jquery-3.1.1.min.js"></script>
-	<script type="text/javascript" src="/static/jsPlumb-2.1.7-min.js"></script>
+	<script type="text/javascript" src="/static/js/jquery-3.1.1.min.js"></script>
+	<script type="text/javascript" src="/static/js/vue.js"></script>
+	<script type="text/javascript" src="/static/js/jsPlumb-2.1.7-min.js"></script>
 	<script type="text/javascript" src="/static/js/bootstrap.js"></script>
-	<script type="text/javascript" src="/api/nodetypes"></script>
-	<script type="text/javascript" src="/static/funk.js"></script>
+    <script type="text/javascript" src="/static/js/funk.js"></script>
+    <script type="text/javascript" src="/api/nodetypes"></script>
 	<script type="text/javascript">
 		jsPlumb.ready(function () {
 
