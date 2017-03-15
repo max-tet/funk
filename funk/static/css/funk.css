@@ -45,7 +45,7 @@ body {
 	position: relative;
 }
 
-#canvas {
+#funk-canvas {
 	position: absolute;
 	top: 0;
 	bottom: 0;
@@ -64,7 +64,13 @@ body {
     background-size: 100px 100px, 100px 100px, 20px 20px, 20px 20px;
 }
 
-.permission-demo .node {
+#funk-button-save {
+    position: absolute;
+    right: 30px;
+    top: 30px;
+}
+
+.funk-node {
     border: 1px solid #50A162;
     box-shadow: 2px 2px 19px #aaa;
     -o-box-shadow: 2px 2px 19px #aaa;
@@ -86,18 +92,18 @@ body {
     transition: box-shadow 0.15s ease-in;
 }
 
-.permission-demo .node:hover {
+.funk-node:hover {
     box-shadow: 2px 2px 19px #444;
     -o-box-shadow: 2px 2px 19px #444;
     -webkit-box-shadow: 2px 2px 19px #444;
     -moz-box-shadow: 2px 2px 19px #444;
 }
 
-.permission-demo .active {
+.active {
     border: 1px dotted green;
 }
 
-.permission-demo .hover {
+.hover {
     border: 1px dotted red;
 }
 
@@ -121,16 +127,16 @@ body {
     left: 22em;
 }
 
-.permission-demo .jsplumb-connector {
+.jsplumb-connector {
     z-index: 4;
 }
 
-.permission-demo .jsplumb-endpoint, .endpointTargetLabel, .endpointSourceLabel {
+.jsplumb-endpoint, .endpointTargetLabel, .endpointSourceLabel {
     z-index: 21;
     cursor: pointer;
 }
 
-.permission-demo .aLabel {
+.aLabel {
     background-color: white;
     padding: 0.4em;
     font: 12px sans-serif;
@@ -141,7 +147,7 @@ body {
     cursor: pointer;
 }
 
-.permission-demo .aLabel.jsplumb-hover {
+.aLabel.jsplumb-hover {
     background-color: #5C96BC;
     color: white;
     border: 1px solid white;
@@ -155,16 +161,16 @@ path, .jsplumb-endpoint {
     background-color:transparent;
 }
 
-.permission-demo .node table {
+.funk-node table {
     width: 100%;
 }
 
-.permission-demo .node td {
+.funk-node td {
     padding-left: 0.3em;
     padding-right: 0.3em;
 }
 
-.permission-demo .node td.attr_r {
+.funk-node td.attr_r {
     text-align: right;
 }
 

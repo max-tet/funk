@@ -1,0 +1,26 @@
+{
+  "nodes": [
+    {
+      "nodeid": "node_id_0",
+      "name": "node_name_0",
+      "type": "node_type_0",
+      "top": "0px",
+      "left": "0px"
+    },
+    {
+      "nodeid": "node_id_1",
+      "name": "node_name_1",
+      "type": "node_type_1",
+      "top": "1px",
+      "left": "1px"
+    }
+  ],
+  "connections": [
+    {
+      "out_node": "node_id_0",
+      "out_connector": "actor",
+      "in_node": "node_id_1",
+      "in_connector": "out"
+    }
+  ]
+}
