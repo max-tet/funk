@@ -29,7 +29,7 @@ def test_create_empty_graph_already_existing(database):
 
 def test_save_graph(database):
     with open('graph0.json') as f:
-        test_json = ' '.join(f.readlines())
+        test_json = json.load(f)
     graph_name = 'test_graph'
     create_empty_graph(graph_name)
     save_graph(graph_name, test_json)
@@ -51,9 +51,9 @@ def test_save_nonexisting_graph(database):
 
 def test_update_graph(database):
     with open('graph0.json') as f:
-        graph0_json = ' '.join(f.readlines())
+        graph0_json = json.load(f)
     with open('graph1.json') as f:
-        graph1_json = ' '.join(f.readlines())
+        graph1_json = json.load(f)
     graph_name = 'test_graph'
     create_empty_graph(graph_name)
     save_graph(graph_name, graph0_json)
@@ -72,7 +72,7 @@ def test_update_graph(database):
 
 def test_two_graphs(database):
     with open('graph0.json') as f:
-        graph_json = ' '.join(f.readlines())
+        graph_json = json.load(f)
     graph0_name = 'test_graph_0'
     graph1_name = 'test_graph_1'
     create_empty_graph(graph0_name)
@@ -93,7 +93,7 @@ def test_two_graphs(database):
 
 def test_delete_graph(database):
     with open('graph0.json') as f:
-        graph0_json = ' '.join(f.readlines())
+        graph0_json = json.load(f)
     graph_name = 'test_graph'
     create_empty_graph(graph_name)
     save_graph(graph_name, graph0_json)
@@ -112,12 +112,12 @@ def test_delete_nonexisting_graph(database):
 
 def test_load_graph(database):
     with open('graph0.json') as f:
-        graph0_json = ' '.join(f.readlines())
+        graph0_json = json.load(f)
     graph_name = 'test_graph'
     create_empty_graph(graph_name)
     save_graph(graph_name, graph0_json)
 
-    assert json.loads(load_graph(graph_name)) == json.loads(graph0_json)
+    assert json.loads(load_graph(graph_name)) == graph0_json
 
 
 def test_load_nonexisting_graph(database):

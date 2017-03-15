@@ -12,8 +12,7 @@ def create_empty_graph(graph_name: str):
         raise GraphAlreadyExistsError('graph {} already exist'.format(graph_name)) from e
 
 
-def save_graph(graph_name: str, graph: str):
-    graph_json = json.loads(graph)
+def save_graph(graph_name: str, graph_json):
     try:
         graph = Graph.select().where(Graph.name == graph_name).get()
     except DoesNotExist as e:

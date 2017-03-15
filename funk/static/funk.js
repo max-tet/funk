@@ -151,7 +151,7 @@ var serialize = function (instance) {
 	for (var n = 0; n < nodes.length; n++) {
 		var node = $(nodes[n])
 		var node_json = {
-			id: node.attr('id'),
+			nodeid: node.attr('id'),
 			name: node.children('strong').text(),
 			type: node.attr('funk-node-type'),
 			top: node.css('top'),
@@ -186,7 +186,7 @@ var loadFromString = function (instance, data) {
 	instance.batch(function () {
 		for (var i = 0; i < data.nodes.length; i++) {
 			var node = data.nodes[i];
-			addNode(instance, node.id, node.name, nodeTypes[node.type], [node.top, node.left]);
+			addNode(instance, node.nodeid, node.name, nodeTypes[node.type], [node.top, node.left]);
 		}
 		for (var i = 0; i < data.connections.length; i++) {
 			var connection = data.connections[i];
@@ -199,7 +199,12 @@ var loadFromString = function (instance, data) {
 };
 
 var save = function () {
-    $.post('/api/graph/' + funkInstance.graphname, {data:serialize(funkInstance.jsPlumbInstance)});
+    $.ajax({
+        url: '/api/graph/' + funkInstance.graphname,
+        type: 'PUT',
+        contentType: 'application/json',
+        data: serialize(funkInstance.jsPlumbInstance)
+    });
 };
 
 var load_graph = function () {

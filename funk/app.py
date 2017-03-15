@@ -1,8 +1,9 @@
 from flask import Flask, Response
+from flask.globals import request
 from flask.templating import render_template
 
 from funk import nodetypes, model, persistence
-from funk.persistence import GraphDoesNotExistError, create_empty_graph, GraphAlreadyExistsError
+from funk.persistence import GraphDoesNotExistError, create_empty_graph, GraphAlreadyExistsError, save_graph
 
 app = Flask(__name__)
 
@@ -59,4 +60,10 @@ def get_graph(graph_name):
 @app.route('/api/graph/<graph_name>', methods=['POST'])
 def post_graph(graph_name):
     create_empty_graph(graph_name)
+    return ''
+
+
+@app.route('/api/graph/<graph_name>', methods=['PUT'])
+def update_graph(graph_name):
+    save_graph(graph_name, request.get_json())
     return ''
