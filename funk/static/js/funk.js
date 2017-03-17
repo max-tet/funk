@@ -242,11 +242,38 @@ var load_graph = function () {
 };
 
 var funk_init = function (containerId) {
+    init_typeahead();
     funkInstance.jsPlumbInstance = getInstance(containerId);
     var pathname = window.location.pathname;
     funkInstance.graphname = pathname.split('/')[2];
     load_graph();
 };
+
+function init_typeahead() {
+    var funkNodeMatcher = function (query, callback) {
+        var matches = [];
+        var regex = new RegExp(query, 'i');
+        $.each(nodeTypes, function (i, nodeType) {
+            if (regex.test(nodeType.type)) {matches.push(nodeType);}
+        });
+        callback(matches);
+    };
+
+    $('#funk-add-node').find('input').typeahead({
+        minLength: 1,
+        highlight: true
+    },
+    {
+        name: 'nodeTypes',
+        source: funkNodeMatcher,
+        display: 'type',
+        templates: {
+            suggestion: function (nodeType) {
+                return '<div style="background-color: '+nodeType.color+'">'+nodeType.type+'</div>';
+            }
+        }
+    });
+}
 
 function shadeColor(color, percent) {   
     var f=parseInt(color.slice(1),16),t=percent<0?0:255,p=percent<0?percent*-1:percent,R=f>>16,G=f>>8&0x00FF,B=f&0x0000FF;

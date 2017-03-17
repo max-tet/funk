@@ -31,12 +31,16 @@
 
         <button id="funk-button-save" class="btn btn-default funk-control" v-bind:class="{disabled: !funkInstance.isDirty}" type="submit" v-on:click="save()">Save</button>
 
-        <input id="funk-add-node-input" type="text" class="form-control funk-control" placeholder="Add Node">
+        <div id="funk-add-node">
+            <input type="text" class="form-control funk-control" placeholder="Add Node">
+        </div>
+
 
 
 
 	</div>
 	<script type="text/javascript" src="/static/js/jquery-3.1.1.min.js"></script>
+	<script type="text/javascript" src="/static/js/typeahead.jquery.js"></script>
 	<script type="text/javascript" src="/static/js/vue.js"></script>
 	<script type="text/javascript" src="/static/js/jsPlumb-2.1.7-min.js"></script>
 	<script type="text/javascript" src="/static/js/bootstrap.js"></script>
