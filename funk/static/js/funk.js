@@ -253,6 +253,7 @@ var funk_init = function (containerId) {
     init_typeahead();
     funkInstance.containerId = containerId;
     funkInstance.jsPlumbInstance = getInstance(containerId);
+    $('#'+containerId).click(function () {funkInstance.jsPlumbInstance.clearDragSelection();});
     var pathname = window.location.pathname;
     funkInstance.graphname = pathname.split('/')[2];
     load_graph();
