@@ -55,6 +55,14 @@ var addNode = function (instance, node_id, name, type, position) {
 		.css('border-color', shadeColor(type.color, -0.2))
 		.css('top', position[0])
 		.css('left', position[1])
+		.click(function () {
+		    if ($(this).hasClass('jsplumb-drag-selected')) {
+		        instance.removeFromDragSelection(this);
+		    } else {
+		        instance.addToDragSelection(this);
+		    }
+		    return false;
+		})
 		.appendTo('#funk-canvas');
 
 	// node name
