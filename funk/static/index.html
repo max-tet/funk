@@ -32,7 +32,9 @@
 	</div>
 
     <script type="text/x-template" id="funk-node-template">
-        <div class="funk-node">{{node.name}}</div>
+        <div class="funk-node" v-bind:id="node.nodeid" v-bind:style="style">
+            {{node.name}}
+        </div>
     </script>
 
 	<script type="text/javascript" src="/static/js/jquery-3.1.1.min.js"></script>

@@ -48,7 +48,18 @@ var endpoint_in = {
 
 Vue.component('funk-node', {
     template: '#funk-node-template',
-    props: ['node']
+    props: ['node'],
+    computed: {
+        type: function () {return nodeTypes[this.node.type];},
+        style: function () {
+            return {
+                'background-color': this.type.color,
+                'border-color': shadeColor(this.type.color, -0.2),
+                top: this.node.top,
+                left: this.node.left
+            };
+        }
+    }
 });
 
 funkCanvas = new Vue({
