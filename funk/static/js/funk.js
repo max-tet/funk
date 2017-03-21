@@ -48,6 +48,7 @@ var endpoint_in = {
 
 Vue.component('funk-node', {
     template: '#funk-node-template',
+    data: function () {return {funkInstance: funkInstance};},
     props: ['node'],
     computed: {
         type: function () {return nodeTypes[this.node.type];},
@@ -59,6 +60,17 @@ Vue.component('funk-node', {
                 left: this.node.left
             };
         }
+    },
+    mounted: function () {
+        funkInstance.jsPlumbInstance.draggable(this.$el, {stop: function () {funkInstance.isDirty = true;}});
+    }
+});
+
+Vue.component('funk-save-button', {
+    template: '#funk-save-button-template',
+    data: function () {return {funkInstance: funkInstance};},
+    computed: {
+        active: function () {return this.funkInstance.isDirty;}
     }
 });
 
@@ -329,11 +341,3 @@ function shadeColor(color, percent) {
 function randomString(length) {
     return (Math.random()+1).toString(36).substr(2,length);
 }
-
-//buttonSave = new Vue({
-//    el: '#funk-button-save',
-//    data: {
-//        save: save,
-//        funkInstance: funkInstance
-//    }
-//});
