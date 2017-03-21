@@ -46,6 +46,20 @@ var endpoint_in = {
 	cssClass: 'funk-endpoint-in'
 };
 
+Vue.component('funk-node', {
+    template: '#funk-node-template',
+    data: {
+        node: {}
+    }
+});
+
+funkCanvas = new Vue({
+    el: '#funk-canvas',
+    data: {
+        nodes: []
+    }
+});
+
 var addNode = function (instance, node_id, name, type, position) {
 
 	// node main div
@@ -87,7 +101,7 @@ var addNode = function (instance, node_id, name, type, position) {
 		if (row < connector_r.length) {
 			_addEndpoint(instance, node_id, tr, connector_r[row], 'r');
 		} else {
-			$('<td/>').appendTo(tr);
+			$('<td/>', {class: 'funk-right'}).appendTo(tr);
 		}
 	}
 
@@ -230,7 +244,8 @@ var save = function () {
 var load_graph = function () {
     $.get('/api/graph/' + funkInstance.graphname)
         .done(function (data) {
-            funkInstance.jsPlumbInstance = loadFromString(funkInstance.jsPlumbInstance, data);
+            funkCanvas.$data.nodes = data.nodes;
+//            funkInstance.jsPlumbInstance = loadFromString(funkInstance.jsPlumbInstance, data);
             funkInstance.isDirty = false;
         })
         .fail(function (response) {
@@ -303,10 +318,10 @@ function randomString(length) {
     return (Math.random()+1).toString(36).substr(2,length);
 }
 
-buttonSave = new Vue({
-    el: '#funk-button-save',
-    data: {
-        save: save,
-        funkInstance: funkInstance
-    }
-});
+//buttonSave = new Vue({
+//    el: '#funk-button-save',
+//    data: {
+//        save: save,
+//        funkInstance: funkInstance
+//    }
+//});
