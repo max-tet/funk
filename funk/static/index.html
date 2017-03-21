@@ -28,12 +28,11 @@
     </div>
 
 	<div class="permission-demo jtk-surface" id="funk-canvas">
-        <funk-node v-repeat="node in nodes"></funk-node>
+        <funk-node v-for="node in nodes" :key="node.nodeid" v-bind:node="node"></funk-node>
 	</div>
 
     <script type="text/x-template" id="funk-node-template">
-        <div v-bind:id="nodeId"
-                class="funk-node"></div>
+        <div class="funk-node">{{node.name}}</div>
     </script>
 
 	<script type="text/javascript" src="/static/js/jquery-3.1.1.min.js"></script>

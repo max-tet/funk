@@ -48,9 +48,7 @@ var endpoint_in = {
 
 Vue.component('funk-node', {
     template: '#funk-node-template',
-    data: {
-        node: {}
-    }
+    props: ['node']
 });
 
 funkCanvas = new Vue({
@@ -244,9 +242,12 @@ var save = function () {
 var load_graph = function () {
     $.get('/api/graph/' + funkInstance.graphname)
         .done(function (data) {
-            funkCanvas.$data.nodes = data.nodes;
+//            for (node in data.nodes) {
+//                funkCanvas.$data.nodes.push(node);
+//            }
+            funkCanvas.nodes = data.nodes;
 //            funkInstance.jsPlumbInstance = loadFromString(funkInstance.jsPlumbInstance, data);
-            funkInstance.isDirty = false;
+//            funkInstance.isDirty = false;
         })
         .fail(function (response) {
             if (response.status == 404) {
@@ -265,7 +266,7 @@ var load_graph = function () {
 };
 
 var funk_init = function (containerId) {
-    init_typeahead();
+//    init_typeahead();
     funkInstance.containerId = containerId;
     funkInstance.jsPlumbInstance = getInstance(containerId);
     $('#'+containerId).click(function () {funkInstance.jsPlumbInstance.clearDragSelection();});

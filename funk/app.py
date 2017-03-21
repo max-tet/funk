@@ -38,7 +38,8 @@ def handle_graph_already_exists_error(e: GraphAlreadyExistsError):
 
 @app.route('/graph/<graph_name>')
 def graph(graph_name):
-    return render_template('index.html')
+    with open('funk/static/index.html') as f:
+        return '\n'.join(f.readlines())
 
 
 @app.route('/api/nodetypes')
