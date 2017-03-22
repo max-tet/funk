@@ -1,11 +1,11 @@
 var funkInstance = {
     isDirty: false,
-    constants: {
-        endpointArgs: {
+    endpointArgsFactory: function (isLeft, isIn, type) {
+        endpointArgs = {
             endpoint: 'Dot',
             paintStyle: {
-                strokeStyle: 'black',
-                fillStyle: 'grey',
+                strokeStyle: shadeColor(type, -0.4),
+                fillStyle: (isIn) ? shadeColor(type, 0.4) : type,
                 radius: 5,
                 lineWidth: 1
             },
@@ -14,30 +14,22 @@ var funkInstance = {
             connector: [ "Bezier" ],
             connectorStyle: {
                 lineWidth: 2,
-                strokeStyle: '${type_color}',
+                strokeStyle: type,
                 joinstyle: 'round',
                 outlineColor: '#dcdcdc',
                 outlineWidth: 1
             },
             connectorHoverStyle: {
                 lineWidth: 4
-            }
-        },
-        endpointOutMixin: {
-            maxConnections: -1,
-	        cssClass: 'funk-endpoint-out'
-        },
-        endpointInMixin: {
-            maxConnections: 1,
-            dropOptions: { hoverClass: 'hover', activeClass: 'active' },
-	        cssClass: 'funk-endpoint-in'
-        },
-        endpointLeftMixin: {
-            anchor: [0, 0.5, -1, 0, -7, 0]
-        },
-        endpointRightMixin: {
-            anchor: [1, 0.5, 1, 0, 7, 0]
+            },
+            maxConnections: (isIn) ? 1 : -1,
+            cssClass: (isIn) ? 'funk-endpoint-in' : 'funk-endpoint-out',
+            anchor: (isLeft) ? [0, 0.5, -1, 0, -7, 0] : [1, 0.5, 1, 0, 7, 0]
+        };
+        if (isIn) {
+            endpointArgs.dropOptions = { hoverClass: 'hover', activeClass: 'active' };
         }
+        return endpointArgs;
     }
 };
 
@@ -63,16 +55,9 @@ Vue.component('funk-node', {
             props: ['connector', 'side'],
             mounted: function () {
                 if (this.connector == undefined) {return;}
-                var endpointArgs = funkInstance.constants.endpointArgs;
-
-                var endpointDirectionMixin = (this.connector.direction == 'out') ?
-                    funkInstance.constants.endpointOutMixin : funkInstance.constants.endpointInMixin;
-
-                var endpointSideMixin = (this.side == 'left') ?
-                    funkInstance.constants.endpointLeftMixin : funkInstance.constants.endpointRightMixin;
-
-                funkInstance.jsPlumbInstance.addEndpoint(this.$el, Object.assign({},
-                    endpointArgs, endpointDirectionMixin, endpointSideMixin));
+                var endpointArgs = funkInstance.endpointArgsFactory(
+                    this.side == 'left', this.connector.direction == 'in', dataTypes[this.connector.type]);
+                funkInstance.jsPlumbInstance.addEndpoint(this.$el, endpointArgs);
             }
         }
     },
