@@ -38,15 +38,15 @@
             <small>{{node.type}}</small>
             <table>
                 <tr v-for="i in nrOfRows">
-                    <td is="funk-node-connector" v-bind:connector="type.connector_l[i-1]"></td>
-                    <td is="funk-node-connector" v-bind:connector="type.connector_r[i-1]"></td>
+                    <td is="funk-node-connector" side="left" v-bind:connector="type.connector_l[i-1]"></td>
+                    <td is="funk-node-connector" side="right" v-bind:connector="type.connector_r[i-1]"></td>
                 </tr>
             </table>
         </div>
     </script>
 
     <script type="text/x-template" id="funk-node-connector-template">
-        <td>{{connector && connector.name && ''}}</td>
+        <td><span>{{(connector != undefined) ? connector.name : ''}}</span></td>
     </script>
 
     <script type="text/x-template" id="funk-save-button-template">

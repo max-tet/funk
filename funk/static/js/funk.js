@@ -1,49 +1,44 @@
 var funkInstance = {
-    isDirty: false
-};
-
-var connectorPaintStyle = {
-	lineWidth: 2,
-	strokeStyle: '${type_color}',
-	joinstyle: "round",
-	outlineColor: "#dcdcdc",
-	outlineWidth: 1
-};
-var connectorHoverStyle = {
-	lineWidth: 4
-};
-var endpoint_out = {
-	endpoint: "Dot",
-	paintStyle: {
-		strokeStyle: '${type_color_dark}',
-		fillStyle: '${type_color}',
-		radius: 5,
-		lineWidth: 1
-	},
-	maxConnections: -1,
-	isTarget: true,
-	isSource: true,
-	connector: [ "Bezier" ],
-	connectorStyle: connectorPaintStyle,
-	connectorHoverStyle: connectorHoverStyle,
-	cssClass: 'funk-endpoint-out'
-};
-var endpoint_in = {
-	endpoint: "Dot",
-	paintStyle: {
-		strokeStyle: '${type_color_dark}',
-		fillStyle: '${type_color_light}',
-		radius: 5,
-		lineWidth: 1
-	},
-	maxConnections: 1,
-	dropOptions: { hoverClass: "hover", activeClass: "active" },
-	isTarget: true,
-	isSource: true,
-	connector: [ "Bezier" ],
-	connectorStyle: connectorPaintStyle,
-	connectorHoverStyle: connectorHoverStyle,
-	cssClass: 'funk-endpoint-in'
+    isDirty: false,
+    constants: {
+        endpointArgs: {
+            endpoint: 'Dot',
+            paintStyle: {
+                strokeStyle: 'black',
+                fillStyle: 'grey',
+                radius: 5,
+                lineWidth: 1
+            },
+            isTarget: true,
+            isSource: true,
+            connector: [ "Bezier" ],
+            connectorStyle: {
+                lineWidth: 2,
+                strokeStyle: '${type_color}',
+                joinstyle: 'round',
+                outlineColor: '#dcdcdc',
+                outlineWidth: 1
+            },
+            connectorHoverStyle: {
+                lineWidth: 4
+            }
+        },
+        endpointOutMixin: {
+            maxConnections: -1,
+	        cssClass: 'funk-endpoint-out'
+        },
+        endpointInMixin: {
+            maxConnections: 1,
+            dropOptions: { hoverClass: 'hover', activeClass: 'active' },
+	        cssClass: 'funk-endpoint-in'
+        },
+        endpointLeftMixin: {
+            anchor: [0, 0.5, -1, 0, -7, 0]
+        },
+        endpointRightMixin: {
+            anchor: [1, 0.5, 1, 0, 7, 0]
+        }
+    }
 };
 
 Vue.component('funk-node', {
@@ -65,7 +60,20 @@ Vue.component('funk-node', {
     components: {
         'funk-node-connector': {
             template: '#funk-node-connector-template',
-            props: ['connector']
+            props: ['connector', 'side'],
+            mounted: function () {
+                if (this.connector == undefined) {return;}
+                var endpointArgs = funkInstance.constants.endpointArgs;
+
+                var endpointDirectionMixin = (this.connector.direction == 'out') ?
+                    funkInstance.constants.endpointOutMixin : funkInstance.constants.endpointInMixin;
+
+                var endpointSideMixin = (this.side == 'left') ?
+                    funkInstance.constants.endpointLeftMixin : funkInstance.constants.endpointRightMixin;
+
+                funkInstance.jsPlumbInstance.addEndpoint(this.$el, Object.assign({},
+                    endpointArgs, endpointDirectionMixin, endpointSideMixin));
+            }
         }
     },
     mounted: function () {
