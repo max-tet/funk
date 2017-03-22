@@ -59,6 +59,13 @@ Vue.component('funk-node', {
                 top: this.node.top,
                 left: this.node.left
             };
+        },
+        nrOfRows: function () {return Math.max(this.type.connector_l.length, this.type.connector_r.length);}
+    },
+    components: {
+        'funk-node-connector': {
+            template: '#funk-node-connector-template',
+            props: ['connector']
         }
     },
     mounted: function () {

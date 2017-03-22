@@ -36,7 +36,17 @@
         <div class="funk-node" v-bind:id="node.nodeid" v-bind:style="style">
             <strong>{{node.name}}</strong><br/>
             <small>{{node.type}}</small>
+            <table>
+                <tr v-for="i in nrOfRows">
+                    <td is="funk-node-connector" v-bind:connector="type.connector_l[i-1]"></td>
+                    <td is="funk-node-connector" v-bind:connector="type.connector_r[i-1]"></td>
+                </tr>
+            </table>
         </div>
+    </script>
+
+    <script type="text/x-template" id="funk-node-connector-template">
+        <td>{{connector && connector.name && ''}}</td>
     </script>
 
     <script type="text/x-template" id="funk-save-button-template">
