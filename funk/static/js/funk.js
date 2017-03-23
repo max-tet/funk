@@ -3,12 +3,12 @@ var funkInstance = {
     containerId: undefined,
     jsPlumbInstance: undefined,
     graphname: undefined,
-    endpointArgsFactory: function (isLeft, isIn, type) {
+    endpointArgsFactory: function (isLeft, connector, type) {
         endpointArgs = {
             endpoint: 'Dot',
             paintStyle: {
                 strokeStyle: shadeColor(type, -0.4),
-                fillStyle: (isIn) ? shadeColor(type, 0.4) : type,
+                fillStyle: (connector.direction == 'in') ? shadeColor(type, 0.4) : type,
                 radius: 5,
                 lineWidth: 1
             },
@@ -25,11 +25,11 @@ var funkInstance = {
             connectorHoverStyle: {
                 lineWidth: 4
             },
-            maxConnections: (isIn) ? 1 : -1,
-            cssClass: (isIn) ? 'funk-endpoint-in' : 'funk-endpoint-out',
+            maxConnections: (connector.direction == 'in') ? 1 : -1,
+            cssClass: (connector.direction == 'in') ? 'funk-endpoint-in' : 'funk-endpoint-out',
             anchor: (isLeft) ? [0, 0.5, -1, 0, -7, 0] : [1, 0.5, 1, 0, 7, 0]
         };
-        if (isIn) {
+        if (connector.direction == 'in') {
             endpointArgs.dropOptions = { hoverClass: 'hover', activeClass: 'active' };
         }
         return endpointArgs;
@@ -67,11 +67,12 @@ Vue.component('funk-node', {
     components: {
         'funk-node-connector': {
             template: '#funk-node-connector-template',
-            props: ['connector', 'side'],
+            props: ['connector', 'side', 'nodeid'],
             mounted: function () {
                 if (this.connector == undefined) {return;}
                 var endpointArgs = funkInstance.endpointArgsFactory(
-                    this.side == 'left', this.connector.direction == 'in', dataTypes[this.connector.type]);
+                    this.side == 'left', this.connector, dataTypes[this.connector.type]);
+                endpointArgs.uuid = 'funk-connector-' + this.nodeid + '-' + this.connector.id;
                 funkInstance.jsPlumbInstance.addEndpoint(this.$el, endpointArgs);
             }
         }
@@ -96,6 +97,19 @@ funkCanvas = new Vue({
         funkInstance: funkInstance
     },
     methods: {
+        loadGraph: function (data) {
+            this.funkInstance.jsPlumbInstance.reset();
+            this.nodes = [];
+            this.funkInstance.jsPlumbInstance = getInstance(this.funkInstance.containerId);
+            this.nodes = data.nodes;
+            this.$nextTick(function () {
+                $.each(data.connections, function (i, connection) {
+                    connector_id_out = 'funk-connector-' + connection.out_node + '-' + connection.out_connector;
+                    connector_id_in = 'funk-connector-' + connection.in_node + '-' + connection.in_connector;
+                    connectEndpoints(funkInstance.jsPlumbInstance, connector_id_out, connector_id_in);
+                });
+            });
+        },
         clearSelection: function () {
             $.each(this.$refs.nodes, function (i, node) {
                 node.isSelected = false;
@@ -291,7 +305,7 @@ var load_graph = function () {
 //            for (node in data.nodes) {
 //                funkCanvas.$data.nodes.push(node);
 //            }
-            funkCanvas.nodes = data.nodes;
+            funkCanvas.loadGraph(data);
 //            funkInstance.jsPlumbInstance = loadFromString(funkInstance.jsPlumbInstance, data);
 //            funkInstance.isDirty = false;
         })
