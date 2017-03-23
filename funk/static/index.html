@@ -27,13 +27,13 @@
       </div>
     </div>
 
-	<div class="permission-demo jtk-surface" id="funk-canvas">
+	<div class="permission-demo jtk-surface" id="funk-canvas" v-on:click.ctrl="clearSelection">
         <funk-save-button></funk-save-button>
-        <funk-node v-for="node in nodes" :key="node.nodeid" v-bind:node="node"></funk-node>
+        <funk-node v-for="node in nodes" :key="node.nodeid" ref="nodes" v-bind:node="node"></funk-node>
 	</div>
 
     <script type="text/x-template" id="funk-node-template">
-        <div class="funk-node" v-bind:id="node.nodeid" v-bind:style="style">
+        <div class="funk-node" v-bind:id="node.nodeid" v-bind:style="style" v-on:click.stop.ctrl="toggleSelection">
             <strong>{{node.name}}</strong><br/>
             <small>{{node.type}}</small>
             <table>

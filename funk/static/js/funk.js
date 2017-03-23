@@ -1,5 +1,8 @@
 var funkInstance = {
     isDirty: false,
+    containerId: undefined,
+    jsPlumbInstance: undefined,
+    graphname: undefined,
     endpointArgsFactory: function (isLeft, isIn, type) {
         endpointArgs = {
             endpoint: 'Dot',
@@ -35,7 +38,10 @@ var funkInstance = {
 
 Vue.component('funk-node', {
     template: '#funk-node-template',
-    data: function () {return {funkInstance: funkInstance};},
+    data: function () {return {
+        funkInstance: funkInstance,
+        isSelected: false
+    };},
     props: ['node'],
     computed: {
         type: function () {return nodeTypes[this.node.type];},
@@ -48,6 +54,15 @@ Vue.component('funk-node', {
             };
         },
         nrOfRows: function () {return Math.max(this.type.connector_l.length, this.type.connector_r.length);}
+    },
+    methods: {
+        toggleSelection: function () {this.isSelected = !this.isSelected;}
+    },
+    watch: {
+        isSelected: function (val, oldVal) {
+            if (val) {this.funkInstance.jsPlumbInstance.addToDragSelection(this.$el);}
+            else {this.funkInstance.jsPlumbInstance.removeFromDragSelection(this.$el);}
+        }
     },
     components: {
         'funk-node-connector': {
@@ -77,7 +92,15 @@ Vue.component('funk-save-button', {
 funkCanvas = new Vue({
     el: '#funk-canvas',
     data: {
-        nodes: []
+        nodes: [],
+        funkInstance: funkInstance
+    },
+    methods: {
+        clearSelection: function () {
+            $.each(this.$refs.nodes, function (i, node) {
+                node.isSelected = false;
+            })
+        }
     }
 });
 
@@ -292,7 +315,7 @@ var funk_init = function (containerId) {
 //    init_typeahead();
     funkInstance.containerId = containerId;
     funkInstance.jsPlumbInstance = getInstance(containerId);
-    $('#'+containerId).click(function () {funkInstance.jsPlumbInstance.clearDragSelection();});
+//    $('#'+containerId).click(function () {funkInstance.jsPlumbInstance.clearDragSelection();});
     var pathname = window.location.pathname;
     funkInstance.graphname = pathname.split('/')[2];
     load_graph();
