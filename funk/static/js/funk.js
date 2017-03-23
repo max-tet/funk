@@ -68,6 +68,12 @@ Vue.component('funk-node', {
         'funk-node-connector': {
             template: '#funk-node-connector-template',
             props: ['connector', 'side', 'nodeid'],
+            computed: {
+                elId: function () {
+                    if (this.connector == undefined) {return undefined;}
+                    else {return this.nodeid + '-' + this.connector.id;}
+                }
+            },
             mounted: function () {
                 if (this.connector == undefined) {return;}
                 var endpointArgs = funkInstance.endpointArgsFactory(
@@ -79,6 +85,17 @@ Vue.component('funk-node', {
     },
     mounted: function () {
         funkInstance.jsPlumbInstance.draggable(this.$el, {stop: function () {funkInstance.isDirty = true;}});
+        var thisEl = this.$el;
+        var node = this.node;
+        var observer = new MutationObserver(
+            function (records) {
+                $.each(records, function (i, record) {
+                    node.top = $(thisEl).css('top');
+                    node.left = $(thisEl).css('left');
+                });
+            }
+        );
+        observer.observe(this.$el, {attributes:true, attributeFilter:['style']});
     }
 });
 
@@ -87,6 +104,17 @@ Vue.component('funk-save-button', {
     data: function () {return {funkInstance: funkInstance};},
     computed: {
         active: function () {return this.funkInstance.isDirty;}
+    },
+    methods: {
+        save: function () {
+            $.ajax({
+                url: '/api/graph/' + this.funkInstance.graphname,
+                type: 'PUT',
+                contentType: 'application/json',
+                data: funkCanvas.serializeGraph(),
+                success: function () {funkInstance.isDirty = false;}
+            });
+        }
     }
 });
 
@@ -109,6 +137,21 @@ funkCanvas = new Vue({
                     connectEndpoints(funkInstance.jsPlumbInstance, connector_id_out, connector_id_in);
                 });
             });
+        },
+        serializeGraph: function () {
+            var json = {nodes: this.nodes, connections: []};
+            $.each(this.funkInstance.jsPlumbInstance.getConnections('*'), function (i, connection) {
+                var ids_in = $(connection.endpoints[0].getElement()).attr('id').split('-');
+                var ids_out = $(connection.endpoints[1].getElement()).attr('id').split('-');
+                var connection_json = {
+                    out_node: ids_out[0],
+                    out_connector: ids_out[1],
+                    in_node: ids_in[0],
+                    in_connector: ids_in[1],
+                };
+                json.connections = json.connections.concat(connection_json);
+            });
+            return JSON.stringify(json);
         },
         clearSelection: function () {
             $.each(this.$refs.nodes, function (i, node) {

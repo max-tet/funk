@@ -46,11 +46,11 @@
     </script>
 
     <script type="text/x-template" id="funk-node-connector-template">
-        <td><span>{{(connector != undefined) ? connector.name : ''}}</span></td>
+        <td :id="elId"><span>{{(connector != undefined) ? connector.name : ''}}</span></td>
     </script>
 
     <script type="text/x-template" id="funk-save-button-template">
-        <button id="funk-button-save" type="button" class="btn btn-default funk-control">Save</button>
+        <button id="funk-button-save" type="button" class="btn btn-default funk-control" v-on:click="save">Save</button>
     </script>
 
 	<script type="text/javascript" src="/static/js/jquery-3.1.1.min.js"></script>
