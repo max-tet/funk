@@ -50,7 +50,10 @@
     </script>
 
     <script type="text/x-template" id="funk-save-button-template">
-        <button id="funk-button-save" type="button" class="btn btn-default funk-control" v-on:click="save">Save</button>
+        <button id="funk-button-save" type="button" class="btn btn-default funk-control"
+                v-on:click="save" v-bind:disabled="!active">
+            {{text}}
+        </button>
     </script>
 
 	<script type="text/javascript" src="/static/js/jquery-3.1.1.min.js"></script>

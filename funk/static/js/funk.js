@@ -96,23 +96,35 @@ Vue.component('funk-node', {
             }
         );
         observer.observe(this.$el, {attributes:true, attributeFilter:['style']});
+        this.funkInstance.isDirty = true;
     }
 });
 
 Vue.component('funk-save-button', {
     template: '#funk-save-button-template',
-    data: function () {return {funkInstance: funkInstance};},
+    data: function () {return {
+        funkInstance: funkInstance,
+        isSaving: false
+    };},
     computed: {
-        active: function () {return this.funkInstance.isDirty;}
+        active: function () {return this.funkInstance.isDirty;},
+        text: function () {
+            if (this.isSaving) {return 'Saving..';}
+            if (this.active) {return 'Save';}
+            return 'Saved';
+        }
     },
     methods: {
         save: function () {
+            component = this;
+            component.isSaving = true;
             $.ajax({
-                url: '/api/graph/' + this.funkInstance.graphname,
+                url: '/api/graph/' + component.funkInstance.graphname,
                 type: 'PUT',
                 contentType: 'application/json',
                 data: funkCanvas.serializeGraph(),
-                success: function () {funkInstance.isDirty = false;}
+                success: function () {component.funkInstance.isDirty = false;},
+                complete: function () {component.isSaving = false;}
             });
         }
     }
@@ -136,6 +148,7 @@ funkCanvas = new Vue({
                     connector_id_in = 'funk-connector-' + connection.in_node + '-' + connection.in_connector;
                     connectEndpoints(funkInstance.jsPlumbInstance, connector_id_out, connector_id_in);
                 });
+                funkInstance.isDirty = false;
             });
         },
         serializeGraph: function () {
