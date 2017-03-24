@@ -26,6 +26,7 @@ var funkInstance = {
                 lineWidth: 4
             },
             maxConnections: (connector.direction == 'in') ? 1 : -1,
+            scope: connector.type,
             cssClass: (connector.direction == 'in') ? 'funk-endpoint-in' : 'funk-endpoint-out',
             anchor: (isLeft) ? [0, 0.5, -1, 0, -7, 0] : [1, 0.5, 1, 0, 7, 0]
         };
@@ -267,12 +268,14 @@ var getInstance = function (containerId) {
 	});
 
 	instance.bind('beforeDrop', function(params) {
+	    // Only connect input and output
 		var source_is_out = params.connection.endpoints[0].hasClass('funk-endpoint-out');
 		var target_is_out = params.dropEndpoint.hasClass('funk-endpoint-out');
 		if ( (source_is_out && target_is_out) || (!source_is_out && !target_is_out) ) {
 			return false;
 		}
 
+        // Do not connect to the same node
 		var source_node = $(params.connection.endpoints[0].getElement()).closest('div')[0];
 		var target_node = $(params.dropEndpoint.getElement()).closest('div')[0];
 		if (source_node == target_node) {
