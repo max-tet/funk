@@ -28,6 +28,7 @@
     </div>
 
 	<div class="permission-demo jtk-surface" id="funk-canvas" v-on:click.ctrl="clearSelection">
+        <funk-add-node-input v-bind:add-node="addNode"></funk-add-node-input>
         <funk-save-button></funk-save-button>
         <funk-node v-for="node in nodes" :key="node.nodeid" ref="nodes" v-bind:node="node"></funk-node>
 	</div>
@@ -54,6 +55,12 @@
                 v-on:click="save" v-bind:disabled="!active">
             {{text}}
         </button>
+    </script>
+
+    <script type="text/x-template" id="funk-add-node-input">
+        <div id="funk-add-node">
+            <input type="text" class="form-control funk-control" placeholder="Add Node">
+        </div>
     </script>
 
 	<script type="text/javascript" src="/static/js/jquery-3.1.1.min.js"></script>
