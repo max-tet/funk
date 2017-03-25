@@ -56,7 +56,12 @@ Vue.component('funk-node', {
         nrOfRows: function () {return Math.max(this.type.connector_l.length, this.type.connector_r.length);}
     },
     methods: {
-        toggleSelection: function () {this.isSelected = !this.isSelected;}
+        toggleSelection: function () {this.isSelected = !this.isSelected;},
+        onDeleteKey: function () {
+            if (this.isSelected) {
+                this.$emit('delete-node', this.node.nodeid);
+            }
+        }
     },
     watch: {
         isSelected: function (val, oldVal) {
@@ -80,6 +85,11 @@ Vue.component('funk-node', {
                     this.side == 'left', this.connector, dataTypes[this.connector.type]);
                 endpointArgs.uuid = 'funk-connector-' + this.nodeid + '-' + this.connector.id;
                 funkInstance.jsPlumbInstance.addEndpoint(this.$el, endpointArgs);
+            },
+            beforeDestroy: function () {
+                if (this.connector) {
+                   funkInstance.jsPlumbInstance.deleteEndpoint('funk-connector-' + this.nodeid + '-' + this.connector.id);
+                }
             }
         }
     },
@@ -97,7 +107,8 @@ Vue.component('funk-node', {
         );
         observer.observe(this.$el, {attributes:true, attributeFilter:['style']});
         this.funkInstance.isDirty = true;
-    }
+    },
+    beforeDestroy: function () {this.funkInstance.isDirty = true;}
 });
 
 Vue.component('funk-save-button', {
@@ -246,6 +257,17 @@ funkCanvas = new Vue({
             $.each(this.$refs.nodes, function (i, node) {
                 node.isSelected = false;
             })
+        },
+        onDeleteKey: function () {
+            $.each(this.$refs.nodes, function (i, node) {
+                node.onDeleteKey();
+            });
+        },
+        deleteNode: function (nodeid) {
+            this.nodes = this.nodes.filter(function (node) {
+                if (node.nodeid == nodeid) {return false;}
+                return true;
+            });
         }
     },
     mounted: function () {
@@ -285,6 +307,8 @@ funkCanvas = new Vue({
         this.loadGraph();
     }
 });
+
+$(document).bind("keyup", "del", function() {funkCanvas.onDeleteKey()});
 
 function shadeColor(color, percent) {
     var f=parseInt(color.slice(1),16),t=percent<0?0:255,p=percent<0?percent*-1:percent,R=f>>16,G=f>>8&0x00FF,B=f&0x0000FF;

@@ -15,7 +15,7 @@
         <funk-new-graph-modal v-if="showNewGraphModal" :graph-name="funkInstance.graphname" v-on:create="loadGraph"></funk-new-graph-modal>
         <funk-add-node-input v-on:add-node="addNode"></funk-add-node-input>
         <funk-save-button></funk-save-button>
-        <funk-node v-for="node in nodes" :key="node.nodeid" ref="nodes" v-bind:node="node"></funk-node>
+        <funk-node v-for="node in nodes" :key="node.nodeid" ref="nodes" v-bind:node="node" v-on:delete-node="deleteNode"></funk-node>
     </div>
 
     <script type="text/x-template" id="funk-new-graph-modal-template">
@@ -67,6 +67,7 @@
     </script>
 
 	<script type="text/javascript" src="/static/js/jquery-3.1.1.min.js"></script>
+	<script type="text/javascript" src="/static/js/jquery.hotkeys.js"></script>
 	<script type="text/javascript" src="/static/js/typeahead.jquery.js"></script>
 	<script type="text/javascript" src="/static/js/vue.js"></script>
 	<script type="text/javascript" src="/static/js/jsPlumb-2.1.7-min.js"></script>
