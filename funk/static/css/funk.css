@@ -109,6 +109,10 @@ body {
     transition: box-shadow 0.15s ease-in;
 }
 
+#funk-canvas .funk-node .funk-attr-r {
+    text-align: right;
+}
+
 #funk-canvas .funk-node.jsplumb-drag-selected:after{
     content: '';
     display: block;

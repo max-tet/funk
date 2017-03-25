@@ -1,0 +1,76 @@
+<!doctype html>
+
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="viewport" content="width=device-width">
+	<title>Funk</title>
+	<link rel="stylesheet" type="text/css" href="/static/css/jsPlumbToolkit-defaults.css">
+	<link rel="stylesheet" type="text/css" href="/static/css/funk.css">
+	<link rel="stylesheet" type="text/css" href="/static/css/bootstrap.css">
+</head>
+<body>
+
+    <div class="permission-demo jtk-surface" id="funk-canvas" v-on:click.ctrl="clearSelection">
+        <funk-new-graph-modal v-if="showNewGraphModal" :graph-name="funkInstance.graphname" v-on:create="loadGraph"></funk-new-graph-modal>
+        <funk-add-node-input v-on:add-node="addNode"></funk-add-node-input>
+        <funk-save-button></funk-save-button>
+        <funk-node v-for="node in nodes" :key="node.nodeid" ref="nodes" v-bind:node="node"></funk-node>
+    </div>
+
+    <script type="text/x-template" id="funk-new-graph-modal-template">
+        <div class="modal fade" id="new_graph_modal" tabindex="-1" role="dialog">
+            <div class="modal-dialog modal-sm" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title" id="new_graph_modal_label">New Graph</h4>
+                    </div>
+                    <div class="modal-body">
+                        A graph named <strong>{{graphName}}</strong> does not exist yet. Do you want to create it?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" v-on:click="createGraph">Create Graph</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </script>
+
+    <script type="text/x-template" id="funk-node-template">
+        <div class="funk-node" v-bind:id="node.nodeid" v-bind:style="style" v-on:click.stop.ctrl="toggleSelection">
+            <strong>{{node.name}}</strong><br/>
+            <small>{{node.type}}</small>
+            <table>
+                <tr v-for="i in nrOfRows">
+                    <td is="funk-node-connector" side="left" v-bind:connector="type.connector_l[i-1]" v-bind:nodeid="node.nodeid"></td>
+                    <td is="funk-node-connector" side="right" v-bind:connector="type.connector_r[i-1]" v-bind:nodeid="node.nodeid"></td>
+                </tr>
+            </table>
+        </div>
+    </script>
+
+    <script type="text/x-template" id="funk-node-connector-template">
+        <td :id="elId"><span>{{(connector != undefined) ? connector.name : ''}}</span></td>
+    </script>
+
+    <script type="text/x-template" id="funk-save-button-template">
+        <button id="funk-button-save" type="button" class="btn btn-default funk-control"
+                v-on:click="save" v-bind:disabled="!active">
+            {{text}}
+        </button>
+    </script>
+
+    <script type="text/x-template" id="funk-add-node-input">
+        <div id="funk-add-node">
+            <input type="text" class="form-control funk-control" placeholder="Add Node">
+        </div>
+    </script>
+
+	<script type="text/javascript" src="/static/js/jquery-3.1.1.min.js"></script>
+	<script type="text/javascript" src="/static/js/typeahead.jquery.js"></script>
+	<script type="text/javascript" src="/static/js/vue.js"></script>
+	<script type="text/javascript" src="/static/js/jsPlumb-2.1.7-min.js"></script>
+	<script type="text/javascript" src="/static/js/bootstrap.js"></script>
+    <script type="text/javascript" src="/static/js/funk.js"></script>
+    <script type="text/javascript" src="/api/nodetypes"></script>
+</body>
