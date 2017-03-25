@@ -130,6 +130,28 @@ Vue.component('funk-save-button', {
     }
 });
 
+Vue.component('funk-new-graph-modal', {
+    template: '#funk-new-graph-modal-template',
+    data: function () {return {
+        funkInstance: funkInstance
+    };},
+    props: ['graphName'],
+    methods: {
+        createGraph: function () {
+            this_ = this;
+            $.post('/api/graph/' + this.funkInstance.graphname)
+                .done(function () {
+                    this_.$emit('create');
+                    $(this_.$el).modal('hide');
+                });
+        }
+    },
+    mounted: function () {
+        var modal = $(this.$el);
+        modal.modal({backdrop: 'static', keyboard: false});
+    }
+});
+
 Vue.component('funk-add-node-input', {
     template: '#funk-add-node-input',
     props: ['addNode'],
@@ -174,24 +196,33 @@ funkCanvas = new Vue({
     el: '#funk-canvas',
     data: {
         nodes: [],
-        funkInstance: funkInstance
+        funkInstance: funkInstance,
+        showNewGraphModal: false
     },
     methods: {
-        loadGraph: function (data) {
+        loadGraph: function () {
             var this_ = this;
-            this.funkInstance.jsPlumbInstance.reset();
-            this.nodes = [];
-            this.nodes = data.nodes;
-            this.$nextTick(function () {
-                $.each(data.connections, function (i, connection) {
-                    connector_id_out = 'funk-connector-' + connection.out_node + '-' + connection.out_connector;
-                    connector_id_in = 'funk-connector-' + connection.in_node + '-' + connection.in_connector;
-                    source_ep = this_.funkInstance.jsPlumbInstance.getEndpoint(connector_id_out);
-                    target_ep = this_.funkInstance.jsPlumbInstance.getEndpoint(connector_id_in);
-                    this_.funkInstance.jsPlumbInstance.connect({source: source_ep, target: target_ep});
+            $.get('/api/graph/' + this.funkInstance.graphname)
+                .done(function (data) {
+                    this_.funkInstance.jsPlumbInstance.reset();
+                    this_.nodes = [];
+                    this_.nodes = data.nodes;
+                    this_.$nextTick(function () {
+                        $.each(data.connections, function (i, connection) {
+                            connector_id_out = 'funk-connector-' + connection.out_node + '-' + connection.out_connector;
+                            connector_id_in = 'funk-connector-' + connection.in_node + '-' + connection.in_connector;
+                            source_ep = this_.funkInstance.jsPlumbInstance.getEndpoint(connector_id_out);
+                            target_ep = this_.funkInstance.jsPlumbInstance.getEndpoint(connector_id_in);
+                            this_.funkInstance.jsPlumbInstance.connect({source: source_ep, target: target_ep});
+                        });
+                        funkInstance.isDirty = false;
+                    });
+                })
+                .fail(function (response) {
+                    if (response.status == 404) {
+                        this_.showNewGraphModal = true;
+                    }
                 });
-                funkInstance.isDirty = false;
-            });
         },
         serializeGraph: function () {
             var json = {nodes: this.nodes, connections: []};
@@ -275,7 +306,7 @@ var load_graph = function () {
 var funk_init = function () {
     var pathname = window.location.pathname;
     funkInstance.graphname = pathname.split('/')[2];
-    load_graph();
+    funkCanvas.loadGraph();
 };
 
 function shadeColor(color, percent) {

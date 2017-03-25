@@ -11,27 +11,30 @@
 </head>
 <body>
 
-    <div class="modal fade" id="new_graph_modal" tabindex="-1" role="dialog">
-      <div class="modal-dialog modal-sm" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h4 class="modal-title" id="new_graph_modal_label">New Graph</h4>
-          </div>
-          <div class="modal-body">
-            A graph named <strong>name</strong> does not exist yet. Do you want to create it?
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-primary">Create Graph</button>
-          </div>
-        </div>
-      </div>
-    </div>
-
-	<div class="permission-demo jtk-surface" id="funk-canvas" v-on:click.ctrl="clearSelection">
+    <div class="permission-demo jtk-surface" id="funk-canvas" v-on:click.ctrl="clearSelection">
+        <funk-new-graph-modal v-if="showNewGraphModal" :graph-name="funkInstance.graphname" v-on:create="loadGraph"></funk-new-graph-modal>
         <funk-add-node-input v-bind:add-node="addNode"></funk-add-node-input>
         <funk-save-button></funk-save-button>
         <funk-node v-for="node in nodes" :key="node.nodeid" ref="nodes" v-bind:node="node"></funk-node>
-	</div>
+    </div>
+
+    <script type="text/x-template" id="funk-new-graph-modal-template">
+        <div class="modal fade" id="new_graph_modal" tabindex="-1" role="dialog">
+            <div class="modal-dialog modal-sm" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title" id="new_graph_modal_label">New Graph</h4>
+                    </div>
+                    <div class="modal-body">
+                        A graph named <strong>{{graphName}}</strong> does not exist yet. Do you want to create it?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" v-on:click="createGraph">Create Graph</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </script>
 
     <script type="text/x-template" id="funk-node-template">
         <div class="funk-node" v-bind:id="node.nodeid" v-bind:style="style" v-on:click.stop.ctrl="toggleSelection">
