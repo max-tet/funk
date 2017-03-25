@@ -1,6 +1,5 @@
 var funkInstance = {
     isDirty: false,
-    containerId: undefined,
     jsPlumbInstance: undefined,
     graphname: undefined,
     endpointArgsFactory: function (isLeft, connector, type) {
@@ -179,15 +178,17 @@ funkCanvas = new Vue({
     },
     methods: {
         loadGraph: function (data) {
+            var this_ = this;
             this.funkInstance.jsPlumbInstance.reset();
             this.nodes = [];
-            this.funkInstance.jsPlumbInstance = getInstance(this.funkInstance.containerId);
             this.nodes = data.nodes;
             this.$nextTick(function () {
                 $.each(data.connections, function (i, connection) {
                     connector_id_out = 'funk-connector-' + connection.out_node + '-' + connection.out_connector;
                     connector_id_in = 'funk-connector-' + connection.in_node + '-' + connection.in_connector;
-                    connectEndpoints(funkInstance.jsPlumbInstance, connector_id_out, connector_id_in);
+                    source_ep = this_.funkInstance.jsPlumbInstance.getEndpoint(connector_id_out);
+                    target_ep = this_.funkInstance.jsPlumbInstance.getEndpoint(connector_id_in);
+                    this_.funkInstance.jsPlumbInstance.connect({source: source_ep, target: target_ep});
                 });
                 funkInstance.isDirty = false;
             });
@@ -215,49 +216,40 @@ funkCanvas = new Vue({
                 node.isSelected = false;
             })
         }
+    },
+    mounted: function () {
+        var instance = window.jsp = jsPlumb.getInstance({
+            DragOptions: { cursor: 'pointer', zIndex: 2000 },
+            Container: this.$el
+        });
+
+        instance.bind('beforeDrop', function(params) {
+            // Only connect input and output
+            var source_is_out = params.connection.endpoints[0].hasClass('funk-endpoint-out');
+            var target_is_out = params.dropEndpoint.hasClass('funk-endpoint-out');
+            if ( (source_is_out && target_is_out) || (!source_is_out && !target_is_out) ) {
+                return false;
+            }
+
+            // Do not connect to the same node
+            var source_node = $(params.connection.endpoints[0].getElement()).closest('div')[0];
+            var target_node = $(params.dropEndpoint.getElement()).closest('div')[0];
+            if (source_node == target_node) {
+                return false;
+            }
+
+            funkInstance.isDirty = true;
+            return true;
+        });
+
+        instance.bind('beforeDetach', function(connection) {
+            funkInstance.isDirty = true;
+            return true;
+        });
+
+        this.funkInstance.jsPlumbInstance = instance;
     }
 });
-
-var connectEndpoints = function (instance, ep1, ep2) {
-	source_ep = instance.getEndpoint(ep1);
-	target_ep = instance.getEndpoint(ep2);
-	instance.connect({source: source_ep, target: target_ep});
-	funkInstance.isDirty = true;
-};
-
-var getInstance = function (containerId) {
-
-	var instance = window.jsp = jsPlumb.getInstance({
-		DragOptions: { cursor: 'pointer', zIndex: 2000 },
-		Container: containerId
-	});
-
-	instance.bind('beforeDrop', function(params) {
-	    // Only connect input and output
-		var source_is_out = params.connection.endpoints[0].hasClass('funk-endpoint-out');
-		var target_is_out = params.dropEndpoint.hasClass('funk-endpoint-out');
-		if ( (source_is_out && target_is_out) || (!source_is_out && !target_is_out) ) {
-			return false;
-		}
-
-        // Do not connect to the same node
-		var source_node = $(params.connection.endpoints[0].getElement()).closest('div')[0];
-		var target_node = $(params.dropEndpoint.getElement()).closest('div')[0];
-		if (source_node == target_node) {
-			return false;
-		}
-
-        funkInstance.isDirty = true;
-		return true;
-	});
-
-	instance.bind('beforeDetach', function(connection) {
-	    funkInstance.isDirty = true;
-	    return true;
-	});
-
-	return instance;
-};
 
 var load_graph = function () {
     $.get('/api/graph/' + funkInstance.graphname)
@@ -280,10 +272,7 @@ var load_graph = function () {
         });
 };
 
-var funk_init = function (containerId) {
-//    init_typeahead();
-    funkInstance.containerId = containerId;
-    funkInstance.jsPlumbInstance = getInstance(containerId);
+var funk_init = function () {
     var pathname = window.location.pathname;
     funkInstance.graphname = pathname.split('/')[2];
     load_graph();
