@@ -249,6 +249,8 @@ funkCanvas = new Vue({
         }
     },
     mounted: function () {
+        funkInstance.graphname = window.location.pathname.split('/')[2];
+
         var instance = window.jsp = jsPlumb.getInstance({
             DragOptions: { cursor: 'pointer', zIndex: 2000 },
             Container: this.$el
@@ -279,35 +281,10 @@ funkCanvas = new Vue({
         });
 
         this.funkInstance.jsPlumbInstance = instance;
+
+        this.loadGraph();
     }
 });
-
-var load_graph = function () {
-    $.get('/api/graph/' + funkInstance.graphname)
-        .done(function (data) {
-            funkCanvas.loadGraph(data);
-        })
-        .fail(function (response) {
-            if (response.status == 404) {
-                var modal = $('#new_graph_modal')
-                modal.modal({backdrop: 'static', keyboard: false});
-                modal.find('.modal-body strong').text(funkInstance.graphname);
-                modal.find('button').on('click', function () {
-                    $.post('/api/graph/' + funkInstance.graphname)
-                        .done(function () {
-                            load_graph();
-                            $('#new_graph_modal').modal('hide');
-                        });
-                });
-            }
-        });
-};
-
-var funk_init = function () {
-    var pathname = window.location.pathname;
-    funkInstance.graphname = pathname.split('/')[2];
-    funkCanvas.loadGraph();
-};
 
 function shadeColor(color, percent) {
     var f=parseInt(color.slice(1),16),t=percent<0?0:255,p=percent<0?percent*-1:percent,R=f>>16,G=f>>8&0x00FF,B=f&0x0000FF;
