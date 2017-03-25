@@ -13,7 +13,7 @@
 
     <div class="permission-demo jtk-surface" id="funk-canvas" v-on:click.ctrl="clearSelection">
         <funk-new-graph-modal v-if="showNewGraphModal" :graph-name="funkInstance.graphname" v-on:create="loadGraph"></funk-new-graph-modal>
-        <funk-add-node-input v-bind:add-node="addNode"></funk-add-node-input>
+        <funk-add-node-input v-on:add-node="addNode"></funk-add-node-input>
         <funk-save-button></funk-save-button>
         <funk-node v-for="node in nodes" :key="node.nodeid" ref="nodes" v-bind:node="node"></funk-node>
     </div>

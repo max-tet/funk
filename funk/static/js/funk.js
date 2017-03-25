@@ -154,7 +154,7 @@ Vue.component('funk-new-graph-modal', {
 
 Vue.component('funk-add-node-input', {
     template: '#funk-add-node-input',
-    props: ['addNode'],
+    props: [],
     mounted: function () {
         this_ = this;
         var funkNodeMatcher = function (query, callback) {
@@ -180,7 +180,7 @@ Vue.component('funk-add-node-input', {
             }
         })
         .bind('typeahead:select', function(ev, suggestion) {
-            this_.addNode({
+            this_.$emit('add-node', {
                 nodeid: suggestion.type + '_' + randomString(6),
                 name: suggestion.type,
                 type: suggestion.type,
