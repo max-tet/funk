@@ -6,8 +6,8 @@ var funkInstance = {
         endpointArgs = {
             endpoint: 'Dot',
             paintStyle: {
-                strokeStyle: shadeColor(type, -0.4),
-                fillStyle: (connector.direction == 'in') ? shadeColor(type, 0.4) : type,
+                strokeStyle: shadeColor(type.color, -0.4),
+                fillStyle: (connector.direction == 'in') ? shadeColor(type.color, 0.4) : type.color,
                 radius: 5,
                 lineWidth: 1
             },
@@ -16,7 +16,7 @@ var funkInstance = {
             connector: [ "Bezier" ],
             connectorStyle: {
                 lineWidth: 2,
-                strokeStyle: type,
+                strokeStyle: type.color,
                 joinstyle: 'round',
                 outlineColor: '#dcdcdc',
                 outlineWidth: 1

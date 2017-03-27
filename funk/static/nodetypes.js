@@ -8,13 +8,13 @@ var colors = {
 };
 
 var dataTypes = {
-	actor: '#297E13',
-	bool: '#D66326',
-	integer: '#153D61',
-	float: '#2aa198',
-	string: '#EAA700',
-	resource: '#351F99',
-	timeseries: '#923158'
+	actor: {id: 'actor', name: 'Actor', color: '#297E13'},
+	boolean: {id: 'boolean', name: 'Boolean', color: '#D66326'},
+	integer: {id: 'integer', name: 'Integer', color: '#153D61'},
+	float: {id: 'float', name: 'Float', color: '#2aa198'},
+	string: {id: 'string', name: 'String', color: '#EAA700'},
+	resource: {id: 'resource', name: 'Resource', color: '#351F99'},
+	timeseries: {id: 'timeseries', name: 'Timeseries', color: '#923158'}
 };
 
 var nodeTypes = {
@@ -99,7 +99,7 @@ var nodeTypes = {
 		type: 'has_attr',
 		color: colors.green,
 		connector_l: [{id: 'actor', name: 'Actor', type: 'actor', direction: 'in'}],
-		connector_r: [{id: 'result', name: 'Result', type: 'bool', direction: 'out'}]
+		connector_r: [{id: 'result', name: 'Result', type: 'boolean', direction: 'out'}]
 	},
 	get_attr_actor: {
 		type: 'get_attr_actor',
@@ -136,7 +136,7 @@ var nodeTypes = {
 		color: colors.purple,
 		connector_l: [
 			{id: 'out', name: 'Out', type: 'resource', direction: 'out'},
-			{id: 'if', name: 'If', type: 'bool', direction: 'in'}
+			{id: 'if', name: 'If', type: 'boolean', direction: 'in'}
 		],
 		connector_r: [{id: 'resource', name: 'Resource', type: 'resource', direction: 'in'}]
 	},
@@ -189,7 +189,7 @@ var nodeTypes = {
 			{id: 'val1', name: 'Value 1', type: 'string', direction: 'in'},
 			{id: 'val2', name: 'Value 2', type: 'string', direction: 'in'}
 		],
-		connector_r: [{id: 'result', name: 'Result', type: 'bool', direction: 'out'}]
+		connector_r: [{id: 'result', name: 'Result', type: 'boolean', direction: 'out'}]
 	},
 	const_integer: {
 		type: 'const_integer',
@@ -204,7 +204,7 @@ var nodeTypes = {
 			{id: 'val1', name: 'Value 1', type: 'integer', direction: 'in'},
 			{id: 'val2', name: 'Value 2', type: 'integer', direction: 'in'}
 		],
-		connector_r: [{id: 'result', name: 'Result', type: 'bool', direction: 'out'}]
+		connector_r: [{id: 'result', name: 'Result', type: 'boolean', direction: 'out'}]
 	},
 	convert_resource_to_location: {
 		type: 'convert_resource_to_location',
@@ -215,7 +215,7 @@ var nodeTypes = {
 	convert_boolean_to_resource: {
 	    type: 'convert_boolean_to_resource',
 	    color: colors.yellow,
-	    connector_l: [{id: 'in', name: 'In', type: 'bool', direction: 'in'}],
+	    connector_l: [{id: 'in', name: 'In', type: 'boolean', direction: 'in'}],
 	    connector_r: [{id: 'out', name: 'Out', type: 'resource', direction: 'out'}]
 	},
 	between_integer: {
@@ -226,7 +226,7 @@ var nodeTypes = {
 			{id: 'val', name: 'Value', type: 'integer', direction: 'in'},
 			{id: 'max', name: 'Maximum', type: 'integer', direction: 'in'}
 		],
-		connector_r: [{id: 'result', name: 'Result', type: 'bool', direction: 'out'}]
+		connector_r: [{id: 'result', name: 'Result', type: 'boolean', direction: 'out'}]
 	},
 	time_of_day: {
 		type: 'time_of_day',
@@ -238,16 +238,16 @@ var nodeTypes = {
 		type: 'const_bool',
 		color: colors.yellow,
 		connector_l: [],
-		connector_r: [{id: 'out', name: 'Out', type: 'bool', direction: 'out'}]
+		connector_r: [{id: 'out', name: 'Out', type: 'boolean', direction: 'out'}]
 	},
 	and_bool: {
 		type: 'and_bool',
 		color: colors.yellow,
 		connector_l: [
-			{id: 'val1', name: 'Value 1', type: 'bool', direction: 'in'},
-			{id: 'val2', name: 'Value 2', type: 'bool', direction: 'in'}
+			{id: 'val1', name: 'Value 1', type: 'boolean', direction: 'in'},
+			{id: 'val2', name: 'Value 2', type: 'boolean', direction: 'in'}
 		],
-		connector_r: [{id: 'result', name: 'Result', type: 'bool', direction: 'out'}]
+		connector_r: [{id: 'result', name: 'Result', type: 'boolean', direction: 'out'}]
 	},
 	const_location: {
 		type: 'const_location',
