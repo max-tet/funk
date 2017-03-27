@@ -64,18 +64,35 @@ body {
     background-size: 100px 100px, 100px 100px, 20px 20px, 20px 20px;
 }
 
+#funk-canvas .funk-control {
+    z-index: 50;
+    box-shadow: 0px 0px 20px #ccc;
+}
+
 #funk-button-save {
     position: absolute;
     right: 30px;
     top: 30px;
 }
 
-.funk-node {
+#funk-add-node {
+    width: 400px;
+    position: absolute;
+    top: 30px;
+    left: 0;
+    right: 0;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#funk-add-node span {
+    position: absolute;
+    width: 100%;
+}
+
+#funk-canvas .funk-node {
     border: 1px solid #50A162;
-    box-shadow: 2px 2px 19px #aaa;
-    -o-box-shadow: 2px 2px 19px #aaa;
-    -webkit-box-shadow: 2px 2px 19px #aaa;
-    -moz-box-shadow: 2px 2px 19px #aaa;
+    box-shadow: 0px 0px 10px #888;
     -moz-border-radius: 0.5em;
     border-radius: 0.5em;
     cursor: pointer;
@@ -92,11 +109,24 @@ body {
     transition: box-shadow 0.15s ease-in;
 }
 
-.funk-node:hover {
-    box-shadow: 2px 2px 19px #444;
-    -o-box-shadow: 2px 2px 19px #444;
-    -webkit-box-shadow: 2px 2px 19px #444;
-    -moz-box-shadow: 2px 2px 19px #444;
+#funk-canvas .funk-node .funk-attr-r {
+    text-align: right;
+}
+
+#funk-canvas .funk-node.jsplumb-drag-selected:after{
+    content: '';
+    display: block;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    border-radius: 5px;
+    border: 2px solid rgba(1,1,1,0.3);
+}
+
+#funk-canvas .funk-node:hover {
+    box-shadow: 0px 0px 10px #444;
 }
 
 .active {
