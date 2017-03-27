@@ -211,11 +211,46 @@ funkCanvas = new Vue({
         showNewGraphModal: false
     },
     methods: {
+        initJsPlumbInstance: function () {
+            if (this.funkInstance.jsPlumbInstance) {this.funkInstance.jsPlumbInstance.reset();}
+
+            var instance = window.jsp = jsPlumb.getInstance({
+                DragOptions: { cursor: 'pointer', zIndex: 2000 },
+                Container: this.$el
+            });
+
+            instance.bind('beforeDrop', function(params) {
+                // Only connect input and output
+                var source_is_out = params.connection.endpoints[0].hasClass('funk-endpoint-out');
+                var target_is_out = params.dropEndpoint.hasClass('funk-endpoint-out');
+                if ( (source_is_out && target_is_out) || (!source_is_out && !target_is_out) ) {
+                    return false;
+                }
+
+                // Do not connect to the same node
+                var source_node = $(params.connection.endpoints[0].getElement()).closest('div')[0];
+                var target_node = $(params.dropEndpoint.getElement()).closest('div')[0];
+                if (source_node == target_node) {
+                    return false;
+                }
+
+                funkInstance.isDirty = true;
+                return true;
+            });
+
+            instance.bind('beforeDetach', function(connection) {
+                funkInstance.isDirty = true;
+                return true;
+            });
+
+            this.funkInstance.jsPlumbInstance = instance;
+        },
         loadGraph: function () {
             var this_ = this;
+            funkInstance.graphname = window.location.pathname.split('/')[2];
             $.get('/api/graph/' + this.funkInstance.graphname)
                 .done(function (data) {
-                    this_.funkInstance.jsPlumbInstance.reset();
+                    this_.initJsPlumbInstance();
                     this_.nodes = [];
                     this_.nodes = data.nodes;
                     this_.$nextTick(function () {
@@ -270,42 +305,8 @@ funkCanvas = new Vue({
             });
         }
     },
-    mounted: function () {
-        funkInstance.graphname = window.location.pathname.split('/')[2];
+    mounted: function () {this.loadGraph();}
 
-        var instance = window.jsp = jsPlumb.getInstance({
-            DragOptions: { cursor: 'pointer', zIndex: 2000 },
-            Container: this.$el
-        });
-
-        instance.bind('beforeDrop', function(params) {
-            // Only connect input and output
-            var source_is_out = params.connection.endpoints[0].hasClass('funk-endpoint-out');
-            var target_is_out = params.dropEndpoint.hasClass('funk-endpoint-out');
-            if ( (source_is_out && target_is_out) || (!source_is_out && !target_is_out) ) {
-                return false;
-            }
-
-            // Do not connect to the same node
-            var source_node = $(params.connection.endpoints[0].getElement()).closest('div')[0];
-            var target_node = $(params.dropEndpoint.getElement()).closest('div')[0];
-            if (source_node == target_node) {
-                return false;
-            }
-
-            funkInstance.isDirty = true;
-            return true;
-        });
-
-        instance.bind('beforeDetach', function(connection) {
-            funkInstance.isDirty = true;
-            return true;
-        });
-
-        this.funkInstance.jsPlumbInstance = instance;
-
-        this.loadGraph();
-    }
 });
 
 $(document).bind("keyup", "del", function() {funkCanvas.onDeleteKey()});
