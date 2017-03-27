@@ -42,8 +42,15 @@
             <small>{{node.type}}</small>
             <table>
                 <tr v-for="i in nrOfRows">
-                    <td is="funk-node-connector" side="left" v-bind:connector="type.connector_l[i-1]" v-bind:nodeid="node.nodeid"></td>
-                    <td is="funk-node-connector" side="right" v-bind:connector="type.connector_r[i-1]" v-bind:nodeid="node.nodeid"></td>
+                    <td is="funk-node-connector"
+                        side="left"
+                        v-bind:connector="type.connector_l[i-1]"
+                        v-bind:nodeid="node.nodeid"></td>
+                    <td is="funk-node-connector" 
+                        side="right"
+                        v-bind:connector="type.connector_r[i-1]"
+                        v-bind:nodeid="node.nodeid"
+                        class="funk-attr-r"></td>
                 </tr>
             </table>
         </div>
