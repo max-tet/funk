@@ -39,11 +39,18 @@
     <script type="text/x-template" id="funk-node-template">
         <div class="funk-node" v-bind:id="node.nodeid" v-bind:style="style" v-on:click.stop.ctrl="toggleSelection">
             <strong>{{node.name}}</strong><br/>
-            <small>{{node.type}}</small>
+            <small>{{type.name}}</small>
             <table>
                 <tr v-for="i in nrOfRows">
-                    <td is="funk-node-connector" side="left" v-bind:connector="type.connector_l[i-1]" v-bind:nodeid="node.nodeid"></td>
-                    <td is="funk-node-connector" side="right" v-bind:connector="type.connector_r[i-1]" v-bind:nodeid="node.nodeid"></td>
+                    <td is="funk-node-connector"
+                        side="left"
+                        v-bind:connector="type.connector_l[i-1]"
+                        v-bind:nodeid="node.nodeid"></td>
+                    <td is="funk-node-connector" 
+                        side="right"
+                        v-bind:connector="type.connector_r[i-1]"
+                        v-bind:nodeid="node.nodeid"
+                        class="funk-attr-r"></td>
                 </tr>
             </table>
         </div>
