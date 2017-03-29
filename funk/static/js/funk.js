@@ -163,6 +163,28 @@ Vue.component('funk-new-graph-modal', {
     }
 });
 
+Vue.component('funk-node-properties-modal', {
+    template: '#funk-node-properties-modal-template',
+    props: ['node', 'isOpen'],
+    methods: {
+        cancel: function () {
+            this.$emit('cancel');
+        },
+        save: function () {
+            this.$emit('save', this.node);
+        },
+    },
+    watch: {
+        isOpen: function (val, oldVal) {
+            if (val) {
+                $(this.$el).modal();
+            } else {
+                $(this.$el).modal('hide');
+            }
+        }
+    }
+});
+
 Vue.component('funk-add-node-input', {
     template: '#funk-add-node-input',
     props: [],
@@ -208,7 +230,8 @@ funkCanvas = new Vue({
     data: {
         nodes: [],
         funkInstance: funkInstance,
-        showNewGraphModal: false
+        showNewGraphModal: false,
+        nodeUnderModification: ''
     },
     methods: {
         initJsPlumbInstance: function () {
@@ -303,6 +326,18 @@ funkCanvas = new Vue({
                 if (node.nodeid == nodeid) {return false;}
                 return true;
             });
+        },
+        editNode: function (node) {
+            this.nodeUnderModification = $.extend({}, node);
+            this.showNodeEditModal = true;
+        },
+        modifyNode: function (node) {
+            var existingNode = this.nodes.find(function (candidate) {
+                return candidate.nodeid == node.nodeid;
+            });
+            $.extend(existingNode, node);
+            this.nodeUnderModification= '';
+            this.funkInstance.isDirty = true;
         }
     },
     mounted: function () {this.loadGraph();}
