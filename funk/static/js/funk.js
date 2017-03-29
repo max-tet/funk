@@ -172,28 +172,28 @@ Vue.component('funk-add-node-input', {
             var matches = [];
             var regex = new RegExp(query, 'i');
             $.each(nodeTypes, function (i, nodeType) {
-                if (regex.test(nodeType.type)) {matches.push(nodeType);}
+                if (regex.test(nodeType.name)) {matches.push(nodeType);}
             });
             callback(matches);
         };
         $(this_.$el).find('input').typeahead({
-            minLength: 1,
+            minLength: 0,
             highlight: true
         },
         {
             name: 'nodeTypes',
             source: funkNodeMatcher,
-            display: 'type',
+            display: 'name',
             templates: {
                 suggestion: function (nodeType) {
-                    return '<div style="background-color: '+nodeType.color+'">'+nodeType.type+'</div>';
+                    return '<div style="background-color: '+nodeType.color+'">'+nodeType.name+'</div>';
                 }
             }
         })
         .bind('typeahead:select', function(ev, suggestion) {
             this_.$emit('add-node', {
                 nodeid: suggestion.type + '_' + randomString(6),
-                name: suggestion.type,
+                name: suggestion.name,
                 type: suggestion.type,
                 top: '5em',
                 left: '5em'
