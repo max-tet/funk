@@ -336,12 +336,17 @@ funkCanvas = new Vue({
             this.showNodeEditModal = true;
         },
         modifyNode: function (node) {
+            var this_ = this;
             var existingNode = this.nodes.find(function (candidate) {
                 return candidate.nodeid == node.nodeid;
             });
             $.extend(existingNode, node);
             this.nodeUnderModification= '';
             this.funkInstance.isDirty = true;
+            this.$nextTick(function () {
+                this_.funkInstance.jsPlumbInstance.recalculateOffsets(node.nodeid);
+                this_.funkInstance.jsPlumbInstance.repaintEverything();
+            });
         }
     },
     mounted: function () {this.loadGraph();}
