@@ -40,7 +40,8 @@ Vue.component('funk-node', {
     template: '#funk-node-template',
     data: function () {return {
         funkInstance: funkInstance,
-        isSelected: false
+        isSelected: false,
+        isHovered: false
     };},
     props: ['node'],
     computed: {
@@ -61,6 +62,9 @@ Vue.component('funk-node', {
             if (this.isSelected) {
                 this.$emit('delete-node', this.node.nodeid);
             }
+        },
+        edit: function () {
+            this.$emit('edit', this.node);
         }
     },
     watch: {
@@ -177,7 +181,7 @@ Vue.component('funk-node-properties-modal', {
     watch: {
         isOpen: function (val, oldVal) {
             if (val) {
-                $(this.$el).modal();
+                $(this.$el).modal({backdrop: 'static', keyboard: false});
             } else {
                 $(this.$el).modal('hide');
             }
