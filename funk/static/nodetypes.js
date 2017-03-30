@@ -14,13 +14,22 @@ var dataTypes = {
 	float: {id: 'float', name: 'Float', color: '#2aa198'},
 	string: {id: 'string', name: 'String', color: '#EAA700'},
 	resource: {id: 'resource', name: 'Resource', color: '#351F99'},
-	timeseries: {id: 'timeseries', name: 'Timeseries', color: '#923158'}
+	timeseries: {id: 'timeseries', name: 'Timeseries', color: '#923158'},
+	location: {id: 'location', name: 'Location', color: '#69AB54'},
+	geo_region: {id: 'geo_region', name: 'Geographical Region', color: '#69AB54'}
 };
 
 var nodeTypes = {
     source_rest_server: {
         type: 'source_rest_server',
         name: 'Source Rest Server',
+        color: colors.purple,
+        connector_l: [],
+        connector_r: [{id: 'out', name: 'Out', type: 'resource', direction: 'out'}]
+    },
+    source_dataflow: {
+        type: 'source_dataflow',
+        name: 'Source Dataflow',
         color: colors.purple,
         connector_l: [],
         connector_r: [{id: 'out', name: 'Out', type: 'resource', direction: 'out'}]
@@ -46,6 +55,37 @@ var nodeTypes = {
         connector_l: [{id: 'in', name: 'In', type: 'resource', direction: 'in'}],
         connector_r: []
     },
+    dest_dataflow: {
+        type: 'dest_dataflow',
+        name: 'Destination Dataflow',
+        color: colors.purple,
+        connector_l: [{id: 'in', name: 'In', type: 'resource', direction: 'in'}],
+        connector_r: []
+    },
+    dest_email: {
+        type: 'dest_email',
+        name: 'Destination Email',
+        color: colors.purple,
+        connector_l: [{id: 'in', name: 'In', type: 'resource', direction: 'in'}],
+        connector_r: []
+    },
+    dest_sql: {
+        type: 'dest_sql',
+        name: 'Destination SQL',
+        color: colors.purple,
+        connector_l: [{id: 'in', name: 'In', type: 'resource', direction: 'in'}],
+        connector_r: []
+    },
+    filter_resource: {
+        type: 'filter_resource',
+        name: 'Filter Resource',
+        color: colors.purple,
+        connector_l: [
+            {id: 'in', name: 'In', type: 'resource', direction: 'in'},
+            {id: 'if', name: 'If', type: 'boolean', direction: 'in'}
+        ],
+        connector_r: [{id: 'out', name: 'Out', type: 'resource', direction: 'out'}]
+    },
     constrain_time_sampling: {
         type: 'constrain_time_sampling',
         name: 'Constrain Time Sampling',
@@ -66,16 +106,68 @@ var nodeTypes = {
         ],
         connector_r: [{id: 'out', name: 'Out', type: 'resource', direction: 'out'}]
     },
+    set_res_prop_str: {
+        type: 'set_res_prop_str',
+        name: 'Set Resource Property String',
+        color: colors.purple,
+        connector_l: [
+            {id: 'in', name: 'In', type: 'resource', direction: 'in'},
+            {id: 'key', name: 'Key', type: 'string', direction: 'in'},
+            {id: 'value', name: 'Value', type: 'string', direction: 'in'}
+        ],
+        connector_r: [{id: 'out', name: 'Out', type: 'resource', direction: 'out'}]
+    },
+    get_res_prop_str: {
+        type: 'get_res_prop_str',
+        name: 'Get Resource Property String',
+        color: colors.purple,
+        connector_l: [
+            {id: 'in', name: 'In', type: 'resource', direction: 'in'},
+            {id: 'key', name: 'Key', type: 'string', direction: 'in'}
+        ],
+        connector_r: [{id: 'value', name: 'Value', type: 'string', direction: 'out'}]
+    },
+    set_res_prop_location: {
+        type: 'set_res_prop_location',
+        name: 'Set Resource Property Location',
+        color: colors.purple,
+        connector_l: [
+            {id: 'in', name: 'In', type: 'resource', direction: 'in'},
+            {id: 'key', name: 'Key', type: 'string', direction: 'in'},
+            {id: 'value', name: 'Value', type: 'location', direction: 'in'}
+        ],
+        connector_r: [{id: 'out', name: 'Out', type: 'resource', direction: 'out'}]
+    },
+    get_res_prop_location: {
+        type: 'get_res_prop_location',
+        name: 'Get Resource Property Location',
+        color: colors.purple,
+        connector_l: [
+            {id: 'in', name: 'In', type: 'resource', direction: 'in'},
+            {id: 'key', name: 'Key', type: 'string', direction: 'in'}
+        ],
+        connector_r: [{id: 'value', name: 'Value', type: 'location', direction: 'out'}]
+    },
     distance: {
         type: 'distance',
         name: 'Distance',
-        color: colors.cyan,
+        color: '#A1D490',
         connector_l: [
-            {id: 'in1', name: 'In 1', type: 'float', direction: 'in'},
-            {id: 'in2', name: 'In 2', type: 'float', direction: 'in'}
+            {id: 'in1', name: 'In 1', type: 'location', direction: 'in'},
+            {id: 'in2', name: 'In 2', type: 'location', direction: 'in'}
         ],
         connector_r: [{id: 'distance', name: 'Distance', type: 'integer', direction: 'out'}]
     },
+	location_in_region: {
+		type: 'location_in_region',
+        name: 'Location in Region',
+		color: '#A1D490',
+		connector_l: [
+			{id: 'location', name: 'Location', type: 'location', direction: 'in'},
+			{id: 'region', name: 'Region', type: 'geo_region', direction: 'in'}
+		],
+		connector_r: [{id: 'result', name: 'Result', type: 'boolean', direction: 'out'}]
+	},
 	actor: {
 		type: 'actor',
         name: 'Actor',
@@ -197,6 +289,16 @@ var nodeTypes = {
 		connector_l: [],
 		connector_r: [{id: 'out', name: 'Out', type: 'string', direction: 'out'}]
 	},
+	fill_template_str: {
+		type: 'fill_template_str',
+        name: 'Fill Template String',
+		color: colors.yellow,
+		connector_l: [
+		    {id: 'template', name: 'Template', type: 'string', direction: 'in'},
+		    {id: 'resource', name: 'Resource', type: 'resource', direction: 'in'}
+		],
+		connector_r: [{id: 'out', name: 'Out', type: 'string', direction: 'out'}]
+	},
 	string_to_integer: {
 		type: 'string_to_integer',
         name: 'Convert String to Integer',
@@ -234,9 +336,9 @@ var nodeTypes = {
 	convert_resource_to_location: {
 		type: 'convert_resource_to_location',
         name: 'Convert Resource to Location',
-		color: colors.cyan,
+		color: '#A1D490',
 		connector_l: [{id: 'in', name: 'In', type: 'resource', direction: 'in'}],
-		connector_r: [{id: 'out', name: 'Out', type: 'float', direction: 'out'}]
+		connector_r: [{id: 'out', name: 'Out', type: 'location', direction: 'out'}]
 	},
 	convert_boolean_to_resource: {
 	    type: 'convert_boolean_to_resource',
@@ -280,11 +382,32 @@ var nodeTypes = {
 		],
 		connector_r: [{id: 'result', name: 'Result', type: 'boolean', direction: 'out'}]
 	},
+	not_bool: {
+		type: 'not_bool',
+        name: 'Not',
+		color: colors.yellow,
+		connector_l: [{id: 'in', name: 'In', type: 'boolean', direction: 'in'}],
+		connector_r: [{id: 'out', name: 'Out', type: 'boolean', direction: 'out'}]
+	},
+	const_resource: {
+		type: 'const_resource',
+        name: 'Constant Resource',
+		color: colors.purple,
+		connector_l: [],
+		connector_r: [{id: 'out', name: 'Out', type: 'resource', direction: 'out'}]
+	},
 	const_location: {
 		type: 'const_location',
         name: 'Constant Location',
-		color: colors.cyan,
+		color: '#A1D490',
 		connector_l: [],
-		connector_r: [{id: 'out', name: 'Out', type: 'float', direction: 'out'}]
+		connector_r: [{id: 'out', name: 'Out', type: 'location', direction: 'out'}]
+	},
+	const_geo_region: {
+		type: 'const_geo_region',
+        name: 'Constant Geographical Region',
+		color: '#A1D490',
+		connector_l: [],
+		connector_r: [{id: 'out', name: 'Out', type: 'geo_region', direction: 'out'}]
 	}
 };
