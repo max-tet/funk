@@ -287,7 +287,10 @@ var nodeTypes = {
         name: 'Constant String',
 		color: colors.yellow,
 		connector_l: [],
-		connector_r: [{id: 'out', name: 'Out', type: 'string', direction: 'out'}]
+		connector_r: [{id: 'out', name: 'Out', type: 'string', direction: 'out'}],
+		props: [
+		    {id: 'value', name: 'Value', type: 'string', default: ''}
+		]
 	},
 	fill_template_str: {
 		type: 'fill_template_str',
@@ -321,7 +324,10 @@ var nodeTypes = {
         name: 'Constant Integer',
 		color: colors.yellow,
 		connector_l: [],
-		connector_r: [{id: 'out', name: 'Out', type: 'integer', direction: 'out'}]
+		connector_r: [{id: 'out', name: 'Out', type: 'integer', direction: 'out'}],
+		props: [
+		    {id: 'value', name: 'Value', type: 'integer', default: 0}
+		]
 	},
 	compare_integer: {
 		type: 'compare_integer',
@@ -370,7 +376,10 @@ var nodeTypes = {
         name: 'Constant Boolean',
 		color: colors.yellow,
 		connector_l: [],
-		connector_r: [{id: 'out', name: 'Out', type: 'boolean', direction: 'out'}]
+		connector_r: [{id: 'out', name: 'Out', type: 'boolean', direction: 'out'}],
+		props: [
+		    {id: 'value', name: 'Value', type: 'boolean', default: false}
+		]
 	},
 	and_bool: {
 		type: 'and_bool',
@@ -401,7 +410,11 @@ var nodeTypes = {
         name: 'Constant Location',
 		color: '#A1D490',
 		connector_l: [],
-		connector_r: [{id: 'out', name: 'Out', type: 'location', direction: 'out'}]
+		connector_r: [{id: 'out', name: 'Out', type: 'location', direction: 'out'}],
+		props: [
+		    {id: 'lat', name: 'Latitude', type: 'float', default: 0},
+		    {id: 'lng', name: 'Longitude', type: 'float', default: 0}
+		]
 	},
 	const_geo_region: {
 		type: 'const_geo_region',

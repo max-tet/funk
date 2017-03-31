@@ -102,6 +102,13 @@ Vue.component('funk-node', {
                    funkInstance.jsPlumbInstance.deleteEndpoint('funk-connector-' + this.nodeid + '-' + this.connector.id);
                 }
             }
+        },
+        'funk-node-property': {
+            template: '#funk-node-property-template',
+            props: ['prop'],
+            data: function () {return {
+                value: this.prop.default
+            };}
         }
     },
     mounted: function () {
