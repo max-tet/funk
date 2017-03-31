@@ -85,10 +85,17 @@ Vue.component('funk-node', {
             },
             mounted: function () {
                 if (this.connector == undefined) {return;}
+
                 var endpointArgs = funkInstance.endpointArgsFactory(
                     this.side == 'left', this.connector, dataTypes[this.connector.type]);
                 endpointArgs.uuid = 'funk-connector-' + this.nodeid + '-' + this.connector.id;
                 funkInstance.jsPlumbInstance.addEndpoint(this.$el, endpointArgs);
+
+                $(this.$el).tooltip({
+                    placement: this.side,
+                    title: dataTypes[this.connector.type].name,
+                    delay: {show: 500, hide: 100}
+                });
             },
             beforeDestroy: function () {
                 if (this.connector) {
