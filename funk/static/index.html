@@ -11,7 +11,7 @@
 </head>
 <body>
 
-    <div class="permission-demo jtk-surface" id="funk-canvas" v-on:click.ctrl="clearSelection">
+    <div class="permission-demo jtk-surface" id="funk-canvas" v-on:click="onCanvasClick($event)">
         <funk-new-graph-modal
                 v-if="showNewGraphModal"
                 :graph-name="funkInstance.graphname"
@@ -28,8 +28,8 @@
                 :key="node.nodeid"
                 ref="nodes"
                 v-bind:node="node"
-                v-on:delete-node="deleteNode"
-                v-on:edit="editNode"></funk-node>
+                v-on:edit="editNode"
+                v-on:shift-clicked="selectNode"></funk-node>
     </div>
 
     <script type="text/x-template" id="funk-new-graph-modal-template">
@@ -54,12 +54,12 @@
         <div class="funk-node"
                 v-bind:id="node.nodeid"
                 v-bind:style="style"
-                v-on:click.stop.ctrl="toggleSelection"
-                v-on:mouseover="isHovered = true"
-                v-on:mouseleave="isHovered = false">
+                v-on:mouseover="node.isHovered = true"
+                v-on:mouseleave="node.isHovered = false"
+                v-on:click.shift.stop="shiftClick">
             <strong>{{node.name}}</strong><br/>
             <small>{{type.name}}</small>
-            <div class="funk-node-edit-button" v-if="isHovered" v-on:click.stop="edit">
+            <div class="funk-node-edit-button" v-if="node.isHovered" v-on:click.stop="edit">
                 <span class="badge"><span class="glyphicon glyphicon-pencil"></span></span>
             </div>
             <funk-node-property

@@ -39,9 +39,7 @@ var funkInstance = {
 Vue.component('funk-node', {
     template: '#funk-node-template',
     data: function () {return {
-        funkInstance: funkInstance,
-        isSelected: false,
-        isHovered: false
+        funkInstance: funkInstance
     };},
     props: ['node'],
     computed: {
@@ -57,18 +55,15 @@ Vue.component('funk-node', {
         nrOfRows: function () {return Math.max(this.type.connector_l.length, this.type.connector_r.length);}
     },
     methods: {
-        toggleSelection: function () {this.isSelected = !this.isSelected;},
-        onDeleteKey: function () {
-            if (this.isSelected) {
-                this.$emit('delete-node', this.node.nodeid);
-            }
-        },
         edit: function () {
             this.$emit('edit', this.node);
+        },
+        shiftClick: function () {
+            this.$emit('shift-clicked', this.node);
         }
     },
     watch: {
-        isSelected: function (val, oldVal) {
+        'node.isSelected': function (val, oldVal) {
             if (val) {this.funkInstance.jsPlumbInstance.addToDragSelection(this.$el);}
             else {this.funkInstance.jsPlumbInstance.removeFromDragSelection(this.$el);}
         }
@@ -327,17 +322,25 @@ funkCanvas = new Vue({
                 name: nodeType.name,
                 type: nodeType.type,
                 top: '5em',
-                left: '5em'
+                left: '5em',
+                isSelected: false,
+                isHovered: false
             };
             if ('props' in nodeType) {
                 node.props = $.extend(true, [], nodeType.props);
             }
             this.nodes.push(node);
         },
-        clearSelection: function () {
-            $.each(this.$refs.nodes, function (i, node) {
-                node.isSelected = false;
-            })
+        selectNode: function (node) {
+            $.each(this.nodes, function (i, n) {n.isSelected = false;});
+            node.isSelected = true;
+        },
+        onCanvasClick: function (event) {
+            if ($(event.target).attr('id') == 'funk-canvas') {
+                $.each(this.nodes, function (i, node) {
+                    node.isSelected = false;
+                })
+            }
         },
         onDeleteKey: function () {
             $.each(this.$refs.nodes, function (i, node) {
