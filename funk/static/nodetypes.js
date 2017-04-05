@@ -339,6 +339,16 @@ var nodeTypes = {
 		],
 		connector_r: [{id: 'result', name: 'Result', type: 'boolean', direction: 'out'}]
 	},
+	has_changed_bool: {
+		type: 'has_changed_bool',
+        name: 'Has Changed (Boolean)',
+		color: colors.yellow,
+		connector_l: [
+			{id: 'val', name: 'Value', type: 'boolean', direction: 'in'},
+			{id: 'context', name: 'Context', type: 'string', direction: 'in'}
+		],
+		connector_r: [{id: 'has_changed', name: 'Has changed', type: 'boolean', direction: 'out'}]
+	},
 	convert_resource_to_location: {
 		type: 'convert_resource_to_location',
         name: 'Convert Resource to Location',
@@ -351,6 +361,13 @@ var nodeTypes = {
         name: 'Convert Boolean to Resource',
 	    color: colors.yellow,
 	    connector_l: [{id: 'in', name: 'In', type: 'boolean', direction: 'in'}],
+	    connector_r: [{id: 'out', name: 'Out', type: 'resource', direction: 'out'}]
+	},
+	convert_string_to_resource: {
+	    type: 'convert_string_to_resource',
+        name: 'Convert String to Resource',
+	    color: colors.yellow,
+	    connector_l: [{id: 'in', name: 'In', type: 'string', direction: 'in'}],
 	    connector_r: [{id: 'out', name: 'Out', type: 'resource', direction: 'out'}]
 	},
 	between_integer: {

@@ -223,6 +223,7 @@ Vue.component('funk-add-node-input', {
         {
             name: 'nodeTypes',
             source: funkNodeMatcher,
+            limit: 15,
             display: 'name',
             templates: {
                 suggestion: function (nodeType) {
