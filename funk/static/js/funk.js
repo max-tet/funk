@@ -232,13 +232,7 @@ Vue.component('funk-add-node-input', {
             }
         })
         .bind('typeahead:select', function(ev, suggestion) {
-            this_.$emit('add-node', {
-                nodeid: suggestion.type + '_' + randomString(6),
-                name: suggestion.name,
-                type: suggestion.type,
-                top: '5em',
-                left: '5em'
-            });
+            this_.$emit('add-node', suggestion);
             $(this_.$el).find('input').typeahead('val', '');
         });
     }
@@ -327,7 +321,17 @@ funkCanvas = new Vue({
             });
             return JSON.stringify(json);
         },
-        addNode: function (node) {
+        addNode: function (nodeType) {
+            var node = {
+                nodeid: nodeType.type + '_' + randomString(6),
+                name: nodeType.name,
+                type: nodeType.type,
+                top: '5em',
+                left: '5em'
+            };
+            if ('props' in nodeType) {
+                node.props = $.extend(true, [], nodeType.props);
+            }
             this.nodes.push(node);
         },
         clearSelection: function () {
