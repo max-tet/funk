@@ -331,9 +331,8 @@ funkCanvas = new Vue({
             }
             this.nodes.push(node);
         },
-        selectNode: function (node) {
-            $.each(this.nodes, function (i, n) {n.isSelected = false;});
-            node.isSelected = true;
+        toggleNodeSelection: function (node) {
+            node.isSelected = !node.isSelected;
         },
         onCanvasClick: function (event) {
             if ($(event.target).attr('id') == 'funk-canvas') {
@@ -342,15 +341,9 @@ funkCanvas = new Vue({
                 })
             }
         },
-        onDeleteKey: function () {
-            $.each(this.$refs.nodes, function (i, node) {
-                node.onDeleteKey();
-            });
-        },
-        deleteNode: function (nodeid) {
+        deleteSelectedNodes: function () {
             this.nodes = this.nodes.filter(function (node) {
-                if (node.nodeid == nodeid) {return false;}
-                return true;
+                return !node.isSelected;
             });
         },
         editNode: function (node) {
@@ -375,7 +368,7 @@ funkCanvas = new Vue({
 
 });
 
-$(document).bind("keyup", "del", function() {funkCanvas.onDeleteKey()});
+$(document).bind("keyup", "del", function() {funkCanvas.deleteSelectedNodes()});
 
 function shadeColor(color, percent) {
     var f=parseInt(color.slice(1),16),t=percent<0?0:255,p=percent<0?percent*-1:percent,R=f>>16,G=f>>8&0x00FF,B=f&0x0000FF;
