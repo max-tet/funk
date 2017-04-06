@@ -55,17 +55,16 @@
         <div class="funk-node"
                 v-bind:id="node.nodeid"
                 v-bind:style="style"
-                v-on:mouseover="node.isHovered = true"
-                v-on:mouseleave="node.isHovered = false"
+                v-on:mouseover="node.ephemeral.isHovered = true"
+                v-on:mouseleave="node.ephemeral.isHovered = false"
                 v-on:click.shift.stop="shiftClick">
             <strong>{{node.name}}</strong><br/>
             <small>{{type.name}}</small>
-            <div class="funk-node-edit-button" v-if="node.isHovered" v-on:click.stop="edit">
+            <div class="funk-node-edit-button" v-if="node.ephemeral.isHovered" v-on:click.stop="edit">
                 <span class="badge"><span class="glyphicon glyphicon-pencil"></span></span>
             </div>
             <funk-node-property
-                    v-if="('props' in type)"
-                    v-for="p in type.props"
+                    v-for="p in node.props"
                     :key="p.id"
                     :prop="p"></funk-node-property>
             <table>
@@ -89,7 +88,7 @@
     </script>
 
     <script type="text/x-template" id="funk-node-property-template">
-        <div><span class="small">{{prop.name}} <strong>{{value}}</strong></span></div>
+        <div><span class="small">{{prop.name}} <strong>{{prop.value}}</strong></span></div>
     </script>
 
     <script type="text/x-template" id="funk-node-properties-modal-template">

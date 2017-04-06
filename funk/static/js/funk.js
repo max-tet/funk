@@ -63,7 +63,7 @@ Vue.component('funk-node', {
         }
     },
     watch: {
-        'node.isSelected': function (val, oldVal) {
+        'node.ephemeral.isSelected': function (val, oldVal) {
             if (val) {this.funkInstance.jsPlumbInstance.addToDragSelection(this.$el);}
             else {this.funkInstance.jsPlumbInstance.removeFromDragSelection(this.$el);}
         }
@@ -100,10 +100,7 @@ Vue.component('funk-node', {
         },
         'funk-node-property': {
             template: '#funk-node-property-template',
-            props: ['prop'],
-            data: function () {return {
-                value: this.prop.default
-            };}
+            props: ['prop']
         }
     },
     mounted: function () {
@@ -282,8 +279,11 @@ funkCanvas = new Vue({
             $.get('/api/graph/' + this.funkInstance.graphname)
                 .done(function (data) {
                     this_.initJsPlumbInstance();
-                    this_.nodes = [];
-                    this_.nodes = data.nodes;
+                    $.each(data.nodes, function (i, node) {
+                        var newNode = $.extend({ephemeral: {isSelected: false, isHovered: false}}, node);
+                        this_.nodes.push(newNode);
+                        // TODO Properties are missing!
+                    });
                     this_.$nextTick(function () {
                         $.each(data.connections, function (i, connection) {
                             connector_id_out = 'funk-connector-' + connection.out_node + '-' + connection.out_connector;
@@ -302,19 +302,24 @@ funkCanvas = new Vue({
                 });
         },
         serializeGraph: function () {
-            var json = {nodes: this.nodes, connections: []};
+            var outJson = {nodes: [], connections: []};
+            $.each(this.nodes, function (i, node) {
+                var outNode = $.extend({}, node);
+                delete outNode.ephemeral;
+                outJson.nodes.push(outNode);
+            });
             $.each(this.funkInstance.jsPlumbInstance.getConnections('*'), function (i, connection) {
                 var ids_in = $(connection.endpoints[0].getElement()).attr('id').split('-');
                 var ids_out = $(connection.endpoints[1].getElement()).attr('id').split('-');
-                var connection_json = {
+                var outConnection = {
                     out_node: ids_out[0],
                     out_connector: ids_out[1],
                     in_node: ids_in[0],
                     in_connector: ids_in[1],
                 };
-                json.connections = json.connections.concat(connection_json);
+                outJson.connections.push(outConnection);
             });
-            return JSON.stringify(json);
+            return JSON.stringify(outJson);
         },
         addNode: function (nodeType) {
             var node = {
@@ -323,8 +328,10 @@ funkCanvas = new Vue({
                 type: nodeType.type,
                 top: '5em',
                 left: '5em',
-                isSelected: false,
-                isHovered: false
+                ephemeral: {
+                    isSelected: false,
+                    isHovered: false
+                }
             };
             if ('props' in nodeType) {
                 node.props = $.extend(true, [], nodeType.props);
@@ -332,18 +339,18 @@ funkCanvas = new Vue({
             this.nodes.push(node);
         },
         toggleNodeSelection: function (node) {
-            node.isSelected = !node.isSelected;
+            node.ephemeral.isSelected = !node.ephemeral.isSelected;
         },
         onCanvasClick: function (event) {
             if ($(event.target).attr('id') == 'funk-canvas') {
                 $.each(this.nodes, function (i, node) {
-                    node.isSelected = false;
+                    node.ephemeral.isSelected = false;
                 })
             }
         },
         deleteSelectedNodes: function () {
             this.nodes = this.nodes.filter(function (node) {
-                return !node.isSelected;
+                return !node.ephemeral.isSelected;
             });
         },
         editNode: function (node) {
