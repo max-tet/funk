@@ -2,7 +2,7 @@ import json
 
 from peewee import IntegrityError, DoesNotExist
 
-from funk.model import Graph, Node, Connection
+from funk.model import Graph, Node, Connection, NodeProp
 
 
 def create_empty_graph(graph_name: str):
@@ -25,15 +25,35 @@ def _update_nodes(graph, graph_json):
     nodes_for_saving = {n['nodeid']: n for n in graph_json['nodes']}
     remaining_nodes_for_saving = nodes_for_saving.copy()
 
-    for n in Node.select().where(Node.graph == graph):
+    for node_in_db in Node.select().where(Node.graph == graph):
         try:
-            n.update(**nodes_for_saving[n.id])
-            del remaining_nodes_for_saving[n.id]
+            node_for_saving = nodes_for_saving[node_in_db.nodeid]
         except KeyError:
-            n.delete_instance()
+            node_in_db.delete_instance()
+            continue
 
-    for n in remaining_nodes_for_saving.values():
-        Node.create(graph=graph, **n)
+        try:
+            props_for_saving = {p['id']: p for p in node_for_saving['props']}
+            del node_for_saving['props']
+        except KeyError:
+            props_for_saving = {}
+        for prop_in_db in node_in_db.props:
+            prop_in_db.update(**(props_for_saving[prop_in_db.id])).execute()
+
+        node_in_db.update(**node_for_saving).execute()
+
+        del remaining_nodes_for_saving[node_in_db.nodeid]
+
+    for node_for_saving in remaining_nodes_for_saving.values():
+
+        try:
+            props_for_saving = node_for_saving['props']
+            del node_for_saving['props']
+        except KeyError:
+            props_for_saving = []
+        node = Node.create(graph=graph, **node_for_saving)
+        for prop_in_db in props_for_saving:
+            NodeProp.create(node=node, **prop_in_db)
 
 
 def _update_connections(graph, graph_json):

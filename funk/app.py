@@ -1,13 +1,10 @@
 from flask import Flask, Response
 from flask.globals import request
-from flask.templating import render_template
 
 from funk import nodetypes, model, persistence
 from funk.persistence import GraphDoesNotExistError, create_empty_graph, GraphAlreadyExistsError, save_graph
 
 app = Flask(__name__)
-
-graphs = {}
 
 db = model.init_db('graphs.db')
 db.connect()
@@ -45,11 +42,6 @@ def graph(graph_name):
 @app.route('/api/nodetypes')
 def types():
     return nodetypes.from_static('nodetypes.js')
-
-
-@app.route('/api/graph/top_secret')
-def get_top_secret():
-    return Response(render_template('top_secret.json'), mimetype='application/json')
 
 
 @app.route('/api/graph/<graph_name>')

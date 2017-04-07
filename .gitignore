@@ -1,7 +1,6 @@
 **/*.sublime-*
 **/*.log
 **/*.sql
-**/*.db
 
 .idea/
 

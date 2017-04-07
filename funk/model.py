@@ -1,4 +1,4 @@
-from peewee import Model, CharField, ForeignKeyField, SqliteDatabase
+from peewee import Model, CharField, ForeignKeyField, SqliteDatabase, CompositeKey
 
 database = SqliteDatabase(None)
 
@@ -21,6 +21,24 @@ class Node(BaseModel):
     left = CharField()
 
     json_attributes = ['nodeid', 'name', 'type', 'top', 'left']
+
+    def to_json(self):
+        result = {attribute: getattr(self, attribute) for attribute in self.json_attributes}
+        result['props'] = [prop.to_json() for prop in self.props]
+        return result
+
+
+class NodeProp(BaseModel):
+    node = ForeignKeyField(Node, related_name='props')
+    id = CharField()
+    name = CharField()
+    type = CharField()
+    value = CharField()
+
+    class Meta:
+        primary_key = CompositeKey('node', 'id')
+
+    json_attributes = ['id', 'name', 'type', 'value']
 
     def to_json(self):
         return {attribute: getattr(self, attribute) for attribute in self.json_attributes}
@@ -48,4 +66,4 @@ def init_db(db_path: str):
 
 
 def create_tables(db):
-    db.create_tables([Graph, Node, Connection], safe=True)
+    db.create_tables([Graph, Node, NodeProp, Connection], safe=True)
