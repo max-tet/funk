@@ -282,7 +282,6 @@ funkCanvas = new Vue({
                     $.each(data.nodes, function (i, node) {
                         var newNode = $.extend({ephemeral: {isSelected: false, isHovered: false}}, node);
                         this_.nodes.push(newNode);
-                        // TODO Properties are missing!
                     });
                     this_.$nextTick(function () {
                         $.each(data.connections, function (i, connection) {

@@ -23,7 +23,6 @@ def save_graph(graph_name: str, graph_json):
 
 def _update_nodes(graph, graph_json):
     nodes_for_saving = {n['nodeid']: n for n in graph_json['nodes']}
-    remaining_nodes_for_saving = nodes_for_saving.copy()
 
     for node_in_db in Node.select().where(Node.graph == graph):
         try:
@@ -33,22 +32,23 @@ def _update_nodes(graph, graph_json):
             continue
 
         try:
-            props_for_saving = {p['id']: p for p in node_for_saving['props']}
+            props_of_node = node_for_saving['props']
             del node_for_saving['props']
         except KeyError:
             props_for_saving = {}
+        else:
+            props_for_saving = {prop['propid']: prop for prop in props_of_node}
         for prop_in_db in node_in_db.props:
-            prop_in_db.update(**(props_for_saving[prop_in_db.id])).execute()
+            prop_in_db.update(**(props_for_saving[prop_in_db.propid])).execute()
 
         node_in_db.update(**node_for_saving).execute()
 
-        del remaining_nodes_for_saving[node_in_db.nodeid]
+        del nodes_for_saving[node_in_db.nodeid]
 
-    for node_for_saving in remaining_nodes_for_saving.values():
+    for node_for_saving in nodes_for_saving.values():
 
         try:
             props_for_saving = node_for_saving['props']
-            del node_for_saving['props']
         except KeyError:
             props_for_saving = []
         node = Node.create(graph=graph, **node_for_saving)
@@ -82,12 +82,7 @@ def load_graph(graph_name: str) -> str:
         graph = Graph.select().where(Graph.name == graph_name).get()
     except DoesNotExist as e:
         raise GraphDoesNotExistError('graph {} does not exist'.format(graph_name)) from e
-    nodes = Node.select().where(Node.graph == graph).execute()
-    connections = Connection.select().where(Connection.graph == graph).execute()
-    return json.dumps({
-        'nodes': [node.to_json() for node in nodes],
-        'connections': [connection.to_json() for connection in connections]
-    })
+    return json.dumps(graph.to_json())
 
 
 class GraphDoesNotExistError(Exception):

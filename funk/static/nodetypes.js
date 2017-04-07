@@ -289,7 +289,7 @@ var nodeTypes = {
 		connector_l: [],
 		connector_r: [{id: 'out', name: 'Out', type: 'string', direction: 'out'}],
 		props: [
-		    {id: 'value', name: 'Value', type: 'string', value: ''}
+		    {propid: 'value', name: 'Value', type: 'string', value: ''}
 		]
 	},
 	fill_template_str: {
@@ -326,7 +326,7 @@ var nodeTypes = {
 		connector_l: [],
 		connector_r: [{id: 'out', name: 'Out', type: 'integer', direction: 'out'}],
 		props: [
-		    {id: 'value', name: 'Value', type: 'integer', value: 0}
+		    {propid: 'value', name: 'Value', type: 'integer', value: 0}
 		]
 	},
 	compare_integer: {
@@ -395,7 +395,7 @@ var nodeTypes = {
 		connector_l: [],
 		connector_r: [{id: 'out', name: 'Out', type: 'boolean', direction: 'out'}],
 		props: [
-		    {id: 'value', name: 'Value', type: 'boolean', value: false}
+		    {propid: 'value', name: 'Value', type: 'boolean', value: false}
 		]
 	},
 	and_bool: {
@@ -429,8 +429,8 @@ var nodeTypes = {
 		connector_l: [],
 		connector_r: [{id: 'out', name: 'Out', type: 'location', direction: 'out'}],
 		props: [
-		    {id: 'lat', name: 'Latitude', type: 'float', value: 0},
-		    {id: 'lng', name: 'Longitude', type: 'float', value: 0}
+		    {propid: 'lat', name: 'Latitude', type: 'float', value: 0},
+		    {propid: 'lng', name: 'Longitude', type: 'float', value: 0}
 		]
 	},
 	const_geo_region: {

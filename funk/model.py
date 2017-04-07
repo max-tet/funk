@@ -11,6 +11,12 @@ class BaseModel(Model):
 class Graph(BaseModel):
     name = CharField(primary_key=True)
 
+    def to_json(self):
+        return {
+            'nodes': [node.to_json() for node in self.nodes],
+            'connections': [connection.to_json() for connection in self.connections]
+        }
+
 
 class Node(BaseModel):
     graph = ForeignKeyField(Graph, related_name='nodes')
@@ -30,15 +36,12 @@ class Node(BaseModel):
 
 class NodeProp(BaseModel):
     node = ForeignKeyField(Node, related_name='props')
-    id = CharField()
+    propid = CharField()
     name = CharField()
     type = CharField()
     value = CharField()
 
-    class Meta:
-        primary_key = CompositeKey('node', 'id')
-
-    json_attributes = ['id', 'name', 'type', 'value']
+    json_attributes = ['propid', 'name', 'type', 'value']
 
     def to_json(self):
         return {attribute: getattr(self, attribute) for attribute in self.json_attributes}
