@@ -23,6 +23,8 @@ def save_graph(graph_name: str, graph_json):
 
 def _update_nodes(graph, graph_json):
     new_nodeids = [node['nodeid'] for node in graph_json['nodes']]
+    for node_to_delete in Node.select().where((Node.graph == graph) & (Node.nodeid.not_in(new_nodeids))):
+        NodeProp.delete().where(NodeProp.node == node_to_delete).execute()
     Node.delete().where(Node.graph == graph and Node.nodeid.not_in(new_nodeids)).execute()
 
     for node in graph_json['nodes']:
@@ -39,30 +41,44 @@ def _update_or_create_node(graph, node_json):
 
     try:
         node = Node.select() \
-            .where(Node.graph == graph
-                   and Node.nodeid == node_json['nodeid']) \
+            .where((Node.graph == graph)
+                   & (Node.nodeid == node_json['nodeid'])) \
             .get()
     except DoesNotExist:
         node = Node.create(graph=graph, **node_json)
     else:
         Node.update(**node_json) \
-            .where(Node.graph == graph
-                   and Node.nodeid == node_json['nodeid']) \
+            .where((Node.graph == graph)
+                   & (Node.nodeid == node_json['nodeid'])) \
             .execute()
 
     for prop_json in props:
-        try:
-            NodeProp.select() \
-                .where(NodeProp.node == node
-                       and NodeProp.propid == prop_json['propid']) \
-                .get()
-        except DoesNotExist:
-            NodeProp.create(node=node, **prop_json)
-        else:
-            NodeProp.update(**prop_json) \
-                .where(NodeProp.node == node
-                       and NodeProp.propid == prop_json['propid']) \
-                .execute()
+        _update_or_create_prop(node, prop_json)
+
+
+def _update_or_create_prop(node, prop_json):
+    if prop_json['type'] == 'string':
+        prop_json['valueString'] = prop_json['value']
+    elif prop_json['type'] == 'integer':
+        prop_json['valueInteger'] = prop_json['value']
+    elif prop_json['type'] == 'float':
+        prop_json['valueFloat'] = prop_json['value']
+    elif prop_json['type'] == 'boolean':
+        prop_json['valueBoolean'] = prop_json['value']
+    del prop_json['value']
+
+    try:
+        NodeProp.select() \
+            .where((NodeProp.node == node)
+                   & (NodeProp.propid == prop_json['propid'])) \
+            .get()
+    except DoesNotExist:
+        NodeProp.create(node=node, **prop_json)
+    else:
+        NodeProp.update(**prop_json) \
+            .where((NodeProp.node == node)
+                   & (NodeProp.propid == prop_json['propid'])) \
+            .execute()
 
 
 def _update_connections(graph, graph_json):

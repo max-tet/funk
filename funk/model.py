@@ -1,4 +1,5 @@
-from peewee import Model, CharField, ForeignKeyField, SqliteDatabase, CompositeKey
+from peewee import Model, CharField, ForeignKeyField, SqliteDatabase, TextField, IntegerField, FloatField, \
+    BooleanField
 
 database = SqliteDatabase(None)
 
@@ -38,13 +39,25 @@ class NodeProp(BaseModel):
     node = ForeignKeyField(Node, related_name='props')
     propid = CharField()
     name = CharField()
-    type = CharField()
-    value = CharField()
+    type = CharField(choices=[('string', 'string'), ('integer', 'integer'), ('float', 'float'), ('boolean', 'boolean')])
+    valueString = TextField(null=True)
+    valueInteger = IntegerField(null=True)
+    valueFloat = FloatField(null=True)
+    valueBoolean = BooleanField(null=True)
 
-    json_attributes = ['propid', 'name', 'type', 'value']
+    json_attributes = ['propid', 'name', 'type']
 
     def to_json(self):
-        return {attribute: getattr(self, attribute) for attribute in self.json_attributes}
+        result = {attribute: getattr(self, attribute) for attribute in self.json_attributes}
+        if self.type == 'string':
+            result['value'] = self.valueString
+        elif self.type == 'integer':
+            result['value'] = self.valueInteger
+        elif self.type == 'float':
+            result['value'] = self.valueFloat
+        elif self.type == 'boolean':
+            result['value'] = self.valueBoolean
+        return result
 
 
 class Connection(BaseModel):
