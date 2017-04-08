@@ -22,38 +22,47 @@ def save_graph(graph_name: str, graph_json):
 
 
 def _update_nodes(graph, graph_json):
-    nodes_for_saving = {n['nodeid']: n for n in graph_json['nodes']}
+    new_nodeids = [node['nodeid'] for node in graph_json['nodes']]
+    Node.delete().where(Node.graph == graph and Node.nodeid.not_in(new_nodeids)).execute()
 
-    for node_in_db in Node.select().where(Node.graph == graph):
-        try:
-            node_for_saving = nodes_for_saving[node_in_db.nodeid]
-        except KeyError:
-            node_in_db.delete_instance()
-            continue
+    for node in graph_json['nodes']:
+        _update_or_create_node(graph, node)
 
+
+def _update_or_create_node(graph, node_json):
+    try:
+        props = node_json['props']
+    except KeyError:
+        props = []
+    else:
+        del node_json['props']
+
+    try:
+        node = Node.select() \
+            .where(Node.graph == graph
+                   and Node.nodeid == node_json['nodeid']) \
+            .get()
+    except DoesNotExist:
+        node = Node.create(graph=graph, **node_json)
+    else:
+        Node.update(**node_json) \
+            .where(Node.graph == graph
+                   and Node.nodeid == node_json['nodeid']) \
+            .execute()
+
+    for prop_json in props:
         try:
-            props_of_node = node_for_saving['props']
-            del node_for_saving['props']
-        except KeyError:
-            props_for_saving = {}
+            NodeProp.select() \
+                .where(NodeProp.node == node
+                       and NodeProp.propid == prop_json['propid']) \
+                .get()
+        except DoesNotExist:
+            NodeProp.create(node=node, **prop_json)
         else:
-            props_for_saving = {prop['propid']: prop for prop in props_of_node}
-        for prop_in_db in node_in_db.props:
-            prop_in_db.update(**(props_for_saving[prop_in_db.propid])).execute()
-
-        node_in_db.update(**node_for_saving).execute()
-
-        del nodes_for_saving[node_in_db.nodeid]
-
-    for node_for_saving in nodes_for_saving.values():
-
-        try:
-            props_for_saving = node_for_saving['props']
-        except KeyError:
-            props_for_saving = []
-        node = Node.create(graph=graph, **node_for_saving)
-        for prop_in_db in props_for_saving:
-            NodeProp.create(node=node, **prop_in_db)
+            NodeProp.update(**prop_json) \
+                .where(NodeProp.node == node
+                       and NodeProp.propid == prop_json['propid']) \
+                .execute()
 
 
 def _update_connections(graph, graph_json):
