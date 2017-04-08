@@ -39,8 +39,7 @@ var funkInstance = {
 Vue.component('funk-node', {
     template: '#funk-node-template',
     data: function () {return {
-        funkInstance: funkInstance,
-        isSelected: false
+        funkInstance: funkInstance
     };},
     props: ['node'],
     computed: {
@@ -56,15 +55,15 @@ Vue.component('funk-node', {
         nrOfRows: function () {return Math.max(this.type.connector_l.length, this.type.connector_r.length);}
     },
     methods: {
-        toggleSelection: function () {this.isSelected = !this.isSelected;},
-        onDeleteKey: function () {
-            if (this.isSelected) {
-                this.$emit('delete-node', this.node.nodeid);
-            }
+        edit: function () {
+            this.$emit('edit', this.node);
+        },
+        shiftClick: function () {
+            this.$emit('shift-clicked', this.node);
         }
     },
     watch: {
-        isSelected: function (val, oldVal) {
+        'node.ephemeral.isSelected': function (val, oldVal) {
             if (val) {this.funkInstance.jsPlumbInstance.addToDragSelection(this.$el);}
             else {this.funkInstance.jsPlumbInstance.removeFromDragSelection(this.$el);}
         }
@@ -81,16 +80,27 @@ Vue.component('funk-node', {
             },
             mounted: function () {
                 if (this.connector == undefined) {return;}
+
                 var endpointArgs = funkInstance.endpointArgsFactory(
                     this.side == 'left', this.connector, dataTypes[this.connector.type]);
                 endpointArgs.uuid = 'funk-connector-' + this.nodeid + '-' + this.connector.id;
                 funkInstance.jsPlumbInstance.addEndpoint(this.$el, endpointArgs);
+
+                $(this.$el).tooltip({
+                    placement: this.side,
+                    title: dataTypes[this.connector.type].name,
+                    delay: {show: 500, hide: 100}
+                });
             },
             beforeDestroy: function () {
                 if (this.connector) {
                    funkInstance.jsPlumbInstance.deleteEndpoint('funk-connector-' + this.nodeid + '-' + this.connector.id);
                 }
             }
+        },
+        'funk-node-property': {
+            template: '#funk-node-property-template',
+            props: ['prop']
         }
     },
     mounted: function () {
@@ -163,6 +173,28 @@ Vue.component('funk-new-graph-modal', {
     }
 });
 
+Vue.component('funk-node-properties-modal', {
+    template: '#funk-node-properties-modal-template',
+    props: ['node', 'isOpen'],
+    methods: {
+        cancel: function () {
+            this.$emit('cancel');
+        },
+        save: function () {
+            this.$emit('save', this.node);
+        },
+    },
+    watch: {
+        isOpen: function (val, oldVal) {
+            if (val) {
+                $(this.$el).modal({backdrop: 'static', keyboard: false});
+            } else {
+                $(this.$el).modal('hide');
+            }
+        }
+    }
+});
+
 Vue.component('funk-add-node-input', {
     template: '#funk-add-node-input',
     props: [],
@@ -183,6 +215,7 @@ Vue.component('funk-add-node-input', {
         {
             name: 'nodeTypes',
             source: funkNodeMatcher,
+            limit: 15,
             display: 'name',
             templates: {
                 suggestion: function (nodeType) {
@@ -191,13 +224,7 @@ Vue.component('funk-add-node-input', {
             }
         })
         .bind('typeahead:select', function(ev, suggestion) {
-            this_.$emit('add-node', {
-                nodeid: suggestion.type + '_' + randomString(6),
-                name: suggestion.name,
-                type: suggestion.type,
-                top: '5em',
-                left: '5em'
-            });
+            this_.$emit('add-node', suggestion);
             $(this_.$el).find('input').typeahead('val', '');
         });
     }
@@ -208,7 +235,8 @@ funkCanvas = new Vue({
     data: {
         nodes: [],
         funkInstance: funkInstance,
-        showNewGraphModal: false
+        showNewGraphModal: false,
+        nodeUnderModification: ''
     },
     methods: {
         initJsPlumbInstance: function () {
@@ -251,8 +279,10 @@ funkCanvas = new Vue({
             $.get('/api/graph/' + this.funkInstance.graphname)
                 .done(function (data) {
                     this_.initJsPlumbInstance();
-                    this_.nodes = [];
-                    this_.nodes = data.nodes;
+                    $.each(data.nodes, function (i, node) {
+                        var newNode = $.extend({ephemeral: {isSelected: false, isHovered: false}}, node);
+                        this_.nodes.push(newNode);
+                    });
                     this_.$nextTick(function () {
                         $.each(data.connections, function (i, connection) {
                             connector_id_out = 'funk-connector-' + connection.out_node + '-' + connection.out_connector;
@@ -271,37 +301,72 @@ funkCanvas = new Vue({
                 });
         },
         serializeGraph: function () {
-            var json = {nodes: this.nodes, connections: []};
+            var outJson = {nodes: [], connections: []};
+            $.each(this.nodes, function (i, node) {
+                var outNode = $.extend({}, node);
+                delete outNode.ephemeral;
+                outJson.nodes.push(outNode);
+            });
             $.each(this.funkInstance.jsPlumbInstance.getConnections('*'), function (i, connection) {
                 var ids_in = $(connection.endpoints[0].getElement()).attr('id').split('-');
                 var ids_out = $(connection.endpoints[1].getElement()).attr('id').split('-');
-                var connection_json = {
+                var outConnection = {
                     out_node: ids_out[0],
                     out_connector: ids_out[1],
                     in_node: ids_in[0],
                     in_connector: ids_in[1],
                 };
-                json.connections = json.connections.concat(connection_json);
+                outJson.connections.push(outConnection);
             });
-            return JSON.stringify(json);
+            return JSON.stringify(outJson);
         },
-        addNode: function (node) {
+        addNode: function (nodeType) {
+            var node = {
+                nodeid: nodeType.type + '_' + randomString(6),
+                name: nodeType.name,
+                type: nodeType.type,
+                top: '5em',
+                left: '5em',
+                ephemeral: {
+                    isSelected: false,
+                    isHovered: false
+                }
+            };
+            if ('props' in nodeType) {
+                node.props = $.extend(true, [], nodeType.props);
+            }
             this.nodes.push(node);
         },
-        clearSelection: function () {
-            $.each(this.$refs.nodes, function (i, node) {
-                node.isSelected = false;
-            })
+        toggleNodeSelection: function (node) {
+            node.ephemeral.isSelected = !node.ephemeral.isSelected;
         },
-        onDeleteKey: function () {
-            $.each(this.$refs.nodes, function (i, node) {
-                node.onDeleteKey();
+        onCanvasClick: function (event) {
+            if ($(event.target).attr('id') == 'funk-canvas') {
+                $.each(this.nodes, function (i, node) {
+                    node.ephemeral.isSelected = false;
+                })
+            }
+        },
+        deleteSelectedNodes: function () {
+            this.nodes = this.nodes.filter(function (node) {
+                return !node.ephemeral.isSelected;
             });
         },
-        deleteNode: function (nodeid) {
-            this.nodes = this.nodes.filter(function (node) {
-                if (node.nodeid == nodeid) {return false;}
-                return true;
+        editNode: function (node) {
+            this.nodeUnderModification = $.extend(true, {}, node, {ephemeral: {isHovered: false}});
+            this.showNodeEditModal = true;
+        },
+        modifyNode: function (node) {
+            var this_ = this;
+            var existingNode = this.nodes.find(function (candidate) {
+                return candidate.nodeid == node.nodeid;
+            });
+            $.extend(true, existingNode, node);
+            this.nodeUnderModification= '';
+            this.funkInstance.isDirty = true;
+            this.$nextTick(function () {
+                this_.funkInstance.jsPlumbInstance.recalculateOffsets(node.nodeid);
+                this_.funkInstance.jsPlumbInstance.repaintEverything();
             });
         }
     },
@@ -309,7 +374,7 @@ funkCanvas = new Vue({
 
 });
 
-$(document).bind("keyup", "del", function() {funkCanvas.onDeleteKey()});
+$(document).bind("keyup", "del", function() {funkCanvas.deleteSelectedNodes()});
 
 function shadeColor(color, percent) {
     var f=parseInt(color.slice(1),16),t=percent<0?0:255,p=percent<0?percent*-1:percent,R=f>>16,G=f>>8&0x00FF,B=f&0x0000FF;

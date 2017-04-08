@@ -113,6 +113,14 @@ body {
     text-align: right;
 }
 
+#funk-canvas .funk-node .funk-node-edit-button {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    font-size: 1.5em;
+    color: #222;
+}
+
 #funk-canvas .funk-node.jsplumb-drag-selected:after{
     content: '';
     display: block;
@@ -135,6 +143,10 @@ body {
 
 .hover {
     border: 1px dotted red;
+}
+
+#node_properties_modal .input-group {
+    margin-bottom: 20px;
 }
 
 #flowchartWindow1 {
