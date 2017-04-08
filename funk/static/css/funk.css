@@ -145,6 +145,10 @@ body {
     border: 1px dotted red;
 }
 
+#node_properties_modal .input-group {
+    margin-bottom: 20px;
+}
+
 #flowchartWindow1 {
     top: 34em;
     left: 5em;

@@ -99,8 +99,48 @@
                         <h4 class="modal-title">Properties</h4>
                     </div>
                     <div class="modal-body">
-                        <input type="text" class="form-control" placeholder="Name"
-                               v-model="node.name" v-bind:value="node.name">
+                            <div class="input-group">
+                                <div class="input-group-addon">Name</div>
+                                <input type="text" class="form-control" placeholder="Name"
+                                   v-model="node.name" v-bind:value="node.name">
+                            </div>
+                            <template v-for="prop in node.props">
+                                <div v-if="prop.type == 'string'" class="input-group">
+                                    <div class="input-group-addon">{{prop.name}}</div>
+                                    <input type="text"
+                                           class="form-control"
+                                           v-model="prop.value"
+                                           v-bind:value="prop.value">
+                                </div>
+                                <div v-if="prop.type == 'boolean'" class="input-group btn-group">
+                                    <div class="input-group-addon">{{prop.name}}</div>
+                                    <button class="btn" type="button"
+                                            v-bind:class="{'btn-primary': prop.value, 'btn-default': !prop.value}"
+                                            v-on:click="prop.value = true">
+                                        True
+                                    </button>
+                                    <button class="btn" type="button"
+                                            v-bind:class="{'btn-primary': !prop.value, 'btn-default': prop.value}"
+                                            v-on:click="prop.value = false">
+                                        False
+                                    </button>
+                                </div>
+                                <div v-if="prop.type == 'integer'" class="input-group">
+                                    <div class="input-group-addon">{{prop.name}}</div>
+                                    <input type="number"
+                                           class="form-control"
+                                           v-model="prop.value"
+                                           v-bind:value="prop.value">
+                                </div>
+                                <div v-if="prop.type == 'float'" class="input-group">
+                                    <div class="input-group-addon">{{prop.name}}</div>
+                                    <input type="number"
+                                           step="0.01"
+                                           class="form-control"
+                                           v-model="prop.value"
+                                           v-bind:value="prop.value">
+                                </div>
+                            </template>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn" v-on:click="cancel">Cancel</button>

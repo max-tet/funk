@@ -353,7 +353,7 @@ funkCanvas = new Vue({
             });
         },
         editNode: function (node) {
-            this.nodeUnderModification = $.extend({}, node);
+            this.nodeUnderModification = $.extend(true, {}, node, {ephemeral: {isHovered: false}});
             this.showNodeEditModal = true;
         },
         modifyNode: function (node) {
@@ -361,7 +361,7 @@ funkCanvas = new Vue({
             var existingNode = this.nodes.find(function (candidate) {
                 return candidate.nodeid == node.nodeid;
             });
-            $.extend(existingNode, node);
+            $.extend(true, existingNode, node);
             this.nodeUnderModification= '';
             this.funkInstance.isDirty = true;
             this.$nextTick(function () {
