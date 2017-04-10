@@ -110,6 +110,10 @@ def load_graph(graph_name: str) -> str:
     return json.dumps(graph.to_json())
 
 
+def get_graphs() -> list:
+    return json.dumps([graph.name for graph in Graph.select()])
+
+
 class GraphDoesNotExistError(Exception):
     pass
 

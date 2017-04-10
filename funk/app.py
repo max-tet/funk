@@ -33,9 +33,21 @@ def handle_graph_already_exists_error(e: GraphAlreadyExistsError):
     return str(e), 409
 
 
+@app.route('/')
+def graph_list():
+    with open('funk/static/index.html') as f:
+        return '\n'.join(f.readlines())
+
+
+@app.route('/api/graphs')
+def graphs():
+    graphs = persistence.get_graphs()
+    return Response(graphs, mimetype='application/json')
+
+
 @app.route('/graph/<graph_name>')
 def graph(graph_name):
-    with open('funk/static/index.html') as f:
+    with open('funk/static/graph.html') as f:
         return '\n'.join(f.readlines())
 
 
