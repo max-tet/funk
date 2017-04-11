@@ -25,7 +25,7 @@ def _update_nodes(graph, graph_json):
     new_nodeids = [node['nodeid'] for node in graph_json['nodes']]
     for node_to_delete in Node.select().where((Node.graph == graph) & (Node.nodeid.not_in(new_nodeids))):
         NodeProp.delete().where(NodeProp.node == node_to_delete).execute()
-    Node.delete().where(Node.graph == graph and Node.nodeid.not_in(new_nodeids)).execute()
+    Node.delete().where((Node.graph == graph) & (Node.nodeid.not_in(new_nodeids))).execute()
 
     for node in graph_json['nodes']:
         _update_or_create_node(graph, node)

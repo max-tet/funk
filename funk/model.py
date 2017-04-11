@@ -31,7 +31,8 @@ class Node(BaseModel):
 
     def to_json(self):
         result = {attribute: getattr(self, attribute) for attribute in self.json_attributes}
-        result['props'] = [prop.to_json() for prop in self.props]
+        if len(self.props) > 0:
+            result['props'] = [prop.to_json() for prop in self.props]
         return result
 
 

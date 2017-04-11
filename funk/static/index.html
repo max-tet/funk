@@ -5,15 +5,19 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 	<meta name="viewport" content="width=device-width">
 	<title>Funk</title>
+	<link rel="stylesheet" type="text/css" href="/static/css/bootstrap.css">
 	<link rel="stylesheet" type="text/css" href="/static/css/index.css">
 </head>
 <body>
 
-    <div class="row">
-        <div id="graph-list" class="col-md-12">
-            <table class="table">
-                <tr is="graph-tr" v-for="graph in graphs" :graph="graph"></tr>
-            </table>
+    <div class="container">
+        <div class="row">
+            <h1>Graphs</h1>
+            <div id="graph-list" class="col-md-12">
+                <table class="table">
+                    <tr is="graph-tr" v-for="graph in graphs" :graph="graph"></tr>
+                </table>
+            </div>
         </div>
     </div>
 
