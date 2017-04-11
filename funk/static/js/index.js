@@ -1,14 +1,28 @@
 var graphList = new Vue({
     el: '#graph-list',
     data: {
-        graphs: []
+        graphs: [],
+        graphname: ''
+    },
+    methods: {
+        refreshList: function () {
+            this_ = this;
+            $.get('/api/graphs')
+                .done(function (data) {
+                    this_.graphs = data;
+                });
+        },
+        createGraph: function () {
+            this_ = this;
+            $.post('/api/graph/' + this.graphname)
+                .done(function () {
+                    this_.refreshList();
+                });
+            this.graphname = '';
+        }
     },
     mounted: function () {
-        this_ = this;
-        $.get('/api/graphs')
-            .done(function (data) {
-                this_.graphs = data;
-            });
+        this.refreshList();
     }
 });
 
