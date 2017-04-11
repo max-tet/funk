@@ -19,6 +19,16 @@ var graphList = new Vue({
                     this_.refreshList();
                 });
             this.graphname = '';
+        },
+        deleteGraph: function (graphname) {
+            this_ = this;
+            $.ajax({
+                url: '/api/graph/' + graphname,
+                type: 'DELETE',
+                success: function () {
+                    this_.refreshList();
+                }
+            });
         }
     },
     mounted: function () {
@@ -32,6 +42,11 @@ Vue.component('graph-tr', {
     computed: {
         href: function () {
             return '/graph/' + this.graph;
+        }
+    },
+    methods: {
+        deleteGraph: function () {
+            this.$emit('delete-graph', this.graph);
         }
     }
 });

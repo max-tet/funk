@@ -29,7 +29,10 @@
             </div>
             <div class="col-md-12">
                 <table class="table">
-                    <tr is="graph-tr" v-for="graph in graphs" :graph="graph"></tr>
+                    <tr is="graph-tr"
+                        v-for="graph in graphs"
+                        :graph="graph"
+                        v-on:delete-graph="deleteGraph"></tr>
                 </table>
             </div>
         </div>
@@ -38,6 +41,11 @@
     <script type="text/x-template" id="graph-tr-template">
         <tr>
             <td><a :href="href">{{graph}}</a></td>
+            <td class="text-right">
+                <button class="btn btn-default" v-on:click="deleteGraph">
+                    <span class="glyphicon glyphicon-trash"></span>
+                </button>
+            </td>
         </tr>
     </script>
 
