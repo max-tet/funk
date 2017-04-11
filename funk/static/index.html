@@ -12,7 +12,21 @@
 
     <div class="container">
         <div class="row">
-            <h1>Graphs</h1>
+            <div class="col-md-8">
+                <h1>Graphs</h1>
+            </div>
+            <div class="col-md-4 text-right">
+                <h1>
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="New Graph">
+                        <span class="input-group-btn">
+                            <button class="btn btn-default" type="button">
+                                <span class="glyphicon glyphicon-plus"></span>
+                            </button>
+                        </span>
+                    </div>
+                </h1>
+            </div>
             <div id="graph-list" class="col-md-12">
                 <table class="table">
                     <tr is="graph-tr" v-for="graph in graphs" :graph="graph"></tr>
