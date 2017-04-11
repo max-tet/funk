@@ -27,7 +27,7 @@
                 v-bind:node="node"
                 v-on:edit="editNode"
                 v-on:shift-clicked="toggleNodeSelection"></funk-node>
-        <div id="not-found">
+        <div id="not-found" v-if="graphNotFound">
             <h1>Graph <i>{{funkInstance.graphname}}</i> does not exist</h1>
             <div class="coverup"></div>
         </div>

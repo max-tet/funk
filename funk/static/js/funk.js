@@ -213,7 +213,7 @@ funkCanvas = new Vue({
     data: {
         nodes: [],
         funkInstance: funkInstance,
-        showNewGraphModal: false,
+        graphNotFound: false,
         nodeUnderModification: ''
     },
     methods: {
@@ -274,7 +274,7 @@ funkCanvas = new Vue({
                 })
                 .fail(function (response) {
                     if (response.status == 404) {
-                        this_.showNewGraphModal = true;
+                        this_.graphNotFound = true;
                     }
                 });
         },
