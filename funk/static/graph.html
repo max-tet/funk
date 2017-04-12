@@ -164,7 +164,11 @@
     </script>
 
     <script type="text/x-template" id="funk-nodetype-preview-template">
-        <tr><td><span>{{nodetype.name}}</span></td></tr>
+        <tr><td>
+            <div class="funk-nodetype" :style="style">
+                <span>{{nodetype.name}}</span>
+            </div>
+        </td></tr>
     </script>
 
     <script type="text/javascript" src="/api/nodetypes"></script>

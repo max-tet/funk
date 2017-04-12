@@ -104,6 +104,23 @@ body {
     overflow: auto;
 }
 
+#funk-add-node .nodetype-list table {
+    width: 100%;
+}
+
+.funk-nodetype {
+    border: 1px solid #50A162;
+    border-radius: 0.5em;
+    cursor: pointer;
+    z-index: 30;
+    background-color: #80C18F;
+    color: black;
+    font-family: helvetica, sans-serif;
+    padding: 5px;
+    margin: 2px;
+    font-size: 0.9em;
+}
+
 #funk-canvas .funk-node {
     border: 1px solid #50A162;
     box-shadow: 0px 0px 10px #888;

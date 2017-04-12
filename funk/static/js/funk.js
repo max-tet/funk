@@ -193,7 +193,15 @@ Vue.component('funk-add-node', {
 
 Vue.component('funk-nodetype-preview', {
     template: '#funk-nodetype-preview-template',
-    props: ['nodetype']
+    props: ['nodetype'],
+    computed: {
+        style: function () {
+            return {
+                'background-color': this.nodetype.color,
+                'border-color': shadeColor(this.nodetype.color, -0.2)
+            };
+        }
+    }
 });
 
 funkCanvas = new Vue({
