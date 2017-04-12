@@ -173,38 +173,20 @@ Vue.component('funk-node-properties-modal', {
     }
 });
 
-Vue.component('funk-add-node-input', {
-    template: '#funk-add-node-input',
-    props: [],
-    mounted: function () {
-        this_ = this;
-        var funkNodeMatcher = function (query, callback) {
-            var matches = [];
-            var regex = new RegExp(query, 'i');
-            $.each(nodeTypes, function (i, nodeType) {
-                if (regex.test(nodeType.name)) {matches.push(nodeType);}
-            });
-            callback(matches);
-        };
-        $(this_.$el).find('input').typeahead({
-            minLength: 0,
-            highlight: true
-        },
-        {
-            name: 'nodeTypes',
-            source: funkNodeMatcher,
-            limit: 15,
-            display: 'name',
-            templates: {
-                suggestion: function (nodeType) {
-                    return '<div style="background-color: '+nodeType.color+'">'+nodeType.name+'</div>';
-                }
+Vue.component('funk-add-node', {
+    template: '#funk-add-node-template',
+    data: function () {return {
+        isActive: false
+    };},
+    watch: {
+        isActive: function (val) {
+            this_ = this;
+            if (val) {
+                Vue.nextTick(function () {
+                    $(this_.$el).find('input').focus();
+                });
             }
-        })
-        .bind('typeahead:select', function(ev, suggestion) {
-            this_.$emit('add-node', suggestion);
-            $(this_.$el).find('input').typeahead('val', '');
-        });
+        }
     }
 });
 

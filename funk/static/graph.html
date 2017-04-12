@@ -19,7 +19,7 @@
                 :is-open="(nodeUnderModification != '')"
                 v-on:save="modifyNode"
                 v-on:cancel="nodeUnderModification = ''"></funk-node-properties-modal>
-        <funk-add-node-input v-on:add-node="addNode"></funk-add-node-input>
+        <funk-add-node v-on:add-node="addNode"></funk-add-node>
         <funk-save-button></funk-save-button>
         <funk-node
                 v-for="node in nodes"
@@ -140,15 +140,24 @@
         </button>
     </script>
 
-    <script type="text/x-template" id="funk-add-node-input">
+    <script type="text/x-template" id="funk-add-node-template">
         <div id="funk-add-node">
-            <input type="text" class="form-control funk-control" placeholder="Add Node">
+            <div v-if="isActive">
+                <input type="text"
+                       class="form-control funk-control"
+                       placeholder="Add Node"
+                       v-on:focusout="isActive=false">
+            </div>
+            <button class="btn btn-primary funk-control"
+                    type="button"
+                    v-on:click="isActive=true" v-else>
+                <span class="glyphicon glyphicon-plus"></span>
+            </button>
         </div>
     </script>
 
 	<script type="text/javascript" src="/static/js/jquery-3.1.1.min.js"></script>
 	<script type="text/javascript" src="/static/js/jquery.hotkeys.js"></script>
-	<script type="text/javascript" src="/static/js/typeahead.jquery.js"></script>
 	<script type="text/javascript" src="/static/js/vue.js"></script>
 	<script type="text/javascript" src="/static/js/jsPlumb-2.1.7-min.js"></script>
 	<script type="text/javascript" src="/static/js/bootstrap.js"></script>

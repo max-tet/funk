@@ -75,8 +75,7 @@ body {
     top: 30px;
 }
 
-#funk-add-node {
-    width: 400px;
+#funk-add-node button {
     position: absolute;
     top: 30px;
     left: 0;
@@ -85,9 +84,15 @@ body {
     margin-right: auto;
 }
 
-#funk-add-node span {
+#funk-add-node input {
     position: absolute;
-    width: 100%;
+    width: 300px;
+    top: 30px;
+    left: 0;
+    right: 0;
+    margin-left: auto;
+    margin-right: auto;
+
 }
 
 #funk-canvas .funk-node {
