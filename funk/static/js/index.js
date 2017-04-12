@@ -38,6 +38,9 @@ var graphList = new Vue({
 
 Vue.component('graph-tr', {
     template: '#graph-tr-template',
+    data: function () {return {
+        confirm: false
+    };},
     props: ['graph'],
     computed: {
         href: function () {

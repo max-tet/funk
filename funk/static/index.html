@@ -29,6 +29,10 @@
             </div>
             <div class="col-md-12">
                 <table class="table">
+                    <col width="25%"/>
+                    <col width="25%"/>
+                    <col width="25%"/>
+                    <col width="25%"/>
                     <thead>
                         <tr>
                             <th>Name</th>
@@ -52,7 +56,15 @@
             <td>{{graph.time_created | formatTimestamp}}</td>
             <td>{{graph.time_modified | formatTimestamp}}</td>
             <td class="text-right">
-                <button class="btn btn-default" v-on:click="deleteGraph">
+                <div class="input-group" v-if="confirm" v-on:mouseleave="confirm=false">
+                    <span class="input-group-btn">
+                        <button class="btn btn-danger" type="button" v-on:click="deleteGraph">
+                            <span class="glyphicon glyphicon-trash"></span>
+                        </button>
+                    </span>
+                    <span class="input-group-addon">Confirm Delete</span>
+                </div>
+                <button class="btn btn-default" v-on:click="confirm=true" v-else>
                     <span class="glyphicon glyphicon-trash"></span>
                 </button>
             </td>
