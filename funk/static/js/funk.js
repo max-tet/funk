@@ -178,6 +178,7 @@ Vue.component('funk-add-node', {
     data: function () {return {
         isActive: false
     };},
+    props: ['nodetypes'],
     watch: {
         isActive: function (val) {
             this_ = this;
@@ -190,10 +191,16 @@ Vue.component('funk-add-node', {
     }
 });
 
+Vue.component('funk-nodetype-preview', {
+    template: '#funk-nodetype-preview-template',
+    props: ['nodetype']
+});
+
 funkCanvas = new Vue({
     el: '#funk-canvas',
     data: {
         nodes: [],
+        nodetypes: nodeTypes,
         funkInstance: funkInstance,
         graphNotFound: false,
         nodeUnderModification: ''
