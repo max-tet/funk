@@ -2,7 +2,7 @@ import json
 
 import pytest
 
-from funk.model import Graph, Node, Connection
+from funk.model import Graph, Node, Connection, NodeProp
 from funk.persistence import save_graph, delete_graph, load_graph, create_empty_graph, GraphAlreadyExistsError, \
     GraphDoesNotExistError
 
@@ -102,6 +102,7 @@ def test_delete_graph(database):
     assert Graph.select().count() == 0
     assert Node.select().count() == 0
     assert Connection.select().count() == 0
+    assert NodeProp.select().count() == 0
 
 
 def test_delete_nonexisting_graph(database):

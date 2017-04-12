@@ -149,6 +149,32 @@ body {
     margin-bottom: 20px;
 }
 
+#not-found {
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 30%;
+    z-index: 100;
+}
+
+#not-found .coverup {
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    z-index: 99;
+    pointer-events: all;
+    cursor: initial;
+    background-color: grey;
+    opacity: 0.5;
+}
+
+#not-found h1 {
+    text-align: center;
+    z-index: 100;
+}
+
 #flowchartWindow1 {
     top: 34em;
     left: 5em;

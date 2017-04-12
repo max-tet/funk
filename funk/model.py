@@ -1,5 +1,5 @@
 from peewee import Model, CharField, ForeignKeyField, SqliteDatabase, TextField, IntegerField, FloatField, \
-    BooleanField
+    BooleanField, DateTimeField
 
 database = SqliteDatabase(None)
 
@@ -11,6 +11,8 @@ class BaseModel(Model):
 
 class Graph(BaseModel):
     name = CharField(primary_key=True)
+    time_created = DateTimeField()
+    time_modified = DateTimeField()
 
     def to_json(self):
         return {
@@ -31,7 +33,8 @@ class Node(BaseModel):
 
     def to_json(self):
         result = {attribute: getattr(self, attribute) for attribute in self.json_attributes}
-        result['props'] = [prop.to_json() for prop in self.props]
+        if len(self.props) > 0:
+            result['props'] = [prop.to_json() for prop in self.props]
         return result
 
 

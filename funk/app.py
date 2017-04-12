@@ -2,7 +2,8 @@ from flask import Flask, Response
 from flask.globals import request
 
 from funk import nodetypes, model, persistence
-from funk.persistence import GraphDoesNotExistError, create_empty_graph, GraphAlreadyExistsError, save_graph
+from funk.persistence import GraphDoesNotExistError, create_empty_graph, GraphAlreadyExistsError, save_graph, \
+    delete_graph
 
 app = Flask(__name__)
 
@@ -33,9 +34,21 @@ def handle_graph_already_exists_error(e: GraphAlreadyExistsError):
     return str(e), 409
 
 
+@app.route('/')
+def graph_list():
+    with open('funk/static/index.html') as f:
+        return '\n'.join(f.readlines())
+
+
+@app.route('/api/graphs')
+def graphs():
+    graphs = persistence.get_graphs()
+    return Response(graphs, mimetype='application/json')
+
+
 @app.route('/graph/<graph_name>')
 def graph(graph_name):
-    with open('funk/static/index.html') as f:
+    with open('funk/static/graph.html') as f:
         return '\n'.join(f.readlines())
 
 
@@ -53,7 +66,13 @@ def get_graph(graph_name):
 @app.route('/api/graph/<graph_name>', methods=['POST'])
 def post_graph(graph_name):
     create_empty_graph(graph_name)
-    return ''
+    return Response(status=201)
+
+
+@app.route('/api/graph/<graph_name>', methods=['DELETE'])
+def del_graph(graph_name):
+    delete_graph(graph_name)
+    return Response(status=200)
 
 
 @app.route('/api/graph/<graph_name>', methods=['PUT'])

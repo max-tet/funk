@@ -12,7 +12,10 @@
       "name": "node_name_1",
       "type": "node_type_1",
       "top": "1px",
-      "left": "1px"
+      "left": "1px",
+      "props": [
+          {"propid": "value", "name": "Value", "type": "boolean", "value": false}
+      ]
     }
   ],
   "connections": [

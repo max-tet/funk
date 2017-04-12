@@ -151,28 +151,6 @@ Vue.component('funk-save-button', {
     }
 });
 
-Vue.component('funk-new-graph-modal', {
-    template: '#funk-new-graph-modal-template',
-    data: function () {return {
-        funkInstance: funkInstance
-    };},
-    props: ['graphName'],
-    methods: {
-        createGraph: function () {
-            this_ = this;
-            $.post('/api/graph/' + this.funkInstance.graphname)
-                .done(function () {
-                    this_.$emit('create');
-                    $(this_.$el).modal('hide');
-                });
-        }
-    },
-    mounted: function () {
-        var modal = $(this.$el);
-        modal.modal({backdrop: 'static', keyboard: false});
-    }
-});
-
 Vue.component('funk-node-properties-modal', {
     template: '#funk-node-properties-modal-template',
     props: ['node', 'isOpen'],
@@ -235,7 +213,7 @@ funkCanvas = new Vue({
     data: {
         nodes: [],
         funkInstance: funkInstance,
-        showNewGraphModal: false,
+        graphNotFound: false,
         nodeUnderModification: ''
     },
     methods: {
@@ -296,7 +274,7 @@ funkCanvas = new Vue({
                 })
                 .fail(function (response) {
                     if (response.status == 404) {
-                        this_.showNewGraphModal = true;
+                        this_.graphNotFound = true;
                     }
                 });
         },
