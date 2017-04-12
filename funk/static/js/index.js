@@ -41,12 +41,18 @@ Vue.component('graph-tr', {
     props: ['graph'],
     computed: {
         href: function () {
-            return '/graph/' + this.graph;
+            return '/graph/' + this.graph.name;
         }
     },
     methods: {
         deleteGraph: function () {
-            this.$emit('delete-graph', this.graph);
+            this.$emit('delete-graph', this.graph.name);
+        }
+    },
+    filters: {
+        formatTimestamp: function (timestamp) {
+            var date = new Date(timestamp * 1000);
+            return date.toLocaleString();
         }
     }
 });

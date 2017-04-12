@@ -29,6 +29,14 @@
             </div>
             <div class="col-md-12">
                 <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Created</th>
+                            <th>Modified</th>
+                            <th></th>
+                        </tr>
+                    </thead>
                     <tr is="graph-tr"
                         v-for="graph in graphs"
                         :graph="graph"
@@ -40,7 +48,9 @@
 
     <script type="text/x-template" id="graph-tr-template">
         <tr>
-            <td><a :href="href">{{graph}}</a></td>
+            <td><a :href="href">{{graph.name}}</a></td>
+            <td>{{graph.time_created | formatTimestamp}}</td>
+            <td>{{graph.time_modified | formatTimestamp}}</td>
             <td class="text-right">
                 <button class="btn btn-default" v-on:click="deleteGraph">
                     <span class="glyphicon glyphicon-trash"></span>

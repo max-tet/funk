@@ -1,5 +1,6 @@
 import copy
 import json
+from datetime import datetime
 
 from peewee import IntegrityError, DoesNotExist
 
@@ -8,7 +9,7 @@ from funk.model import Graph, Node, Connection, NodeProp
 
 def create_empty_graph(graph_name: str):
     try:
-        Graph.create(name=graph_name)
+        Graph.create(name=graph_name, time_created=datetime.now(), time_modified=datetime.now())
     except IntegrityError as e:
         raise GraphAlreadyExistsError('graph {} already exist'.format(graph_name)) from e
 
@@ -21,6 +22,8 @@ def save_graph(graph_name: str, graph_json):
     graph_json_copy = copy.deepcopy(graph_json)
     _update_nodes(graph, graph_json_copy)
     _update_connections(graph, graph_json_copy)
+    graph.time_modified = datetime.now()
+    graph.save()
 
 
 def _update_nodes(graph, graph_json):
@@ -119,7 +122,11 @@ def load_graph(graph_name: str) -> str:
 
 
 def get_graphs() -> list:
-    return json.dumps([graph.name for graph in Graph.select()])
+    return json.dumps([{
+        'name': graph.name,
+        'time_created': graph.time_created.timestamp(),
+        'time_modified': graph.time_modified.timestamp()
+    } for graph in Graph.select()])
 
 
 class GraphDoesNotExistError(Exception):

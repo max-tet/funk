@@ -1,5 +1,5 @@
 from peewee import Model, CharField, ForeignKeyField, SqliteDatabase, TextField, IntegerField, FloatField, \
-    BooleanField
+    BooleanField, DateTimeField
 
 database = SqliteDatabase(None)
 
@@ -11,6 +11,8 @@ class BaseModel(Model):
 
 class Graph(BaseModel):
     name = CharField(primary_key=True)
+    time_created = DateTimeField()
+    time_modified = DateTimeField()
 
     def to_json(self):
         return {
