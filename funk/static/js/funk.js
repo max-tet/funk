@@ -179,6 +179,12 @@ Vue.component('funk-add-node', {
         isActive: false
     };},
     props: ['nodetypes'],
+    methods: {
+        addNode: function (nodetype) {
+            this.isActive = false;
+            this.$emit('add-node', nodetype);
+        }
+    },
     watch: {
         isActive: function (val) {
             this_ = this;
@@ -200,6 +206,11 @@ Vue.component('funk-nodetype-preview', {
                 'background-color': this.nodetype.color,
                 'border-color': shadeColor(this.nodetype.color, -0.2)
             };
+        }
+    },
+    methods: {
+        addNode: function () {
+            this.$emit('add-node', this.nodetype);
         }
     }
 });

@@ -55,7 +55,7 @@
                         side="left"
                         v-bind:connector="type.connector_l[i-1]"
                         v-bind:nodeid="node.nodeid"></td>
-                    <td is="funk-node-connector" 
+                    <td is="funk-node-connector"
                         side="right"
                         v-bind:connector="type.connector_r[i-1]"
                         v-bind:nodeid="node.nodeid"
@@ -145,11 +145,10 @@
             <div v-if="isActive">
                 <input type="text"
                        class="form-control funk-control"
-                       placeholder="Add Node"
-                       v-on:focusout="isActive=false">
+                       placeholder="Add Node">
                 <div class="nodetype-list">
                     <table>
-                        <tr is="funk-nodetype-preview"
+                        <tr is="funk-nodetype-preview" v-on:add-node="addNode"
                             v-for="nodetype in nodetypes"
                             :nodetype="nodetype"></tr>
                     </table>
@@ -165,7 +164,9 @@
 
     <script type="text/x-template" id="funk-nodetype-preview-template">
         <tr><td>
-            <div class="funk-nodetype" :style="style">
+            <div class="funk-nodetype"
+                 :style="style"
+                 v-on:click="addNode">
                 <span>{{nodetype.name}}</span>
             </div>
         </td></tr>
