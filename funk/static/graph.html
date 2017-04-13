@@ -19,7 +19,9 @@
                 :is-open="(nodeUnderModification != '')"
                 v-on:save="modifyNode"
                 v-on:cancel="nodeUnderModification = ''"></funk-node-properties-modal>
-        <funk-add-node v-on:add-node="addNode" :nodetypes="nodetypes"></funk-add-node>
+        <funk-add-node ref="addNode"
+                       :nodetypes="nodetypes"
+                       v-on:add-node="addNode"></funk-add-node>
         <funk-save-button></funk-save-button>
         <funk-node
                 v-for="node in nodes"
