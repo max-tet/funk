@@ -24,6 +24,7 @@ var nodeTypes = {
         type: 'source_rest_server',
         name: 'Source Rest Server',
         color: colors.purple,
+        categories: ['Source'],
         connector_l: [],
         connector_r: [{id: 'out', name: 'Out', type: 'resource', direction: 'out'}]
     },
@@ -31,6 +32,7 @@ var nodeTypes = {
         type: 'source_dataflow',
         name: 'Source Dataflow',
         color: colors.purple,
+        categories: ['Source'],
         connector_l: [],
         connector_r: [{id: 'out', name: 'Out', type: 'resource', direction: 'out'}]
     },
@@ -38,6 +40,7 @@ var nodeTypes = {
         type: 'dest_rest_server',
         name: 'Destination Rest Server',
         color: colors.purple,
+        categories: ['Destination'],
         connector_l: [{id: 'in', name: 'In', type: 'resource', direction: 'in'}],
         connector_r: []
     },
@@ -45,6 +48,7 @@ var nodeTypes = {
         type: 'dest_rest_client',
         name: 'Destination Rest Client',
         color: colors.purple,
+        categories: ['Destination'],
         connector_l: [{id: 'in', name: 'In', type: 'resource', direction: 'in'}],
         connector_r: []
     },
@@ -52,6 +56,7 @@ var nodeTypes = {
         type: 'dest_file_writer',
         name: 'Destination File Writer',
         color: colors.purple,
+        categories: ['Destination'],
         connector_l: [{id: 'in', name: 'In', type: 'resource', direction: 'in'}],
         connector_r: []
     },
@@ -59,6 +64,7 @@ var nodeTypes = {
         type: 'dest_dataflow',
         name: 'Destination Dataflow',
         color: colors.purple,
+        categories: ['Destination'],
         connector_l: [{id: 'in', name: 'In', type: 'resource', direction: 'in'}],
         connector_r: []
     },
@@ -66,6 +72,7 @@ var nodeTypes = {
         type: 'dest_email',
         name: 'Destination Email',
         color: colors.purple,
+        categories: ['Destination'],
         connector_l: [{id: 'in', name: 'In', type: 'resource', direction: 'in'}],
         connector_r: []
     },
@@ -73,6 +80,7 @@ var nodeTypes = {
         type: 'dest_sql',
         name: 'Destination SQL',
         color: colors.purple,
+        categories: ['Destination'],
         connector_l: [{id: 'in', name: 'In', type: 'resource', direction: 'in'}],
         connector_r: []
     },
@@ -80,6 +88,7 @@ var nodeTypes = {
         type: 'filter_resource',
         name: 'Filter Resource',
         color: colors.purple,
+        categories: ['Resource'],
         connector_l: [
             {id: 'in', name: 'In', type: 'resource', direction: 'in'},
             {id: 'if', name: 'If', type: 'boolean', direction: 'in'}
@@ -90,6 +99,7 @@ var nodeTypes = {
         type: 'constrain_time_sampling',
         name: 'Constrain Time Sampling',
         color: colors.purple,
+        categories: ['Resource'],
         connector_l: [
             {id: 'in', name: 'In', type: 'resource', direction: 'in'},
             {id: 'secs_between_items', name: 'Seconds between Items', type: 'integer', direction: 'in'}
@@ -100,6 +110,7 @@ var nodeTypes = {
         type: 'constrain_resolution',
         name: 'Constrain Resolution',
         color: colors.purple,
+        categories: ['Resource'],
         connector_l: [
             {id: 'in', name: 'In', type: 'resource', direction: 'in'},
             {id: 'bucket_size', name: 'Bucket Size', type: 'integer', direction: 'in'}
@@ -110,6 +121,7 @@ var nodeTypes = {
         type: 'set_res_prop_str',
         name: 'Set Resource Property String',
         color: colors.purple,
+        categories: ['Resource', 'String'],
         connector_l: [
             {id: 'in', name: 'In', type: 'resource', direction: 'in'},
             {id: 'key', name: 'Key', type: 'string', direction: 'in'},
@@ -121,6 +133,7 @@ var nodeTypes = {
         type: 'get_res_prop_str',
         name: 'Get Resource Property String',
         color: colors.purple,
+        categories: ['Resource', 'String'],
         connector_l: [
             {id: 'in', name: 'In', type: 'resource', direction: 'in'},
             {id: 'key', name: 'Key', type: 'string', direction: 'in'}
@@ -131,6 +144,7 @@ var nodeTypes = {
         type: 'set_res_prop_location',
         name: 'Set Resource Property Location',
         color: colors.purple,
+        categories: ['Resource', 'Location'],
         connector_l: [
             {id: 'in', name: 'In', type: 'resource', direction: 'in'},
             {id: 'key', name: 'Key', type: 'string', direction: 'in'},
@@ -142,6 +156,7 @@ var nodeTypes = {
         type: 'get_res_prop_location',
         name: 'Get Resource Property Location',
         color: colors.purple,
+        categories: ['Resource', 'Location'],
         connector_l: [
             {id: 'in', name: 'In', type: 'resource', direction: 'in'},
             {id: 'key', name: 'Key', type: 'string', direction: 'in'}
@@ -152,6 +167,7 @@ var nodeTypes = {
         type: 'distance',
         name: 'Distance',
         color: '#A1D490',
+        categories: ['Location'],
         connector_l: [
             {id: 'in1', name: 'In 1', type: 'location', direction: 'in'},
             {id: 'in2', name: 'In 2', type: 'location', direction: 'in'}
@@ -162,6 +178,7 @@ var nodeTypes = {
 		type: 'location_in_region',
         name: 'Location in Region',
 		color: '#A1D490',
+        categories: ['Location'],
 		connector_l: [
 			{id: 'location', name: 'Location', type: 'location', direction: 'in'},
 			{id: 'region', name: 'Region', type: 'geo_region', direction: 'in'}
