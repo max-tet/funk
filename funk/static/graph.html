@@ -147,11 +147,12 @@
             <div v-if="isActive">
                 <input type="text"
                        class="form-control funk-control"
-                       placeholder="Add Node">
+                       placeholder="Add Node"
+                       v-model="filterText">
                 <div class="nodetype-list">
                     <table>
                         <tr is="funk-nodetype-preview" v-on:add-node="addNode"
-                            v-for="nodetype in nodetypes"
+                            v-for="nodetype in validNodetypes"
                             :nodetype="nodetype"></tr>
                     </table>
                 </div>

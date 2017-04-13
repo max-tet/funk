@@ -176,9 +176,19 @@ Vue.component('funk-node-properties-modal', {
 Vue.component('funk-add-node', {
     template: '#funk-add-node-template',
     data: function () {return {
-        isActive: false
+        isActive: false,
+        filterText: ''
     };},
     props: ['nodetypes'],
+    computed: {
+        validNodetypes: function () {
+            var nodetypesList = $.map(this.nodetypes, function (value, index) {return value;});
+            return nodetypesList.filter(function (item) {
+                var regex = new RegExp('.*' + this_.filterText + '.*', 'i');
+                return item.name.match(regex) != null;
+            });
+        }
+    },
     methods: {
         addNode: function (nodetype) {
             this.isActive = false;
