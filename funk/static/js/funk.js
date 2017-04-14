@@ -43,7 +43,10 @@ Vue.component('funk-node', {
     };},
     props: ['node'],
     computed: {
-        type: function () {return nodeTypes[this.node.type];},
+        type: function () {
+            var typeId = this.node.type;
+            return nodeTypes.find(function (type) {return type.type == typeId;});
+        },
         style: function () {
             return {
                 'background-color': this.type.color,
@@ -182,8 +185,7 @@ Vue.component('funk-add-node', {
     props: ['nodetypes'],
     computed: {
         validNodetypes: function () {
-            var nodetypesList = $.map(this.nodetypes, function (value, index) {return value;});
-            return nodetypesList.filter(function (item) {
+            return this.nodetypes.filter(function (item) {
                 var regex = new RegExp('.*' + this_.filterText + '.*', 'i');
                 return item.name.match(regex) != null;
             });
