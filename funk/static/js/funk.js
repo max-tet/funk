@@ -210,7 +210,7 @@ Vue.component('funk-add-node', {
             this.selection = (this.selection + modulus - 1) % modulus;
         },
         addSelectedNode: function () {
-            this.addNode(this.nodetypes[this.selection]);
+            this.addNode(this.filteredNodetypes[this.selection]);
         }
     },
     watch: {
