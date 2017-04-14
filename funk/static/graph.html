@@ -148,11 +148,14 @@
                 <input type="text"
                        class="form-control funk-control"
                        placeholder="Add Node"
-                       v-model="filterText">
+                       v-model="filterText"
+                       v-on:keydown.down="selectionDown"
+                       v-on:keydown.up="selectionUp"
+                       v-on:keydown.enter="addSelectedNode">
                 <div class="nodetype-list">
                     <table>
                         <tr is="funk-nodetype-preview" v-on:add-node="addNode"
-                            v-for="nodetype in validNodetypes"
+                            v-for="nodetype in filteredNodetypes"
                             :nodetype="nodetype"></tr>
                     </table>
                 </div>
@@ -168,6 +171,7 @@
     <script type="text/x-template" id="funk-nodetype-preview-template">
         <tr><td>
             <div class="funk-nodetype"
+                 :class="{ 'funk-selected': nodetype.isSelected }"
                  :style="style"
                  v-on:click="addNode">
                 <span>{{nodetype.name}}</span>

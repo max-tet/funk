@@ -109,6 +109,7 @@ body {
 }
 
 .funk-nodetype {
+    position: relative;
     border: 1px solid #50A162;
     border-radius: 0.5em;
     cursor: pointer;
@@ -119,6 +120,18 @@ body {
     padding: 5px;
     margin: 2px;
     font-size: 0.9em;
+}
+
+.funk-nodetype.funk-selected:after {
+    content: '';
+    display: block;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    border-radius: 5px;
+    border: 2px solid rgba(1,1,1,0.3);
 }
 
 #funk-canvas .funk-node {

@@ -180,14 +180,19 @@ Vue.component('funk-add-node', {
     template: '#funk-add-node-template',
     data: function () {return {
         isActive: false,
-        filterText: ''
+        filterText: '',
+        selection: 0,
     };},
     props: ['nodetypes'],
     computed: {
-        validNodetypes: function () {
-            return this.nodetypes.filter(function (item) {
+        filteredNodetypes: function () {
+            var this_ = this;
+            var filteredList = this.nodetypes.filter(function (item) {
                 var regex = new RegExp('.*' + this_.filterText + '.*', 'i');
                 return item.name.match(regex) != null;
+            });
+            return $.map(filteredList, function (value, index) {
+                return $.extend({}, value, {isSelected: (index == this_.selection)});
             });
         }
     },
@@ -195,6 +200,17 @@ Vue.component('funk-add-node', {
         addNode: function (nodetype) {
             this.isActive = false;
             this.$emit('add-node', nodetype);
+        },
+        selectionDown: function () {
+            var modulus = this.filteredNodetypes.length;
+            this.selection = (this.selection + modulus + 1) % modulus;
+        },
+        selectionUp: function () {
+            var modulus = this.filteredNodetypes.length;
+            this.selection = (this.selection + modulus - 1) % modulus;
+        },
+        addSelectedNode: function () {
+            this.addNode(this.nodetypes[this.selection]);
         }
     },
     watch: {
