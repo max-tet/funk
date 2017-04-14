@@ -36,6 +36,11 @@ var funkInstance = {
     }
 };
 
+Vue.config.keyCodes = {
+    end: 35,
+    home: 36
+}
+
 Vue.component('funk-node', {
     template: '#funk-node-template',
     data: function () {return {
@@ -191,6 +196,7 @@ Vue.component('funk-add-node', {
                 var regex = new RegExp('.*' + this_.filterText + '.*', 'i');
                 return item.name.match(regex) != null;
             });
+            this.selection = Math.min(this.selection, filteredList.length - 1);
             return $.map(filteredList, function (value, index) {
                 return $.extend({}, value, {isSelected: (index == this_.selection)});
             });
@@ -202,12 +208,17 @@ Vue.component('funk-add-node', {
             this.$emit('add-node', nodetype);
         },
         selectionDown: function () {
-            var modulus = this.filteredNodetypes.length;
-            this.selection = (this.selection + modulus + 1) % modulus;
+            var maxSelection = this.filteredNodetypes.length - 1;
+            this.selection = Math.min(maxSelection, this.selection + 1);
         },
         selectionUp: function () {
-            var modulus = this.filteredNodetypes.length;
-            this.selection = (this.selection + modulus - 1) % modulus;
+            this.selection = Math.max(0, this.selection - 1);
+        },
+        selectionHome: function () {
+            this.selection = 0;
+        },
+        selectionEnd: function () {
+            this.selection = this.filteredNodetypes.length - 1;
         },
         addSelectedNode: function () {
             this.addNode(this.filteredNodetypes[this.selection]);
@@ -243,7 +254,7 @@ Vue.component('funk-nodetype-preview', {
     },
     watch: {
         'nodetype.isSelected': function (val) {
-            if (val) {$(this.$el).scrollintoview();}
+            if (val) {$(this.$el).scrollintoview({duration: 100});}
         }
     }
 });

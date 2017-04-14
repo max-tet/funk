@@ -151,7 +151,10 @@
                        v-model="filterText"
                        v-on:keydown.down="selectionDown"
                        v-on:keydown.up="selectionUp"
-                       v-on:keydown.enter="addSelectedNode">
+                       v-on:keydown.home="selectionHome"
+                       v-on:keydown.end="selectionEnd"
+                       v-on:keydown.enter="addSelectedNode"
+                       v-on:keydown.esc="isActive=false">
                 <div class="nodetype-list">
                     <table>
                         <tr is="funk-nodetype-preview" v-on:add-node="addNode"
