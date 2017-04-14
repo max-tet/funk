@@ -240,6 +240,11 @@ Vue.component('funk-nodetype-preview', {
         addNode: function () {
             this.$emit('add-node', this.nodetype);
         }
+    },
+    watch: {
+        'nodetype.isSelected': function (val) {
+            if (val) {$(this.$el).scrollintoview();}
+        }
     }
 });
 
