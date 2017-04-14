@@ -176,9 +176,11 @@
             <div class="funk-nodetype"
                  :class="{ 'funk-selected': nodetype.isSelected }"
                  :style="style"
+                 v-if="!('isCategory' in nodetype)"
                  v-on:click="addNode">
                 <span>{{nodetype.name}}</span>
             </div>
+            <div v-else>{{nodetype.name}}</div>
         </td></tr>
     </script>
 

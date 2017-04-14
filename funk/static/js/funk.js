@@ -184,6 +184,7 @@ Vue.component('funk-node-properties-modal', {
 Vue.component('funk-add-node', {
     template: '#funk-add-node-template',
     data: function () {return {
+        categories: {},
         isActive: false,
         filterText: '',
         selection: 0,
@@ -192,7 +193,14 @@ Vue.component('funk-add-node', {
     computed: {
         filteredNodetypes: function () {
             var this_ = this;
-            var filteredList = this.nodetypes.filter(function (item) {
+            var completeList = [];
+            $.each(this_.categories, function (category, nodetypes) {
+                completeList.push({name: category, isCategory: true});
+                $.each(nodetypes, function (index, nodetype) {completeList.push(nodetype);});
+            });
+
+            var filteredList = completeList.filter(function (item) {
+                if ('isCategory' in item) {return true;}
                 var regex = new RegExp('.*' + this_.filterText + '.*', 'i');
                 return item.name.match(regex) != null;
             });
@@ -233,7 +241,27 @@ Vue.component('funk-add-node', {
                 });
             }
         }
+    },
+    mounted: function () {
+        for (t in this.nodetypes) {
+            var nodetype = this.nodetypes[t];
+            if ('categories' in nodetype) {
+                for (c in nodetype.categories) {
+                    var category = nodetype.categories[c];
+                    if (!(category in this.categories)) {
+                        this.categories[category] = [];
+                    }
+                    this.categories[category].push(nodetype);
+                }
+            } else {
+                if (!('Misc' in this.categories)) {
+                    this.categories['Misc'] = [];
+                }
+                this.categories.Misc.push(nodetype);
+            }
+        }
     }
+
 });
 
 Vue.component('funk-nodetype-preview', {
