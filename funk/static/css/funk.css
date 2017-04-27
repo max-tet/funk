@@ -75,19 +75,129 @@ body {
     top: 30px;
 }
 
-#funk-add-node {
-    width: 400px;
+#funk-add-node button {
     position: absolute;
-    top: 30px;
+    top: 0;
     left: 0;
     right: 0;
     margin-left: auto;
     margin-right: auto;
 }
 
-#funk-add-node span {
+#funk-add-node input {
     position: absolute;
+    z-index: 70;
+}
+
+#funk-add-node {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+
+#funk-add-node-active-panel {
+    position: absolute;
+    z-index: 70;
+    width: 300px;
+    top: 30px;
+    bottom: 30px;
+    left: 0;
+    right: 0;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#funk-add-node .coverup {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    z-index: 60;
+    pointer-events: all;
+    cursor: initial;
+    background-color: grey;
+    opacity: 0.5;
+}
+
+#funk-add-node-inactive {
+    position: absolute;
+    width: 300px;
+    top: 30px;
+    bottom: 30px;
+    left: 0;
+    right: 0;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#funk-add-node .nodetype-list {
+    position: absolute;
+    top: 3em;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    overflow: auto;
+}
+
+#funk-add-node .nodetype-list table {
     width: 100%;
+}
+
+.funk-nodetype {
+    position: relative;
+    border: 1px solid #50A162;
+    border-radius: 0.5em;
+    cursor: pointer;
+    z-index: 30;
+    background-color: #80C18F;
+    color: black;
+    font-family: helvetica, sans-serif;
+    padding: 5px;
+    margin: 2px;
+    font-size: 0.9em;
+}
+
+.funk-nodetype.funk-selected:after {
+    content: '';
+    display: block;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    border-radius: 5px;
+    border: 2px solid rgba(1,1,1,0.3);
+}
+
+.funk-nodetype-category {
+    position: relative;
+    border: 1px solid #aaa;
+    border-top-left-radius: 2em;
+    border-top-right-radius: 2em;
+    z-index: 30;
+    background-color: #ddd;
+    color: black;
+    font-family: helvetica, sans-serif;
+    padding: 5px;
+    margin: 2px;
+    font-size: 0.9em;
+    text-align: center;
+}
+
+.funk-nodetype-category.funk-selected:after {
+    content: '';
+    display: block;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    border-top-left-radius: 2em;
+    border-top-right-radius: 2em;
+    border: 2px solid rgba(1,1,1,0.3);
 }
 
 #funk-canvas .funk-node {

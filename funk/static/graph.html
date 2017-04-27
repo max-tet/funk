@@ -19,7 +19,9 @@
                 :is-open="(nodeUnderModification != '')"
                 v-on:save="modifyNode"
                 v-on:cancel="nodeUnderModification = ''"></funk-node-properties-modal>
-        <funk-add-node-input v-on:add-node="addNode"></funk-add-node-input>
+        <funk-add-node ref="addNode"
+                       :nodetypes="nodetypes"
+                       v-on:add-node="addNode"></funk-add-node>
         <funk-save-button></funk-save-button>
         <funk-node
                 v-for="node in nodes"
@@ -55,7 +57,7 @@
                         side="left"
                         v-bind:connector="type.connector_l[i-1]"
                         v-bind:nodeid="node.nodeid"></td>
-                    <td is="funk-node-connector" 
+                    <td is="funk-node-connector"
                         side="right"
                         v-bind:connector="type.connector_r[i-1]"
                         v-bind:nodeid="node.nodeid"
@@ -140,18 +142,62 @@
         </button>
     </script>
 
-    <script type="text/x-template" id="funk-add-node-input">
+    <script type="text/x-template" id="funk-add-node-template">
         <div id="funk-add-node">
-            <input type="text" class="form-control funk-control" placeholder="Add Node">
+            <div id="funk-add-node-active" v-if="isActive">
+                <div id="funk-add-node-active-panel">
+                    <input type="text"
+                           class="form-control funk-control"
+                           placeholder="Add Node"
+                           v-model="filterText"
+                           v-on:keydown.down="selectionDown"
+                           v-on:keydown.up="selectionUp"
+                           v-on:keydown.home="selectionHome"
+                           v-on:keydown.end="selectionEnd"
+                           v-on:keydown.enter="addSelectedNode"
+                           v-on:keydown.esc="isActive=false">
+                    <div class="nodetype-list">
+                        <funk-nodetype-preview
+                                v-on:add-node="addNode"
+                                v-for="nodetype in filteredNodetypes"
+                                :nodetype="nodetype"></funk-nodetype-preview>
+                    </div>
+                </div>
+                <div class="coverup" v-on:click="isActive=false"></div>
+            </div>
+            <div id="funk-add-node-inactive" v-else>
+                <button class="btn btn-primary funk-control"
+                        type="button"
+                        v-on:click="isActive=true">
+                    <span class="glyphicon glyphicon-plus"></span>
+                </button>
+            </div>
         </div>
     </script>
 
-	<script type="text/javascript" src="/static/js/jquery-3.1.1.min.js"></script>
-	<script type="text/javascript" src="/static/js/jquery.hotkeys.js"></script>
-	<script type="text/javascript" src="/static/js/typeahead.jquery.js"></script>
-	<script type="text/javascript" src="/static/js/vue.js"></script>
-	<script type="text/javascript" src="/static/js/jsPlumb-2.1.7-min.js"></script>
-	<script type="text/javascript" src="/static/js/bootstrap.js"></script>
-    <script type="text/javascript" src="/static/js/funk.js"></script>
+    <script type="text/x-template" id="funk-nodetype-preview-template">
+        <div class="funk-nodetype"
+             :class="{ 'funk-selected': nodetype.isSelected }"
+             :style="style"
+             v-if="!('isCategory' in nodetype)"
+             v-on:click="addNode">
+            <span>{{nodetype.name}}</span>
+        </div>
+        <div v-else
+             class="funk-nodetype-category"
+             :class="{ 'funk-selected': nodetype.isSelected }">
+            <span>
+                {{nodetype.name}}
+            </span>
+        </div>
+    </script>
+
     <script type="text/javascript" src="/api/nodetypes"></script>
+    <script type="text/javascript" src="/static/js/jquery-3.1.1.min.js"></script>
+    <script type="text/javascript" src="/static/js/jquery.hotkeys.js"></script>
+    <script type="text/javascript" src="/static/js/jquery.scrollintoview.js"></script>
+    <script type="text/javascript" src="/static/js/vue.js"></script>
+    <script type="text/javascript" src="/static/js/jsPlumb-2.1.7-min.js"></script>
+    <script type="text/javascript" src="/static/js/bootstrap.js"></script>
+    <script type="text/javascript" src="/static/js/funk.js"></script>
 </body>

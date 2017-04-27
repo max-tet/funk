@@ -36,6 +36,11 @@ var funkInstance = {
     }
 };
 
+Vue.config.keyCodes = {
+    end: 35,
+    home: 36
+}
+
 Vue.component('funk-node', {
     template: '#funk-node-template',
     data: function () {return {
@@ -43,7 +48,10 @@ Vue.component('funk-node', {
     };},
     props: ['node'],
     computed: {
-        type: function () {return nodeTypes[this.node.type];},
+        type: function () {
+            var typeId = this.node.type;
+            return nodeTypes.find(function (type) {return type.type == typeId;});
+        },
         style: function () {
             return {
                 'background-color': this.type.color,
@@ -173,38 +181,115 @@ Vue.component('funk-node-properties-modal', {
     }
 });
 
-Vue.component('funk-add-node-input', {
-    template: '#funk-add-node-input',
-    props: [],
-    mounted: function () {
-        this_ = this;
-        var funkNodeMatcher = function (query, callback) {
-            var matches = [];
-            var regex = new RegExp(query, 'i');
-            $.each(nodeTypes, function (i, nodeType) {
-                if (regex.test(nodeType.name)) {matches.push(nodeType);}
+Vue.component('funk-add-node', {
+    template: '#funk-add-node-template',
+    data: function () {return {
+        categories: {},
+        isActive: false,
+        filterText: '',
+        selection: 0,
+    };},
+    props: ['nodetypes'],
+    computed: {
+        filteredNodetypes: function () {
+            var this_ = this;
+            var completeList = [];
+            $.each(this_.categories, function (category, nodetypes) {
+                completeList.push({name: category, isCategory: true});
+                $.each(nodetypes, function (index, nodetype) {completeList.push(nodetype);});
             });
-            callback(matches);
-        };
-        $(this_.$el).find('input').typeahead({
-            minLength: 0,
-            highlight: true
-        },
-        {
-            name: 'nodeTypes',
-            source: funkNodeMatcher,
-            limit: 15,
-            display: 'name',
-            templates: {
-                suggestion: function (nodeType) {
-                    return '<div style="background-color: '+nodeType.color+'">'+nodeType.name+'</div>';
+
+            var filteredList = completeList.filter(function (item) {
+                if ('isCategory' in item) {return true;}
+                var regex = new RegExp('.*' + this_.filterText + '.*', 'i');
+                var catMatches = false;
+                if ('categories' in item) {
+                    $.each(item.categories, function (index, cat) {
+                        if (cat.match(regex) != null) {catMatches = true;}
+                    });
                 }
+                return catMatches || item.name.match(regex) != null;
+            });
+            this.selection = Math.min(this.selection, filteredList.length - 1);
+            return $.map(filteredList, function (value, index) {
+                return $.extend({}, value, {isSelected: (index == this_.selection)});
+            });
+        }
+    },
+    methods: {
+        addNode: function (nodetype) {
+            this.isActive = false;
+            this.$emit('add-node', nodetype);
+        },
+        selectionDown: function () {
+            var maxSelection = this.filteredNodetypes.length - 1;
+            this.selection = Math.min(maxSelection, this.selection + 1);
+        },
+        selectionUp: function () {
+            this.selection = Math.max(0, this.selection - 1);
+        },
+        selectionHome: function () {
+            this.selection = 0;
+        },
+        selectionEnd: function () {
+            this.selection = this.filteredNodetypes.length - 1;
+        },
+        addSelectedNode: function () {
+            this.addNode(this.filteredNodetypes[this.selection]);
+        }
+    },
+    watch: {
+        isActive: function (val) {
+            this_ = this;
+            if (val) {
+                Vue.nextTick(function () {
+                    $(this_.$el).find('input').focus();
+                });
             }
-        })
-        .bind('typeahead:select', function(ev, suggestion) {
-            this_.$emit('add-node', suggestion);
-            $(this_.$el).find('input').typeahead('val', '');
-        });
+        }
+    },
+    mounted: function () {
+        for (t in this.nodetypes) {
+            var nodetype = this.nodetypes[t];
+            if ('categories' in nodetype) {
+                for (c in nodetype.categories) {
+                    var category = nodetype.categories[c];
+                    if (!(category in this.categories)) {
+                        this.categories[category] = [];
+                    }
+                    this.categories[category].push(nodetype);
+                }
+            } else {
+                if (!('Misc' in this.categories)) {
+                    this.categories['Misc'] = [];
+                }
+                this.categories.Misc.push(nodetype);
+            }
+        }
+    }
+
+});
+
+Vue.component('funk-nodetype-preview', {
+    template: '#funk-nodetype-preview-template',
+    props: ['nodetype'],
+    computed: {
+        style: function () {
+            return {
+                'background-color': this.nodetype.color,
+                'border-color': shadeColor(this.nodetype.color, -0.2)
+            };
+        }
+    },
+    methods: {
+        addNode: function () {
+            this.$emit('add-node', this.nodetype);
+        }
+    },
+    watch: {
+        'nodetype.isSelected': function (val) {
+            if (val) {$(this.$el).scrollintoview({duration: 100});}
+        }
     }
 });
 
@@ -212,6 +297,7 @@ funkCanvas = new Vue({
     el: '#funk-canvas',
     data: {
         nodes: [],
+        nodetypes: nodeTypes,
         funkInstance: funkInstance,
         graphNotFound: false,
         nodeUnderModification: ''
@@ -352,7 +438,9 @@ funkCanvas = new Vue({
 
 });
 
-$(document).bind("keyup", "del", function() {funkCanvas.deleteSelectedNodes()});
+$(document).bind("keyup", "del", function() {funkCanvas.deleteSelectedNodes();});
+$(document).bind("keydown", "ctrl+a", function() {funkCanvas.$refs.addNode.isActive=true;});
+$(document).bind("keydown", "esc", function() {funkCanvas.$refs.addNode.isActive=false;});
 
 function shadeColor(color, percent) {
     var f=parseInt(color.slice(1),16),t=percent<0?0:255,p=percent<0?percent*-1:percent,R=f>>16,G=f>>8&0x00FF,B=f&0x0000FF;
