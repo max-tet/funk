@@ -180,7 +180,11 @@
                  v-on:click="addNode">
                 <span>{{nodetype.name}}</span>
             </div>
-            <div v-else>{{nodetype.name}}</div>
+            <div v-else class="funk-nodetype-category">
+                <span>
+                    {{nodetype.name}}
+                </span>
+            </div>
         </td></tr>
     </script>
 
