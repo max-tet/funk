@@ -144,29 +144,34 @@
 
     <script type="text/x-template" id="funk-add-node-template">
         <div id="funk-add-node">
-            <div v-if="isActive">
-                <input type="text"
-                       class="form-control funk-control"
-                       placeholder="Add Node"
-                       v-model="filterText"
-                       v-on:keydown.down="selectionDown"
-                       v-on:keydown.up="selectionUp"
-                       v-on:keydown.home="selectionHome"
-                       v-on:keydown.end="selectionEnd"
-                       v-on:keydown.enter="addSelectedNode"
-                       v-on:keydown.esc="isActive=false">
-                <div class="nodetype-list">
-                    <funk-nodetype-preview
-                            v-on:add-node="addNode"
-                            v-for="nodetype in filteredNodetypes"
-                            :nodetype="nodetype"></funk-nodetype-preview>
+            <div id="funk-add-node-active" v-if="isActive">
+                <div id="funk-add-node-active-panel">
+                    <input type="text"
+                           class="form-control funk-control"
+                           placeholder="Add Node"
+                           v-model="filterText"
+                           v-on:keydown.down="selectionDown"
+                           v-on:keydown.up="selectionUp"
+                           v-on:keydown.home="selectionHome"
+                           v-on:keydown.end="selectionEnd"
+                           v-on:keydown.enter="addSelectedNode"
+                           v-on:keydown.esc="isActive=false">
+                    <div class="nodetype-list">
+                        <funk-nodetype-preview
+                                v-on:add-node="addNode"
+                                v-for="nodetype in filteredNodetypes"
+                                :nodetype="nodetype"></funk-nodetype-preview>
+                    </div>
                 </div>
+                <div class="coverup" v-on:click="isActive=false"></div>
             </div>
-            <button class="btn btn-primary funk-control"
-                    type="button"
-                    v-on:click="isActive=true" v-else>
-                <span class="glyphicon glyphicon-plus"></span>
-            </button>
+            <div id="funk-add-node-inactive" v-else>
+                <button class="btn btn-primary funk-control"
+                        type="button"
+                        v-on:click="isActive=true">
+                    <span class="glyphicon glyphicon-plus"></span>
+                </button>
+            </div>
         </div>
     </script>
 
