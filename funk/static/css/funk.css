@@ -84,6 +84,11 @@ body {
     margin-right: auto;
 }
 
+#funk-add-node input {
+    position: absolute;
+    z-index: 70;
+}
+
 #funk-add-node {
     position: absolute;
     width: 300px;
@@ -97,6 +102,7 @@ body {
 
 #funk-add-node .nodetype-list {
     position: absolute;
+    z-index: 70;
     top: 3em;
     bottom: 0;
     left: 0;

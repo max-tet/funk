@@ -156,11 +156,10 @@
                        v-on:keydown.enter="addSelectedNode"
                        v-on:keydown.esc="isActive=false">
                 <div class="nodetype-list">
-                    <table>
-                        <tr is="funk-nodetype-preview" v-on:add-node="addNode"
+                    <funk-nodetype-preview
+                            v-on:add-node="addNode"
                             v-for="nodetype in filteredNodetypes"
-                            :nodetype="nodetype"></tr>
-                    </table>
+                            :nodetype="nodetype"></funk-nodetype-preview>
                 </div>
             </div>
             <button class="btn btn-primary funk-control"
@@ -172,20 +171,18 @@
     </script>
 
     <script type="text/x-template" id="funk-nodetype-preview-template">
-        <tr><td>
-            <div class="funk-nodetype"
-                 :class="{ 'funk-selected': nodetype.isSelected }"
-                 :style="style"
-                 v-if="!('isCategory' in nodetype)"
-                 v-on:click="addNode">
-                <span>{{nodetype.name}}</span>
-            </div>
-            <div v-else class="funk-nodetype-category">
-                <span>
-                    {{nodetype.name}}
-                </span>
-            </div>
-        </td></tr>
+        <div class="funk-nodetype"
+             :class="{ 'funk-selected': nodetype.isSelected }"
+             :style="style"
+             v-if="!('isCategory' in nodetype)"
+             v-on:click="addNode">
+            <span>{{nodetype.name}}</span>
+        </div>
+        <div v-else class="funk-nodetype-category">
+            <span>
+                {{nodetype.name}}
+            </span>
+        </div>
     </script>
 
     <script type="text/javascript" src="/api/nodetypes"></script>
