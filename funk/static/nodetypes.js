@@ -186,123 +186,10 @@ var nodeTypes = [
 		connector_r: [{id: 'result', name: 'Result', type: 'boolean', direction: 'out'}]
 	},
 	{
-		type: 'actor',
-        name: 'Actor',
-		color: colors.green,
-		connector_l: [],
-		connector_r: [
-			{id: 'out', name: 'Out', type: 'actor', direction: 'out'}
-		]
-	},
-	{
-		type: 'actor_any',
-        name: 'Any Actor',
-		color: colors.green,
-		connector_l: [
-			{id: 'actor1', name: 'Actor 1', type: 'actor', direction: 'in'},
-			{id: 'actor2', name: 'Actor 2', type: 'actor', direction: 'in'}
-		],
-		connector_r: [{id: 'any', name: 'Any', type: 'actor', direction: 'out'}]
-	},
-	{
-		type: 'actor_all',
-        name: 'All Actors',
-		color: colors.green,
-		connector_l: [
-			{id: 'actor1', name: 'Actor 1', type: 'actor', direction: 'in'},
-			{id: 'actor2', name: 'Actor 2', type: 'actor', direction: 'in'}
-		],
-		connector_r: [{id: 'all', name: 'All', type: 'actor', direction: 'out'}]
-	},
-	{
-		type: 'has_attr',
-        name: 'Has Attribute',
-		color: colors.green,
-		connector_l: [{id: 'actor', name: 'Actor', type: 'actor', direction: 'in'}],
-		connector_r: [{id: 'result', name: 'Result', type: 'boolean', direction: 'out'}]
-	},
-	{
-		type: 'get_attr_actor',
-        name: 'Get Attribute from Actor',
-		color: colors.green,
-		connector_l: [
-			{id: 'actor', name: 'Actor', type: 'actor', direction: 'in'},
-			{id: 'attr_name', name: 'Attribute Name', type: 'string', direction: 'in'}
-		],
-		connector_r: [{id: 'result', name: 'Result', type: 'string', direction: 'out'}]
-	},
-	{
-		type: 'get_connector_resource',
-        name: 'Get Connector Resource',
-		color: colors.purple,
-		connector_l: [{id: 'attr_name', name: 'Attribute Name', type: 'string', direction: 'in'}],
-		connector_r: [
-			{id: 'resource', name: 'Resource', type: 'resource', direction: 'in'},
-			{id: 'result', name: 'Result', type: 'string', direction: 'out'}
-		]
-	},
-	{
-		type: 'resource',
-        name: 'Resource',
-		color: colors.purple,
-		connector_l: [{id: 'out', name: 'Out', type: 'resource', direction: 'out'}],
-		connector_r: []
-	},
-	{
-		type: 'permission',
-        name: 'Permission',
-		color: colors.purple,
-		connector_l: [{id: 'actor', name: 'Actor', type: 'actor', direction: 'in'}],
-		connector_r: [{id: 'resource', name: 'Resource', type: 'resource', direction: 'in'}]
-	},
-	{
-		type: 'permission_if',
-        name: 'Grant Permission If',
-		color: colors.purple,
-		connector_l: [
-			{id: 'out', name: 'Out', type: 'resource', direction: 'out'},
-			{id: 'if', name: 'If', type: 'boolean', direction: 'in'}
-		],
-		connector_r: [{id: 'resource', name: 'Resource', type: 'resource', direction: 'in'}]
-	},
-	{
-		type: 'resource_to_timeseries',
-        name: 'Convert Resource to Timeseries',
-		color: colors.pink,
-		connector_l: [{id: 'out', name: 'Out', type: 'timeseries', direction: 'out'}],
-		connector_r: [{id: 'in', name: 'In', type: 'resource', direction: 'in'}]
-	},
-	{
-		type: 'timeseries_to_resource',
-        name: 'Convert Timeseries to Resource',
-		color: colors.pink,
-		connector_l: [{id: 'out', name: 'Out', type: 'resource', direction: 'out'}],
-		connector_r: [{id: 'in', name: 'In', type: 'timeseries', direction: 'in'}]
-	},
-	{
-		type: 'merge_timeseries',
-        name: 'Merge Timeseries',
-		color: colors.pink,
-		connector_l: [{id: 'result', name: 'Result', type: 'timeseries', direction: 'out'}],
-		connector_r: [
-			{id: 'in1', name: 'In 1', type: 'timeseries', direction: 'in'},
-			{id: 'in2', name: 'In 2', type: 'timeseries', direction: 'in'}
-		]
-	},
-	{
-		type: 'change_resolution_timeseries',
-        name: 'Change Resolution of Timesries',
-		color: colors.pink,
-		connector_l: [
-			{id: 'result', name: 'Result', type: 'timeseries', direction: 'out'},
-			{id: 'resolution', name: 'Resolution', type: 'integer', direction: 'in'}
-		],
-		connector_r: [{id: 'in', name: 'In', type: 'timeseries', direction: 'in'}]
-	},
-	{
 		type: 'const_string',
         name: 'Constant String',
 		color: colors.yellow,
+        categories: ['Constant', 'String'],
 		connector_l: [],
 		connector_r: [{id: 'out', name: 'Out', type: 'string', direction: 'out'}],
 		props: [
@@ -313,6 +200,7 @@ var nodeTypes = [
 		type: 'fill_template_str',
         name: 'Fill Template String',
 		color: colors.yellow,
+        categories: ['String'],
 		connector_l: [
 		    {id: 'template', name: 'Template', type: 'string', direction: 'in'},
 		    {id: 'resource', name: 'Resource', type: 'resource', direction: 'in'}
@@ -323,6 +211,7 @@ var nodeTypes = [
 		type: 'string_to_integer',
         name: 'Convert String to Integer',
 		color: colors.yellow,
+        categories: ['Conversion'],
 		connector_l: [{id: 'in', name: 'In', type: 'string', direction: 'in'}],
 		connector_r: [{id: 'out', name: 'Out', type: 'integer', direction: 'out'}]
 	},
@@ -330,6 +219,7 @@ var nodeTypes = [
 		type: 'eq_string',
         name: 'Check String Equals',
 		color: colors.yellow,
+        categories: ['String'],
 		connector_l: [
 			{id: 'val1', name: 'Value 1', type: 'string', direction: 'in'},
 			{id: 'val2', name: 'Value 2', type: 'string', direction: 'in'}
@@ -340,6 +230,7 @@ var nodeTypes = [
 		type: 'const_integer',
         name: 'Constant Integer',
 		color: colors.yellow,
+        categories: ['Constant', 'Integer'],
 		connector_l: [],
 		connector_r: [{id: 'out', name: 'Out', type: 'integer', direction: 'out'}],
 		props: [
@@ -350,6 +241,7 @@ var nodeTypes = [
 		type: 'compare_integer',
         name: 'Compare Integers',
 		color: colors.yellow,
+        categories: ['Integer'],
 		connector_l: [
 			{id: 'val1', name: 'Value 1', type: 'integer', direction: 'in'},
 			{id: 'val2', name: 'Value 2', type: 'integer', direction: 'in'}
@@ -370,6 +262,7 @@ var nodeTypes = [
 		type: 'convert_resource_to_location',
         name: 'Convert Resource to Location',
 		color: '#A1D490',
+        categories: ['Location', 'Resource', 'Conversion'],
 		connector_l: [{id: 'in', name: 'In', type: 'resource', direction: 'in'}],
 		connector_r: [{id: 'out', name: 'Out', type: 'location', direction: 'out'}]
 	},
@@ -377,6 +270,7 @@ var nodeTypes = [
 	    type: 'convert_boolean_to_resource',
         name: 'Convert Boolean to Resource',
 	    color: colors.yellow,
+        categories: ['Boolean', 'Resource', 'Conversion'],
 	    connector_l: [{id: 'in', name: 'In', type: 'boolean', direction: 'in'}],
 	    connector_r: [{id: 'out', name: 'Out', type: 'resource', direction: 'out'}]
 	},
@@ -384,6 +278,7 @@ var nodeTypes = [
 	    type: 'convert_string_to_resource',
         name: 'Convert String to Resource',
 	    color: colors.yellow,
+        categories: ['String', 'Resource', 'Conversion'],
 	    connector_l: [{id: 'in', name: 'In', type: 'string', direction: 'in'}],
 	    connector_r: [{id: 'out', name: 'Out', type: 'resource', direction: 'out'}]
 	},
@@ -391,6 +286,7 @@ var nodeTypes = [
 		type: 'between_integer',
         name: 'Integer is between',
 		color: colors.yellow,
+        categories: ['Integer'],
 		connector_l: [
 			{id: 'min', name: 'Minimum', type: 'integer', direction: 'in'},
 			{id: 'val', name: 'Value', type: 'integer', direction: 'in'},
@@ -402,6 +298,7 @@ var nodeTypes = [
 		type: 'time_of_day',
         name: 'Current time of day',
 		color: colors.yellow,
+        categories: ['Time'],
 		connector_l: [],
 		connector_r: [{id: 'out', name: 'Out', type: 'integer', direction: 'out'}]
 	},
@@ -409,6 +306,7 @@ var nodeTypes = [
 		type: 'const_bool',
         name: 'Constant Boolean',
 		color: colors.yellow,
+        categories: ['Boolean', 'Constant'],
 		connector_l: [],
 		connector_r: [{id: 'out', name: 'Out', type: 'boolean', direction: 'out'}],
 		props: [
@@ -419,6 +317,7 @@ var nodeTypes = [
 		type: 'and_bool',
         name: 'And',
 		color: colors.yellow,
+        categories: ['Boolean'],
 		connector_l: [
 			{id: 'val1', name: 'Value 1', type: 'boolean', direction: 'in'},
 			{id: 'val2', name: 'Value 2', type: 'boolean', direction: 'in'}
@@ -429,6 +328,7 @@ var nodeTypes = [
 		type: 'not_bool',
         name: 'Not',
 		color: colors.yellow,
+        categories: ['Boolean'],
 		connector_l: [{id: 'in', name: 'In', type: 'boolean', direction: 'in'}],
 		connector_r: [{id: 'out', name: 'Out', type: 'boolean', direction: 'out'}]
 	},
@@ -436,6 +336,7 @@ var nodeTypes = [
 		type: 'const_resource',
         name: 'Constant Resource',
 		color: colors.purple,
+        categories: ['Resource', 'Constant'],
 		connector_l: [],
 		connector_r: [{id: 'out', name: 'Out', type: 'resource', direction: 'out'}]
 	},
@@ -443,6 +344,7 @@ var nodeTypes = [
 		type: 'const_location',
         name: 'Constant Location',
 		color: '#A1D490',
+        categories: ['Location', 'Constant'],
 		connector_l: [],
 		connector_r: [{id: 'out', name: 'Out', type: 'location', direction: 'out'}],
 		props: [
@@ -454,6 +356,7 @@ var nodeTypes = [
 		type: 'const_geo_region',
         name: 'Constant Geographical Region',
 		color: '#A1D490',
+        categories: ['Location', 'Constant'],
 		connector_l: [],
 		connector_r: [{id: 'out', name: 'Out', type: 'geo_region', direction: 'out'}]
 	}
