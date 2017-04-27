@@ -175,9 +175,8 @@ body {
 .funk-nodetype-category {
     position: relative;
     border: 1px solid #aaa;
-    border-radius: 2em;
-    border-bottom-left-radius: 0;
-    border-bottom-right-radius: 0;
+    border-top-left-radius: 2em;
+    border-top-right-radius: 2em;
     z-index: 30;
     background-color: #ddd;
     color: black;
@@ -186,6 +185,19 @@ body {
     margin: 2px;
     font-size: 0.9em;
     text-align: center;
+}
+
+.funk-nodetype-category.funk-selected:after {
+    content: '';
+    display: block;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    border-top-left-radius: 2em;
+    border-top-right-radius: 2em;
+    border: 2px solid rgba(1,1,1,0.3);
 }
 
 #funk-canvas .funk-node {
