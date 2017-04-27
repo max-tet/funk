@@ -202,7 +202,13 @@ Vue.component('funk-add-node', {
             var filteredList = completeList.filter(function (item) {
                 if ('isCategory' in item) {return true;}
                 var regex = new RegExp('.*' + this_.filterText + '.*', 'i');
-                return item.name.match(regex) != null;
+                var catMatches = false;
+                if ('categories' in item) {
+                    $.each(item.categories, function (index, cat) {
+                        if (cat.match(regex) != null) {catMatches = true;}
+                    });
+                }
+                return catMatches || item.name.match(regex) != null;
             });
             this.selection = Math.min(this.selection, filteredList.length - 1);
             return $.map(filteredList, function (value, index) {
