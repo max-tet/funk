@@ -3,7 +3,7 @@ import random
 
 import pytest
 
-from funk.layout import Node
+from funk.layout import Node, load_graph
 
 
 @pytest.fixture()
@@ -54,5 +54,10 @@ def test_width(node_and_type_factory):
 
 
 def test_connect():
-    with open('graph_test_layout_00.json') as f:
+    with open('tests/graph_test_layout_00.json') as f:
         graph = json.load(f)
+    with open('funk/static/nodetypes.json') as f:
+        nodetypes = json.load(f)
+    nodes = load_graph(graph, nodetypes)
+    assert nodes['source_rest_server'] in nodes['dest_rest_client'].get_left_connected_nodes_dict().values()
+    assert nodes['dest_rest_client'] in nodes['source_rest_server'].get_right_connected_nodes_dict().values()

@@ -1,14 +1,14 @@
 {
   "nodes": [
     {
-      "nodeid": "source_rest_server_b30n0w",
+      "nodeid": "source_rest_server",
       "name": "Source Rest Server",
       "type": "source_rest_server",
       "top": "365px",
       "left": "201px"
     },
     {
-      "nodeid": "dest_rest_client_3xpbvo",
+      "nodeid": "dest_rest_client",
       "name": "Destination Rest Client",
       "type": "dest_rest_client",
       "top": "272px",
@@ -17,9 +17,9 @@
   ],
   "connections": [
     {
-      "out_node": "dest_rest_client_3xpbvo",
+      "out_node": "dest_rest_client",
       "out_connector": "in",
-      "in_node": "source_rest_server_b30n0w",
+      "in_node": "source_rest_server",
       "in_connector": "out"
     }
   ]
