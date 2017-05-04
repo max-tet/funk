@@ -1,0 +1,26 @@
+{
+  "nodes": [
+    {
+      "nodeid": "n0",
+      "name": "n0",
+      "type": "t_r_out",
+      "top": "365px",
+      "left": "201px"
+    },
+    {
+      "nodeid": "n1",
+      "name": "n1",
+      "type": "t_l_in",
+      "top": "272px",
+      "left": "630px"
+    }
+  ],
+  "connections": [
+    {
+      "out_node": "n0",
+      "out_connector": "out",
+      "in_node": "n1",
+      "in_connector": "in"
+    }
+  ]
+}
