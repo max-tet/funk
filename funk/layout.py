@@ -39,6 +39,7 @@ class Node:
         ]  # type: List[Connector]
 
         self.layer = None  # type: int
+        self.uplift = 0  # type: float
 
     def get_connector(self, name: str):
         return [c for c in self.left_connectors + self.right_connectors if c.id == name][0]
@@ -92,10 +93,22 @@ class LayoutException(Exception):
 def layout_graph(graph: str, nodetypes: str) -> str:
     nodes = load_graph(graph, nodetypes)
     assign_layers(nodes)
+    assign_uplift(nodes)
 
 
 def assign_layers(nodes):
     [n.update_layer(0) for n in nodes.values() if len(n.get_left_connected_nodes()) == 0]
+
+
+def assign_uplift(nodes):
+    for node in nodes.values():
+        for connected_nodes in [node.get_left_connected_nodes(), node.get_right_connected_nodes()]:
+            if len(connected_nodes) > 1:
+                step = 1 / len(connected_nodes)
+                current_uplift = 1
+                for connected_node in connected_nodes:
+                    connected_node.uplift += current_uplift
+                    current_uplift -= step
 
 
 def load_graph(graph, nodetypes) -> Dict:

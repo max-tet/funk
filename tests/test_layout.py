@@ -1,6 +1,6 @@
 import json
 
-from funk.layout import load_graph, assign_layers
+from funk.layout import load_graph, assign_layers, assign_uplift
 
 
 def _load_test_graph(graph_name: str):
@@ -56,3 +56,9 @@ def test_layer():
     nodes = _load_test_graph('two_nodes')
     assign_layers(nodes)
     assert all([n0.layer < n1.layer for n0 in nodes.values() for n1 in n0.get_right_connected_nodes()])
+
+
+def test_uplift():
+    nodes = _load_test_graph('two_nodes')
+    assign_uplift(nodes)
+    # TODO: assert something
