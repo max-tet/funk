@@ -1,6 +1,6 @@
 import json
 
-from funk.layout import load_graph
+from funk.layout import load_graph, assign_layers
 
 
 def _load_test_graph(graph_name: str):
@@ -48,5 +48,11 @@ def test_width_narrow():
 
 def test_connect():
     nodes = _load_test_graph('two_nodes')
-    assert nodes['n0'] in nodes['n1'].get_left_connected_nodes_dict().values()
-    assert nodes['n1'] in nodes['n0'].get_right_connected_nodes_dict().values()
+    assert nodes['n0'] in nodes['n1'].get_left_connected_nodes()
+    assert nodes['n1'] in nodes['n0'].get_right_connected_nodes()
+
+
+def test_layer():
+    nodes = _load_test_graph('two_nodes')
+    assign_layers(nodes)
+    assert all([n0.layer < n1.layer for n0 in nodes.values() for n1 in n0.get_right_connected_nodes()])

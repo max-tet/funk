@@ -1,30 +1,6 @@
-import json
 from enum import Enum, auto
 from typing import Dict
 from typing import List
-
-
-def layout_graph(graph: str, nodetypes: str) -> str:
-    graph_json = json.loads(graph)
-    nodetypes_json = json.loads(nodetypes)
-    nodetypes_dict = {nodetype['type']: nodetype for nodetype in nodetypes_json}
-    nodes = {n['nodeid']: Node(n, nodetypes_dict[n['type']]) for n in graph_json['nodes']}  # type: Dict[Node]
-    for connection in graph_json['connections']:
-        connect_nodes(nodes, *connection.values())
-
-
-def load_graph(graph, nodetypes) -> Dict:
-    nodetypes_dict = {nodetype['type']: nodetype for nodetype in nodetypes}
-    nodes = {n['nodeid']: Node(n, nodetypes_dict[n['type']]) for n in graph['nodes']}  # type: Dict[Node]
-    for connection in graph['connections']:
-        connect_nodes(nodes, *connection.values())
-    return nodes
-
-
-def connect_nodes(nodes, out_node, out_connector, in_node, in_connector):
-    out_conn = nodes[out_node].get_connector(out_connector)  # type: Connector
-    in_conn = nodes[in_node].get_connector(in_connector)  # type: Connector
-    in_conn.connect_with(out_conn)
 
 
 class ConnDirection(Enum):
@@ -49,39 +25,44 @@ class Node:
                                max([0, *map(lambda t: len(t['name']), nodetype_json['connector_l'])]) +
                                max([0, *map(lambda t: len(t['name']), nodetype_json['connector_l'])])) / 3)
 
-        self.left_connectors = {
-            c['id']:
-                Connector(self,
-                          c['id'],
-                          ConnDirection[c['direction'].upper()],
-                          ConnSide.LEFT) for c in nodetype_json['connector_l']
-        }  # type: Dict[Connector]
-        self.right_connectors = {
-            c['id']:
-                Connector(self,
-                          c['id'],
-                          ConnDirection[c['direction'].upper()],
-                          ConnSide.RIGHT) for c in nodetype_json['connector_r']
-        }  # type: Dict[Connector]
+        self.left_connectors = [
+            Connector(self,
+                      c['id'],
+                      ConnDirection[c['direction'].upper()],
+                      ConnSide.LEFT) for c in nodetype_json['connector_l']
+        ]  # type: List[Connector]
+        self.right_connectors = [
+            Connector(self,
+                      c['id'],
+                      ConnDirection[c['direction'].upper()],
+                      ConnSide.RIGHT) for c in nodetype_json['connector_r']
+        ]  # type: List[Connector]
+
+        self.layer = None  # type: int
 
     def get_connector(self, name: str):
-        return {**self.left_connectors, **self.right_connectors}[name]
+        return [c for c in self.left_connectors + self.right_connectors if c.id == name][0]
 
-    def get_left_connected_nodes_dict(self):
-        return {rem_conn.node.id: rem_conn.node
-                for this_conns in self.left_connectors.values()
-                for rem_conn in this_conns.connectors}
+    def get_left_connected_nodes(self):
+        return [rem_conn.node
+                for this_conns in self.left_connectors
+                for rem_conn in this_conns.connectors]
 
-    def get_right_connected_nodes_dict(self):
-        return {rem_conn.node.id: rem_conn.node
-                for this_conns in self.right_connectors.values()
-                for rem_conn in this_conns.connectors}
+    def get_right_connected_nodes(self):
+        return [rem_conn.node
+                for this_conns in self.right_connectors
+                for rem_conn in this_conns.connectors]
+
+    def update_layer(self, new_layer: int):
+        if not self.layer or new_layer > self.layer:
+            self.layer = new_layer
+            [n.update_layer(new_layer + 1) for n in self.get_right_connected_nodes()]
 
 
 class Connector:
-    def __init__(self, node: Node, name: str, direction: ConnDirection, side: ConnSide):
+    def __init__(self, node: Node, id: str, direction: ConnDirection, side: ConnSide):
         self.node = node
-        self.name = name
+        self.id = id
         self.direction = direction
         self.side = side
         self.connectors = []  # type: List[Connector]
@@ -106,3 +87,26 @@ class Connector:
 
 class LayoutException(Exception):
     pass
+
+
+def layout_graph(graph: str, nodetypes: str) -> str:
+    nodes = load_graph(graph, nodetypes)
+    assign_layers(nodes)
+
+
+def assign_layers(nodes):
+    [n.update_layer(0) for n in nodes.values() if len(n.get_left_connected_nodes()) == 0]
+
+
+def load_graph(graph, nodetypes) -> Dict:
+    nodetypes_dict = {nodetype['type']: nodetype for nodetype in nodetypes}
+    nodes = {n['nodeid']: Node(n, nodetypes_dict[n['type']]) for n in graph['nodes']}  # type: Dict[Node]
+    for connection in graph['connections']:
+        connect_nodes(nodes, *connection.values())
+    return nodes
+
+
+def connect_nodes(nodes, out_node, out_connector, in_node, in_connector):
+    out_conn = nodes[out_node].get_connector(out_connector)  # type: Connector
+    in_conn = nodes[in_node].get_connector(in_connector)  # type: Connector
+    in_conn.connect_with(out_conn)
