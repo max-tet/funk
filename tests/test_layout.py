@@ -58,6 +58,15 @@ def test_layer():
     assert all([n0.layer < n1.layer for n0 in nodes.values() for n1 in n0.get_right_connected_nodes()])
 
 
+def test_layer_shifted_left_node():
+    nodes = _load_test_graph('shifted_left_node')
+    assign_layers(nodes)
+    assert nodes['n0'].layer == 1
+    assert nodes['n1'].layer == 2
+    assert nodes['n2'].layer == 0
+    assert nodes['n3'].layer == 1
+
+
 def test_uplift():
     nodes = _load_test_graph('3_nodes_fork')
     assign_uplift(nodes)

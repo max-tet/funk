@@ -95,14 +95,17 @@ class LayoutException(Exception):
     pass
 
 
-def layout_graph(graph: str, nodetypes: str) -> str:
+def layout_graph(graph: str, nodetypes: str):
     nodes = load_graph(graph, nodetypes)
     assign_layers(nodes)
     assign_uplift(nodes)
 
 
 def assign_layers(nodes):
-    [n.update_layer(0) for n in nodes.values() if len(n.get_left_connected_nodes()) == 0]
+    leftmost_nodes = [n for n in nodes.values() if len(n.get_left_connected_nodes()) == 0]
+    [n.update_layer(0) for n in leftmost_nodes]
+    for node in leftmost_nodes:
+        node.layer = min([n.layer for n in node.get_right_connected_nodes()]) - 1
 
 
 def assign_uplift(nodes):

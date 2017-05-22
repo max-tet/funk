@@ -89,6 +89,49 @@
     "connector_r": []
   },
   {
+    "type": "t_l_in_r_out",
+    "name": "t_l_in_r_out",
+    "color": "#000000",
+    "categories": [],
+    "connector_l": [
+      {
+        "id": "in",
+        "name": "in",
+        "type": "data",
+        "direction": "in"
+      }
+    ],
+    "connector_r": [
+      {
+        "id": "out",
+        "name": "out",
+        "type": "data",
+        "direction": "out"
+      }
+    ]
+  },
+  {
+    "type": "t_2_l_in",
+    "name": "t_2_l_in",
+    "color": "#000000",
+    "categories": [],
+    "connector_l": [
+      {
+        "id": "in0",
+        "name": "in0",
+        "type": "data",
+        "direction": "in"
+      },
+      {
+        "id": "in1",
+        "name": "in1",
+        "type": "data",
+        "direction": "in"
+      }
+    ],
+    "connector_r": []
+  },
+  {
     "type": "t_5_left",
     "name": "t_5_left",
     "color": "#000000",
