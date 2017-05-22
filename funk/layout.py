@@ -29,20 +29,25 @@ class Node:
             Connector(self,
                       c['id'],
                       ConnDirection[c['direction'].upper()],
-                      ConnSide.LEFT) for c in nodetype_json['connector_l']
+                      ConnSide.LEFT)
+            for c in nodetype_json['connector_l']
         ]  # type: List[Connector]
         self.right_connectors = [
             Connector(self,
                       c['id'],
                       ConnDirection[c['direction'].upper()],
-                      ConnSide.RIGHT) for c in nodetype_json['connector_r']
+                      ConnSide.RIGHT)
+            for c in nodetype_json['connector_r']
         ]  # type: List[Connector]
 
         self.layer = None  # type: int
         self.uplift = 0  # type: float
 
     def get_connector(self, name: str):
-        return [c for c in self.left_connectors + self.right_connectors if c.id == name][0]
+        try:
+            return [c for c in self.left_connectors + self.right_connectors if c.id == name][0]
+        except IndexError as e:
+            raise KeyError from e
 
     def get_left_connected_nodes(self):
         return [rem_conn.node

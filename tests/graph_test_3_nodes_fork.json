@@ -1,0 +1,39 @@
+{
+  "nodes": [
+    {
+      "nodeid": "n0",
+      "name": "n0",
+      "type": "t_2_r_out",
+      "top": "365px",
+      "left": "201px"
+    },
+    {
+      "nodeid": "n1",
+      "name": "n1",
+      "type": "t_l_in",
+      "top": "272px",
+      "left": "630px"
+    },
+    {
+      "nodeid": "n2",
+      "name": "n2",
+      "type": "t_l_in",
+      "top": "272px",
+      "left": "630px"
+    }
+  ],
+  "connections": [
+    {
+      "out_node": "n0",
+      "out_connector": "out0",
+      "in_node": "n1",
+      "in_connector": "in"
+    },
+    {
+      "out_node": "n0",
+      "out_connector": "out1",
+      "in_node": "n2",
+      "in_connector": "in"
+    }
+  ]
+}

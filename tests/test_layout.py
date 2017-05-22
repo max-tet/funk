@@ -4,9 +4,9 @@ from funk.layout import load_graph, assign_layers, assign_uplift
 
 
 def _load_test_graph(graph_name: str):
-    with open('tests/graph_test_{}.json'.format(graph_name)) as f:
+    with open('graph_test_{}.json'.format(graph_name)) as f:
         graph = json.load(f)
-    with open('tests/nodetypes.json') as f:
+    with open('nodetypes.json') as f:
         nodetypes = json.load(f)
     return load_graph(graph, nodetypes)
 
@@ -59,6 +59,6 @@ def test_layer():
 
 
 def test_uplift():
-    nodes = _load_test_graph('two_nodes')
+    nodes = _load_test_graph('3_nodes_fork')
     assign_uplift(nodes)
-    # TODO: assert something
+    assert nodes['n1'].uplift > nodes['n2'].uplift

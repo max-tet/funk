@@ -6,7 +6,8 @@
     "categories": [],
     "connector_l": [],
     "connector_r": []
-  },{
+  },
+  {
     "type": "t_20_name",
     "name": "01234567890123456789",
     "color": "#000000",
@@ -46,6 +47,27 @@
       {
         "id": "out",
         "name": "out",
+        "type": "data",
+        "direction": "out"
+      }
+    ]
+  },
+  {
+    "type": "t_2_r_out",
+    "name": "t_2_r_out",
+    "color": "#000000",
+    "categories": [],
+    "connector_l": [],
+    "connector_r": [
+      {
+        "id": "out0",
+        "name": "out0",
+        "type": "data",
+        "direction": "out"
+      },
+      {
+        "id": "out1",
+        "name": "out1",
         "type": "data",
         "direction": "out"
       }
