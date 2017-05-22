@@ -99,6 +99,21 @@ def layout_graph(graph: str, nodetypes: str):
     nodes = load_graph(graph, nodetypes)
     assign_layers(nodes)
     assign_uplift(nodes)
+    set_x_values_by_layer(nodes)
+
+
+def load_graph(graph, nodetypes) -> Dict:
+    nodetypes_dict = {nodetype['type']: nodetype for nodetype in nodetypes}
+    nodes = {n['nodeid']: Node(n, nodetypes_dict[n['type']]) for n in graph['nodes']}  # type: Dict[Node]
+    for connection in graph['connections']:
+        connect_nodes(nodes, *connection.values())
+    return nodes
+
+
+def connect_nodes(nodes, out_node, out_connector, in_node, in_connector):
+    out_conn = nodes[out_node].get_connector(out_connector)  # type: Connector
+    in_conn = nodes[in_node].get_connector(in_connector)  # type: Connector
+    in_conn.connect_with(out_conn)
 
 
 def assign_layers(nodes):
@@ -119,15 +134,11 @@ def assign_uplift(nodes):
                     current_uplift -= step
 
 
-def load_graph(graph, nodetypes) -> Dict:
-    nodetypes_dict = {nodetype['type']: nodetype for nodetype in nodetypes}
-    nodes = {n['nodeid']: Node(n, nodetypes_dict[n['type']]) for n in graph['nodes']}  # type: Dict[Node]
-    for connection in graph['connections']:
-        connect_nodes(nodes, *connection.values())
-    return nodes
-
-
-def connect_nodes(nodes, out_node, out_connector, in_node, in_connector):
-    out_conn = nodes[out_node].get_connector(out_connector)  # type: Connector
-    in_conn = nodes[in_node].get_connector(in_connector)  # type: Connector
-    in_conn.connect_with(out_conn)
+def set_x_values_by_layer(nodes, step=50, offset=25):
+    current_nodes = [n for n in nodes.values() if n.layer == 0]
+    current_x = offset
+    while len(current_nodes) > 0:
+        for n in current_nodes:
+            n.x = current_x
+        current_nodes = [n for n in nodes.values() if n.layer == current_nodes[0].layer + 1]
+        current_x += step
