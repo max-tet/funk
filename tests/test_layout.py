@@ -1,6 +1,6 @@
 import json
 
-from funk.layout import load_graph, assign_layers, assign_uplift, set_x_values_by_layer
+from funk.layout import load_graph, assign_layers, assign_uplift, set_x_values_by_layer, set_y_values_by_uplift
 
 
 def _load_test_graph(graph_name: str):
@@ -79,3 +79,12 @@ def test_uplift():
     nodes = _load_test_graph('3_nodes_fork')
     assign_uplift(nodes)
     assert nodes['n1'].uplift > nodes['n2'].uplift
+
+
+def test_y_values_by_uplift():
+    nodes = _load_test_graph('3_nodes_fork')
+    assign_layers(nodes)
+    assign_uplift(nodes)
+    set_y_values_by_uplift(nodes, step=2, offset=1)
+    assert nodes['n1'].y == '1px'
+    assert nodes['n2'].y == '3px'

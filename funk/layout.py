@@ -142,3 +142,14 @@ def set_x_values_by_layer(nodes, step=50, offset=25):
             n.x = current_x
         current_nodes = [n for n in nodes.values() if n.layer == current_nodes[0].layer + 1]
         current_x += step
+
+
+def set_y_values_by_uplift(nodes, step=50, offset=25):
+    current_layer_nodes = [n for n in nodes.values() if n.layer == 0]
+    while len(current_layer_nodes) > 0:
+        current_y = offset
+        current_layer_nodes.sort(key=lambda n: n.uplift, reverse=True)
+        for n in current_layer_nodes:
+            n.y = str(current_y) + 'px'
+            current_y += step
+        current_layer_nodes = [n for n in nodes.values() if n.layer == current_layer_nodes[0].layer + 1]
