@@ -1,6 +1,7 @@
 import json
 
-from funk.layout import load_graph, assign_layers, assign_uplift, set_x_values_by_layer, set_y_values_by_uplift
+from funk.graphlayout import load_graph
+from funk.graphlayout.topo_layout import apply_topo_layout
 
 
 def _load_test_graph(graph_name: str):
@@ -54,13 +55,13 @@ def test_connect():
 
 def test_layer():
     nodes = _load_test_graph('two_nodes')
-    assign_layers(nodes)
+    apply_topo_layout(nodes)
     assert all([n0.layer < n1.layer for n0 in nodes.values() for n1 in n0.get_right_connected_nodes()])
 
 
 def test_layer_shifted_left_node():
     nodes = _load_test_graph('shifted_left_node')
-    assign_layers(nodes)
+    apply_topo_layout(nodes)
     assert nodes['n0'].layer == 1
     assert nodes['n1'].layer == 2
     assert nodes['n2'].layer == 0
@@ -69,22 +70,19 @@ def test_layer_shifted_left_node():
 
 def test_x_values_by_layer():
     nodes = _load_test_graph('two_nodes')
-    assign_layers(nodes)
-    set_x_values_by_layer(nodes, step=2, offset=1)
+    apply_topo_layout(nodes, step=2, offset=1)
     assert nodes['n0'].x == 1
     assert nodes['n1'].x == 3
 
 
 def test_uplift():
     nodes = _load_test_graph('3_nodes_fork')
-    assign_uplift(nodes)
+    apply_topo_layout(nodes)
     assert nodes['n1'].uplift > nodes['n2'].uplift
 
 
 def test_y_values_by_uplift():
     nodes = _load_test_graph('3_nodes_fork')
-    assign_layers(nodes)
-    assign_uplift(nodes)
-    set_y_values_by_uplift(nodes, step=2, offset=1)
+    apply_topo_layout(nodes, step=2, offset=1)
     assert nodes['n1'].y == '1px'
     assert nodes['n2'].y == '3px'
