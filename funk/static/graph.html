@@ -22,6 +22,8 @@
         <funk-add-node ref="addNode"
                        :nodetypes="nodetypes"
                        v-on:add-node="addNode"></funk-add-node>
+        <button id="funk-button-layout" type="button" class="btn btn-default funk-control"
+                v-on:click="layoutGraph">Layout</button>
         <funk-save-button></funk-save-button>
         <funk-node
                 v-for="node in nodes"

@@ -1,3 +1,4 @@
+import json
 from enum import Enum, auto
 from typing import List, Dict
 
@@ -96,9 +97,21 @@ class LayoutException(Exception):
     pass
 
 
-def layout_graph(graph: str, nodetypes: str):
-    nodes = load_graph(graph, nodetypes)
+def layout_graph(graph: str, nodetypes: str) -> str:
+    graph_json = json.loads(graph)
+    nodetypes_json = json.loads(nodetypes)
+    nodes = load_graph(graph_json, nodetypes_json)
     apply_topo_layout(nodes)
+
+    apply_positions(graph_json, nodes)
+    return json.dumps(graph_json)
+
+
+def apply_positions(graph_json, nodes):
+    for node_json in graph_json['nodes']:
+        node_internal = nodes[node_json['nodeid']]  # type: Node
+        node_json['top'] = node_internal.y
+        node_json['left'] = node_internal.x
 
 
 def load_graph(graph, nodetypes) -> Dict:

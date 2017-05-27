@@ -1,8 +1,8 @@
-def apply_topo_layout(nodes, step=50, offset=25):
+def apply_topo_layout(nodes, step=150):
     assign_layers(nodes)
     assign_uplift(nodes)
-    set_x_values_by_layer(nodes, step, offset)
-    set_y_values_by_uplift(nodes, step, offset)
+    set_x_values_by_layer(nodes, step)
+    set_y_values_by_uplift(nodes, step)
 
 
 def assign_layers(nodes):
@@ -23,22 +23,22 @@ def assign_uplift(nodes):
                     current_uplift -= step
 
 
-def set_x_values_by_layer(nodes, step=50, offset=25):
+def set_x_values_by_layer(nodes, step=100):
     current_nodes = [n for n in nodes.values() if n.layer == 0]
-    current_x = offset
+    current_x = 0
     while len(current_nodes) > 0:
         for n in current_nodes:
-            n.x = current_x
+            n.x = '{}px'.format(current_x)
         current_nodes = [n for n in nodes.values() if n.layer == current_nodes[0].layer + 1]
         current_x += step
 
 
-def set_y_values_by_uplift(nodes, step=50, offset=25):
+def set_y_values_by_uplift(nodes, step=100):
     current_layer_nodes = [n for n in nodes.values() if n.layer == 0]
     while len(current_layer_nodes) > 0:
-        current_y = offset
+        current_y = 0
         current_layer_nodes.sort(key=lambda n: n.uplift, reverse=True)
         for n in current_layer_nodes:
-            n.y = str(current_y) + 'px'
+            n.y = '{}px'.format(current_y)
             current_y += step
         current_layer_nodes = [n for n in nodes.values() if n.layer == current_layer_nodes[0].layer + 1]

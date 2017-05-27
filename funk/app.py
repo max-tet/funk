@@ -1,9 +1,9 @@
+import json
+
 from flask import Flask, Response
 from flask.globals import request
 
-from funk import nodetypes, model, persistence
-from funk.persistence import GraphDoesNotExistError, create_empty_graph, GraphAlreadyExistsError, save_graph, \
-    delete_graph
+from funk import nodetypes, model, persistence, graphlayout
 
 app = Flask(__name__)
 
@@ -24,13 +24,13 @@ def _db_close(exc):
         model.database.close()
 
 
-@app.errorhandler(GraphDoesNotExistError)
-def handle_graph_does_not_exist_error(e: GraphDoesNotExistError):
+@app.errorhandler(persistence.GraphDoesNotExistError)
+def handle_graph_does_not_exist_error(e: persistence.GraphDoesNotExistError):
     return str(e), 404
 
 
-@app.errorhandler(GraphAlreadyExistsError)
-def handle_graph_already_exists_error(e: GraphAlreadyExistsError):
+@app.errorhandler(persistence.GraphAlreadyExistsError)
+def handle_graph_already_exists_error(e: persistence.GraphAlreadyExistsError):
     return str(e), 409
 
 
@@ -65,17 +65,27 @@ def get_graph(graph_name):
 
 @app.route('/api/graph/<graph_name>', methods=['POST'])
 def post_graph(graph_name):
-    create_empty_graph(graph_name)
+    persistence.create_empty_graph(graph_name)
     return Response(status=201)
 
 
 @app.route('/api/graph/<graph_name>', methods=['DELETE'])
 def del_graph(graph_name):
-    delete_graph(graph_name)
+    persistence.delete_graph(graph_name)
     return Response(status=200)
 
 
 @app.route('/api/graph/<graph_name>', methods=['PUT'])
 def update_graph(graph_name):
-    save_graph(graph_name, request.get_json())
+    persistence.save_graph(graph_name, request.get_json())
+    return ''
+
+
+@app.route('/api/trigger/layout/<graph_name>', methods=['POST'])
+def layout_graph(graph_name):
+    graph = persistence.load_graph(graph_name)
+    with open('funk/static/nodetypes.json') as f:
+        nodetypes = '\n'.join(f.readlines())
+    new_graph = graphlayout.layout_graph(graph, nodetypes)
+    persistence.save_graph(graph_name, json.loads(new_graph))
     return ''

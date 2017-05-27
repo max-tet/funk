@@ -304,7 +304,10 @@ funkCanvas = new Vue({
     },
     methods: {
         initJsPlumbInstance: function () {
-            if (this.funkInstance.jsPlumbInstance) {this.funkInstance.jsPlumbInstance.reset();}
+            if (this.funkInstance.jsPlumbInstance) {
+                this.funkInstance.jsPlumbInstance.reset();
+                $('.funk-node').remove();
+            }
 
             var instance = window.jsp = jsPlumb.getInstance({
                 DragOptions: { cursor: 'pointer', zIndex: 2000 },
@@ -431,6 +434,15 @@ funkCanvas = new Vue({
             this.$nextTick(function () {
                 this_.funkInstance.jsPlumbInstance.recalculateOffsets(node.nodeid);
                 this_.funkInstance.jsPlumbInstance.repaintEverything();
+            });
+        },
+        layoutGraph: function () {
+            var this_ = this;
+            $.ajax({
+                url: '/api/trigger/layout/' + this_.funkInstance.graphname,
+                type: 'POST',
+                success: function () {this_.loadGraph()},
+                complete: function () {console.log('failed layout')}
             });
         }
     },
