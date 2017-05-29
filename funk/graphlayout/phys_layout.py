@@ -1,10 +1,10 @@
 import numpy
 
 
-def apply_phys_layout(nodes, scale_force: float = 0.05):
+def apply_phys_layout(nodes, scale_force: float = 0.1):
     for _ in range(50):
         forces = {k: numpy.array([0.0, 0.0]) for k in nodes.keys()}
-        for force in [f(nodes) for f in [force_repel]]:
+        for force in [f(nodes) for f in [force_repel, force_attract_connected]]:
             for nodeid in forces.keys():
                 forces[nodeid] += force[nodeid]
 
@@ -13,7 +13,7 @@ def apply_phys_layout(nodes, scale_force: float = 0.05):
             move_node(node, forces[nodeid])
 
 
-def force_repel(nodes, distance: float = 50, max_force: float = 10):
+def force_repel(nodes, distance: float = 30, max_force: float = 10):
     force_vector_dict = dict()
     for current_node_id, current_node in nodes.items():
         accumulated_force_vector = numpy.array([0.0, 0.0])
@@ -21,6 +21,19 @@ def force_repel(nodes, distance: float = 50, max_force: float = 10):
             connecting_vector = vector_between(current_node, other_node)
             strength = rescale(vector_length(connecting_vector), 0, distance, max_force, 0, limit=True)
             force_vector = rescale_vector(connecting_vector, strength * -1)
+            accumulated_force_vector += force_vector
+        force_vector_dict[current_node_id] = accumulated_force_vector
+    return force_vector_dict
+
+
+def force_attract_connected(nodes, distance: float = 50, max_force: float = 10):
+    force_vector_dict = dict()
+    for current_node_id, current_node in nodes.items():
+        accumulated_force_vector = numpy.array([0.0, 0.0])
+        for other_node in current_node.get_connected_nodes():
+            connecting_vector = vector_between(current_node, other_node)
+            strength = rescale(vector_length(connecting_vector), 0, distance, 0, max_force, limit=True)
+            force_vector = rescale_vector(connecting_vector, strength)
             accumulated_force_vector += force_vector
         force_vector_dict[current_node_id] = accumulated_force_vector
     return force_vector_dict

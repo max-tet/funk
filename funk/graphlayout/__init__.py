@@ -71,6 +71,9 @@ class Node:
                 for this_conns in self.right_connectors
                 for rem_conn in this_conns.connectors]
 
+    def get_connected_nodes(self):
+        return self.get_left_connected_nodes() + self.get_right_connected_nodes()
+
     def update_layer(self, new_layer: int):
         if not self.layer or new_layer > self.layer:
             self.layer = new_layer
