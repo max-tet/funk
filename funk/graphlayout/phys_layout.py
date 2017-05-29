@@ -1,5 +1,3 @@
-import re
-
 import numpy
 
 
@@ -41,14 +39,7 @@ def rescale_vector(vector: numpy.array, length: float):
 
 
 def node_pos(node):
-    pattern = '^(-?[0-9]*(\.[0-9]*)?)px'
-    try:
-        x = re.match(pattern, node.x).group(1)
-        y = re.match(pattern, node.y).group(1)
-    except AttributeError as e:
-        raise AttributeError('failed to match {} or {}'.format(node.x, node.y)) from e
-
-    return numpy.array([float(x), float(y)])
+    return numpy.array([node.x, node.y])
 
 
 def rescale(input: float, old_from: float, old_to: float, new_from: float, new_to: float, limit: bool = False) -> float:
@@ -61,5 +52,5 @@ def rescale(input: float, old_from: float, old_to: float, new_from: float, new_t
 
 def move_node(node, vector: numpy.array):
     new_pos = node_pos(node) + vector  # type: numpy.array
-    node.x = '{}px'.format(new_pos[0])
-    node.y = '{}px'.format(new_pos[1])
+    node.x = new_pos[0]
+    node.y = new_pos[1]

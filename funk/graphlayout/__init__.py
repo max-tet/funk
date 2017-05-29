@@ -1,4 +1,5 @@
 import json
+import re
 from enum import Enum, auto
 from typing import List, Dict
 
@@ -16,12 +17,19 @@ class ConnSide(Enum):
     RIGHT = auto()
 
 
+pos_pattern = '^(-?[0-9]*(\.[0-9]*)?)px'
+
+
 class Node:
     def __init__(self, node_json: dict, nodetype_json: dict):
         self.nodetype_json = nodetype_json
         self.id = node_json['nodeid']
-        self.x = node_json['top']
-        self.y = node_json['left']
+
+        try:
+            self.x = re.match(pos_pattern, node_json['top']).group(1)
+            self.y = re.match(pos_pattern, node_json['left']).group(1)
+        except AttributeError as e:
+            raise AttributeError('failed to match {} or {}'.format(node_json['top'], node_json['left'])) from e
 
         self.height = 2 + max(len(nodetype_json['connector_l']), len(nodetype_json['connector_r']))
         self.width = round(max(len(node_json['name']), len(nodetype_json['name']),
@@ -111,9 +119,9 @@ def layout_graph(graph: str, nodetypes: str) -> str:
 
 def apply_positions(graph_json, nodes):
     for node_json in graph_json['nodes']:
-        node_internal = nodes[node_json['nodeid']]  # type: Node
-        node_json['top'] = node_internal.y
-        node_json['left'] = node_internal.x
+        node = nodes[node_json['nodeid']]  # type: Node
+        node_json['top'] = '{}px'.format(node.y)
+        node_json['left'] = '{}px'.format(node.x)
 
 
 def load_graph(graph, nodetypes) -> Dict:
