@@ -1,5 +1,7 @@
 import numpy
 
+from funk.graphlayout.misc import bounding_box
+
 
 def apply_phys_layout(nodes, scale_force: float = 0.3):
     for _ in range(50):
@@ -13,13 +15,14 @@ def apply_phys_layout(nodes, scale_force: float = 0.3):
             move_node(node, forces[nodeid])
 
 
-def force_repel(nodes, distance: float = 300, max_force: float = 40):
+def force_repel(nodes, distance: float = 300, max_force: float = 60):
     force_vector_dict = dict()
     for current_node_id, current_node in nodes.items():
         accumulated_force_vector = numpy.array([0.0, 0.0])
         for other_node in [n for n in nodes.values() if n is not current_node]:
             connecting_vector = vector_between(current_node, other_node)
-            strength = rescale(vector_length(connecting_vector), 0, distance, max_force, 0, limit=True)
+            node_dist = node_distance(current_node, other_node)
+            strength = rescale(node_dist, 0, distance, max_force, 0, limit=True)
             force_vector = rescale_vector(connecting_vector, strength * -1)
             accumulated_force_vector += force_vector
         force_vector_dict[current_node_id] = accumulated_force_vector
@@ -42,6 +45,15 @@ def vector_between(node_from, node_to) -> numpy.array:
     return node_pos(node_to) - node_pos(node_from)
 
 
+def node_distance(node_from, node_to) -> float:
+    node_from_top, node_from_bottom, node_from_left, node_from_right = bounding_box(node_from)
+    node_to_top, node_to_bottom, node_to_left, node_to_right = bounding_box(node_to)
+    horizontal_distance = range_distance(node_from_left, node_from_right, node_to_left, node_to_right)
+    vertical_distance = range_distance(node_from_top, node_from_bottom, node_to_top, node_to_bottom)
+    vector = numpy.array([horizontal_distance, vertical_distance])
+    return numpy.linalg.norm(vector)
+
+
 def vector_length(vector: numpy.array) -> float:
     return numpy.linalg.norm(vector)
 
@@ -54,8 +66,7 @@ def node_pos(node):
     return numpy.array([node.x, node.y])
 
 
-def rescale(in_value: float, old_from: float, old_to: float, new_from: float, new_to: float,
-            limit: bool = False) -> float:
+def rescale(in_value, old_from, old_to, new_from, new_to, limit: bool = False) -> float:
     if limit:
         if old_from < old_to:
             in_value = min(in_value, old_to)
@@ -64,6 +75,17 @@ def rescale(in_value: float, old_from: float, old_to: float, new_from: float, ne
             in_value = min(in_value, old_from)
             in_value = max(in_value, old_to)
     return (in_value - old_from) * (new_from - new_to) / (old_from - old_to) + new_from
+
+
+def range_distance(a_left, a_right, b_left, b_right) -> float:
+    if is_between(a_left, b_left, b_right) or is_between(a_right, b_left, b_right) \
+            or is_between(b_left, a_left, a_right) or is_between(b_right, a_left, a_right):
+        return 0.0
+    return min([abs(a - b) for a in [a_left, a_right] for b in [b_left, b_right]])
+
+
+def is_between(value, bound0, bound1):
+    return bound0 < value < bound1 or bound0 > value > bound1
 
 
 def move_node(node, vector: numpy.array):
