@@ -3,7 +3,7 @@ import re
 from enum import Enum, auto
 from typing import List, Dict
 
-from funk.graphlayout.misc import apply_border_offset
+from funk.graphlayout.misc import apply_border_offset, randomize_positions
 from funk.graphlayout.phys_layout import apply_phys_layout
 from funk.graphlayout.topo_layout import assign_layers, assign_uplift, set_x_values_by_layer, apply_topo_layout
 
@@ -112,6 +112,7 @@ def layout_graph(graph: str, nodetypes: str) -> str:
     nodetypes_json = json.loads(nodetypes)
     nodes = load_graph(graph_json, nodetypes_json)
     apply_topo_layout(nodes)
+    randomize_positions(nodes.values(), 10.0)
     apply_phys_layout(nodes)
     apply_border_offset(nodes)
 

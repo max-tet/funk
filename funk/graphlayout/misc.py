@@ -1,4 +1,5 @@
 import math
+import random
 
 
 def apply_border_offset(nodes, left_border: int = 10, top_border: int = 100):
@@ -25,3 +26,9 @@ def shift_all(nodes, x, y):
     for node in nodes:
         node.x += x
         node.y += y
+
+
+def randomize_positions(nodes, max_deviation: float):
+    for node in nodes:
+        node.y += random.uniform(-max_deviation, max_deviation)
+        node.x += random.uniform(-max_deviation, max_deviation)
