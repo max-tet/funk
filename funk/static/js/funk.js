@@ -392,8 +392,8 @@ funkCanvas = new Vue({
                 nodeid: nodeType.type + '_' + randomString(6),
                 name: nodeType.name,
                 type: nodeType.type,
-                top: '5em',
-                left: '5em',
+                top: '30px',
+                left: '30px',
                 ephemeral: {
                     isSelected: false,
                     isHovered: false
