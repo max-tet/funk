@@ -69,6 +69,12 @@ body {
     box-shadow: 0px 0px 20px #ccc;
 }
 
+#funk-button-layout {
+    position: absolute;
+    right: 100px;
+    top: 30px;
+}
+
 #funk-button-save {
     position: absolute;
     right: 30px;

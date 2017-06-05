@@ -1,0 +1,57 @@
+{
+  "drawing": [
+    "      n0 -,       ",
+    "           > - n1 ",
+    " n2 - n3 -’       "
+  ],
+  "nodes": [
+    {
+      "nodeid": "n0",
+      "name": "n0",
+      "type": "t_r_out",
+      "top": "365px",
+      "left": "201px"
+    },
+    {
+      "nodeid": "n1",
+      "name": "n1",
+      "type": "t_2_l_in",
+      "top": "272px",
+      "left": "630px"
+    },
+    {
+      "nodeid": "n2",
+      "name": "n2",
+      "type": "t_r_out",
+      "top": "272px",
+      "left": "630px"
+    },
+    {
+      "nodeid": "n3",
+      "name": "n3",
+      "type": "t_l_in_r_out",
+      "top": "272px",
+      "left": "630px"
+    }
+  ],
+  "connections": [
+    {
+      "out_node": "n0",
+      "out_connector": "out",
+      "in_node": "n1",
+      "in_connector": "in0"
+    },
+    {
+      "out_node": "n2",
+      "out_connector": "out",
+      "in_node": "n3",
+      "in_connector": "in"
+    },
+    {
+      "out_node": "n3",
+      "out_connector": "out",
+      "in_node": "n1",
+      "in_connector": "in1"
+    }
+  ]
+}

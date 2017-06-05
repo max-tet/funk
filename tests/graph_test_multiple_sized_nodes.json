@@ -1,0 +1,47 @@
+{
+  "nodes": [
+    {
+      "nodeid": "n_5_left",
+      "name": "n_5_left",
+      "type": "t_5_left",
+      "top": "0px",
+      "left": "0px"
+    },
+    {
+      "nodeid": "n_5_right",
+      "name": "n_5_right",
+      "type": "t_5_right",
+      "top": "0px",
+      "left": "0px"
+    },
+    {
+      "nodeid": "n_20_name",
+      "name": "0123435678901234356789",
+      "type": "t_empty",
+      "top": "0px",
+      "left": "0px"
+    },
+    {
+      "nodeid": "n_empty",
+      "name": ".",
+      "type": "t_empty",
+      "top": "0px",
+      "left": "0px"
+    },
+    {
+      "nodeid": "n_20_conns",
+      "name": "...",
+      "type": "t_10_10_conn_names",
+      "top": "0px",
+      "left": "0px"
+    },
+    {
+      "nodeid": "n_20_typename",
+      "name": "...",
+      "type": "t_20_name",
+      "top": "0px",
+      "left": "0px"
+    }
+  ],
+  "connections": []
+}

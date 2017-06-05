@@ -1,0 +1,212 @@
+[
+  {
+    "type": "t_empty",
+    "name": ".",
+    "color": "#000000",
+    "categories": [],
+    "connector_l": [],
+    "connector_r": []
+  },
+  {
+    "type": "t_20_name",
+    "name": "01234567890123456789",
+    "color": "#000000",
+    "categories": [],
+    "connector_l": [],
+    "connector_r": []
+  },
+  {
+    "type": "t_10_10_conn_names",
+    "name": "...",
+    "color": "#000000",
+    "categories": [],
+    "connector_l": [
+      {
+        "id": "r",
+        "name": "0123456789",
+        "type": "data",
+        "direction": "in"
+      }
+    ],
+    "connector_r": [
+      {
+        "id": "l",
+        "name": "0123456789",
+        "type": "data",
+        "direction": "out"
+      }
+    ]
+  },
+  {
+    "type": "t_r_out",
+    "name": "t_r_out",
+    "color": "#000000",
+    "categories": [],
+    "connector_l": [],
+    "connector_r": [
+      {
+        "id": "out",
+        "name": "out",
+        "type": "data",
+        "direction": "out"
+      }
+    ]
+  },
+  {
+    "type": "t_2_r_out",
+    "name": "t_2_r_out",
+    "color": "#000000",
+    "categories": [],
+    "connector_l": [],
+    "connector_r": [
+      {
+        "id": "out0",
+        "name": "out0",
+        "type": "data",
+        "direction": "out"
+      },
+      {
+        "id": "out1",
+        "name": "out1",
+        "type": "data",
+        "direction": "out"
+      }
+    ]
+  },
+  {
+    "type": "t_l_in",
+    "name": "t_l_in",
+    "color": "#000000",
+    "categories": [],
+    "connector_l": [
+      {
+        "id": "in",
+        "name": "in",
+        "type": "data",
+        "direction": "in"
+      }
+    ],
+    "connector_r": []
+  },
+  {
+    "type": "t_l_in_r_out",
+    "name": "t_l_in_r_out",
+    "color": "#000000",
+    "categories": [],
+    "connector_l": [
+      {
+        "id": "in",
+        "name": "in",
+        "type": "data",
+        "direction": "in"
+      }
+    ],
+    "connector_r": [
+      {
+        "id": "out",
+        "name": "out",
+        "type": "data",
+        "direction": "out"
+      }
+    ]
+  },
+  {
+    "type": "t_2_l_in",
+    "name": "t_2_l_in",
+    "color": "#000000",
+    "categories": [],
+    "connector_l": [
+      {
+        "id": "in0",
+        "name": "in0",
+        "type": "data",
+        "direction": "in"
+      },
+      {
+        "id": "in1",
+        "name": "in1",
+        "type": "data",
+        "direction": "in"
+      }
+    ],
+    "connector_r": []
+  },
+  {
+    "type": "t_5_left",
+    "name": "t_5_left",
+    "color": "#000000",
+    "categories": [],
+    "connector_l": [
+      {
+        "id": "in0",
+        "name": "in0",
+        "type": "data",
+        "direction": "in"
+      },
+      {
+        "id": "in1",
+        "name": "in1",
+        "type": "data",
+        "direction": "in"
+      },
+      {
+        "id": "in2",
+        "name": "in2",
+        "type": "data",
+        "direction": "in"
+      },
+      {
+        "id": "in3",
+        "name": "in3",
+        "type": "data",
+        "direction": "in"
+      },
+      {
+        "id": "in4",
+        "name": "in4",
+        "type": "data",
+        "direction": "in"
+      }
+    ],
+    "connector_r": []
+  },
+  {
+    "type": "t_5_right",
+    "name": "t_5_right",
+    "color": "#000000",
+    "categories": [],
+    "connector_l": [],
+    "connector_r": [
+      {
+        "id": "in0",
+        "name": "in0",
+        "type": "data",
+        "direction": "in"
+      },
+      {
+        "id": "in1",
+        "name": "in1",
+        "type": "data",
+        "direction": "in"
+      },
+      {
+        "id": "in2",
+        "name": "in2",
+        "type": "data",
+        "direction": "in"
+      },
+      {
+        "id": "in3",
+        "name": "in3",
+        "type": "data",
+        "direction": "in"
+      },
+      {
+        "id": "in4",
+        "name": "in4",
+        "type": "data",
+        "direction": "in"
+      }
+    ]
+  }
+]
