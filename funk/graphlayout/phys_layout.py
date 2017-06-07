@@ -41,7 +41,7 @@ def force_attract_connected(nodes, max_force: float = 20):
     return force_vector_dict
 
 
-def force_linearize_connected(nodes, distance: float = 500, max_force: float = 80):
+def force_linearize_connected(nodes, distance: float = 300, max_force: float = 100):
     force_vector_dict = dict()
     for current_node_id, current_node in nodes.items():
         accumulated_force_vector = numpy.array([0.0, 0.0])
