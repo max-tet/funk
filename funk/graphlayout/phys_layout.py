@@ -3,7 +3,7 @@ import numpy
 from funk.graphlayout.misc import bounding_box
 
 
-def apply_phys_layout(nodes, scale_force: float = 0.4):
+def apply_phys_layout(nodes, scale_force: float = 1):
     for _ in range(50):
         forces = {k: numpy.array([0.0, 0.0]) for k in nodes.keys()}
         for force in [f(nodes) for f in [force_repel, force_attract_connected, force_linearize_connected]]:
@@ -15,7 +15,7 @@ def apply_phys_layout(nodes, scale_force: float = 0.4):
             move_node(node, forces[nodeid])
 
 
-def force_repel(nodes, distance: float = 200, max_force: float = 40):
+def force_repel(nodes, distance: float = 250, max_force: float = 60):
     force_vector_dict = dict()
     for current_node_id, current_node in nodes.items():
         accumulated_force_vector = numpy.array([0.0, 0.0])
@@ -29,7 +29,7 @@ def force_repel(nodes, distance: float = 200, max_force: float = 40):
     return force_vector_dict
 
 
-def force_attract_connected(nodes, max_force: float = 20):
+def force_attract_connected(nodes, max_force: float = 40):
     force_vector_dict = dict()
     for current_node_id, current_node in nodes.items():
         accumulated_force_vector = numpy.array([0.0, 0.0])
@@ -41,7 +41,7 @@ def force_attract_connected(nodes, max_force: float = 20):
     return force_vector_dict
 
 
-def force_linearize_connected(nodes, distance: float = 300, max_force: float = 100):
+def force_linearize_connected(nodes, distance: float = 400, max_force: float = 100):
     force_vector_dict = dict()
     for current_node_id, current_node in nodes.items():
         accumulated_force_vector = numpy.array([0.0, 0.0])

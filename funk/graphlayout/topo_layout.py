@@ -1,6 +1,7 @@
 def apply_topo_layout(nodes):
     assign_layers(nodes)
     assign_uplift_from_left(nodes)
+    assign_uplift_by_connector_order(nodes)
     set_x_values_by_layer(nodes, 200)
     set_y_values_by_uplift(nodes, 100)
 
@@ -12,12 +13,12 @@ def assign_layers(nodes):
         node.layer = min([n.layer for n in node.get_right_connected_nodes()]) - 1
 
 
-def assign_uplift(nodes):
+def assign_uplift_by_connector_order(nodes):
     for node in nodes.values():
         for side in [node.get_left_connected_nodes(), node.get_right_connected_nodes()]:
             if len(side) > 1:
-                step = 1 / len(side)
-                current_uplift = 1
+                step = 1.0 / (float(len(side) - 1))
+                current_uplift = 0.5
                 for connected_node in side:
                     connected_node.uplift += current_uplift
                     current_uplift -= step
@@ -25,7 +26,7 @@ def assign_uplift(nodes):
 
 def assign_uplift_from_left(nodes):
     for i, left_node in enumerate([n for n in nodes.values() if n.layer == 0]):
-        left_node.uplift = float(i)
+        left_node.uplift += float(i)
     do_later = []
     for current_nodes in get_layers(nodes, first_layer=1):
         for node in current_nodes:
@@ -33,10 +34,10 @@ def assign_uplift_from_left(nodes):
             if len(left_nodes) == 0:
                 do_later.append(node)
             else:
-                node.uplift = sum([n.uplift for n in left_nodes]) / len(left_nodes)
+                node.uplift += sum([n.uplift for n in left_nodes]) / len(left_nodes)
     for node in do_later:
         right_nodes = node.get_right_connected_nodes()
-        node.uplift = sum([n.uplift for n in right_nodes]) / len(right_nodes)
+        node.uplift += sum([n.uplift for n in right_nodes]) / len(right_nodes)
 
 
 def get_layers(nodes, first_layer=0):

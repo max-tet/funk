@@ -5,7 +5,7 @@ from typing import List, Dict
 
 from funk.graphlayout.misc import apply_border_offset, randomize_positions
 from funk.graphlayout.phys_layout import apply_phys_layout
-from funk.graphlayout.topo_layout import assign_layers, assign_uplift, set_x_values_by_layer, apply_topo_layout
+from funk.graphlayout.topo_layout import apply_topo_layout
 
 
 class ConnDirection(Enum):
