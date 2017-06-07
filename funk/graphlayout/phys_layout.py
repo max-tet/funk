@@ -1,10 +1,15 @@
+import time
+
 import numpy
 
 from funk.graphlayout.misc import bounding_box
 
 
-def apply_phys_layout(nodes, scale_force: float = 1):
-    for _ in range(50):
+def apply_phys_layout(nodes, scale_force: float = 1, timeout: float = 1):
+    start_time = time.clock()
+    nr_of_rounds = 0
+    while time.clock() - start_time < timeout:
+        nr_of_rounds += 1
         forces = {k: numpy.array([0.0, 0.0]) for k in nodes.keys()}
         for force in [f(nodes) for f in [force_repel, force_attract_connected, force_linearize_connected]]:
             for nodeid in forces.keys():
@@ -13,6 +18,7 @@ def apply_phys_layout(nodes, scale_force: float = 1):
         forces = {nodeid: force * scale_force for nodeid, force in forces.items()}
         for nodeid, node in nodes.items():
             move_node(node, forces[nodeid])
+    print('layouted for {} rounds'.format(nr_of_rounds))
 
 
 def force_repel(nodes, distance: float = 250, max_force: float = 60):
