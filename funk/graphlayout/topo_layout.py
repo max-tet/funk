@@ -1,6 +1,6 @@
 def apply_topo_layout(nodes, step=150):
     assign_layers(nodes)
-    assign_uplift(nodes)
+    assign_uplift_from_left(nodes)
     set_x_values_by_layer(nodes, step)
     set_y_values_by_uplift(nodes, step)
 
@@ -14,13 +14,30 @@ def assign_layers(nodes):
 
 def assign_uplift(nodes):
     for node in nodes.values():
-        for connected_nodes in [node.get_left_connected_nodes(), node.get_right_connected_nodes()]:
-            if len(connected_nodes) > 1:
-                step = 1 / len(connected_nodes)
+        for side in [node.get_left_connected_nodes(), node.get_right_connected_nodes()]:
+            if len(side) > 1:
+                step = 1 / len(side)
                 current_uplift = 1
-                for connected_node in connected_nodes:
+                for connected_node in side:
                     connected_node.uplift += current_uplift
                     current_uplift -= step
+
+
+def assign_uplift_from_left(nodes):
+    current_layer = 0
+    leftmost_node_counter = 0.0
+    while True:
+        current_nodes = [n for n in nodes.values() if n.layer == current_layer]
+        if len(current_nodes) == 0:
+            break
+        current_layer += 1
+        for node in current_nodes:
+            left_nodes = node.get_left_connected_nodes()
+            if len(left_nodes) == 0:
+                node.uplift = leftmost_node_counter
+                leftmost_node_counter += 1.0
+            else:
+                node.uplift = sum([n.uplift for n in left_nodes]) / len(left_nodes)
 
 
 def set_x_values_by_layer(nodes, step=100):
