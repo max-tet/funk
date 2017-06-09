@@ -163,7 +163,7 @@
                     <div class="nodetype-list">
                         <funk-nodetype-preview
                                 v-on:add-node="addNode"
-                                v-for="nodetype in filteredNodetypes"
+                                v-for="nodetype in getFilteredNodetypes()"
                                 :nodetype="nodetype"></funk-nodetype-preview>
                     </div>
                 </div>

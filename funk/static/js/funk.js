@@ -188,18 +188,33 @@ Vue.component('funk-add-node', {
         isActive: false,
         filterText: '',
         selection: 0,
+        completeList: []
     };},
     props: ['nodetypes'],
-    computed: {
-        filteredNodetypes: function () {
+    methods: {
+        addNode: function (nodetype) {
+            this.isActive = false;
+            this.$emit('add-node', nodetype);
+        },
+        selectionDown: function () {
+            var maxSelection = this.getFilteredNodetypes().length - 1;
+            this.selection = Math.min(maxSelection, this.selection + 1);
+        },
+        selectionUp: function () {
+            this.selection = Math.max(0, this.selection - 1);
+        },
+        selectionHome: function () {
+            this.selection = 0;
+        },
+        selectionEnd: function () {
+            this.selection = this.getFilteredNodetypes().length - 1;
+        },
+        addSelectedNode: function () {
+            this.addNode(this.getFilteredNodetypes()[this.selection]);
+        },
+        getFilteredNodetypes: function () {
             var this_ = this;
-            var completeList = [];
-            $.each(this_.categories, function (category, nodetypes) {
-                completeList.push({name: category, isCategory: true});
-                $.each(nodetypes, function (index, nodetype) {completeList.push(nodetype);});
-            });
-
-            var filteredList = completeList.filter(function (item) {
+            var filteredList = this_.completeList.filter(function (item) {
                 if ('isCategory' in item) {return true;}
                 var regex = new RegExp('.*' + this_.filterText + '.*', 'i');
                 var catMatches = false;
@@ -216,28 +231,6 @@ Vue.component('funk-add-node', {
             });
         }
     },
-    methods: {
-        addNode: function (nodetype) {
-            this.isActive = false;
-            this.$emit('add-node', nodetype);
-        },
-        selectionDown: function () {
-            var maxSelection = this.filteredNodetypes.length - 1;
-            this.selection = Math.min(maxSelection, this.selection + 1);
-        },
-        selectionUp: function () {
-            this.selection = Math.max(0, this.selection - 1);
-        },
-        selectionHome: function () {
-            this.selection = 0;
-        },
-        selectionEnd: function () {
-            this.selection = this.filteredNodetypes.length - 1;
-        },
-        addSelectedNode: function () {
-            this.addNode(this.filteredNodetypes[this.selection]);
-        }
-    },
     watch: {
         isActive: function (val) {
             this_ = this;
@@ -249,23 +242,29 @@ Vue.component('funk-add-node', {
         }
     },
     mounted: function () {
+        this_ = this;
+        var categories = {};
         for (t in this.nodetypes) {
             var nodetype = this.nodetypes[t];
             if ('categories' in nodetype) {
                 for (c in nodetype.categories) {
                     var category = nodetype.categories[c];
-                    if (!(category in this.categories)) {
-                        this.categories[category] = [];
+                    if (!(category in categories)) {
+                        categories[category] = [];
                     }
-                    this.categories[category].push(nodetype);
+                    categories[category].push(nodetype);
                 }
             } else {
-                if (!('Misc' in this.categories)) {
-                    this.categories['Misc'] = [];
+                if (!('Misc' in categories)) {
+                    categories['Misc'] = [];
                 }
-                this.categories.Misc.push(nodetype);
+                categories.Misc.push(nodetype);
             }
         }
+        $.each(categories, function (category, nodetypes) {
+            this_.completeList.push({name: category, isCategory: true});
+            $.each(nodetypes, function (index, nodetype) {this_.completeList.push(nodetype);});
+        });
     }
 
 });
