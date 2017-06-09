@@ -22,9 +22,11 @@
         <funk-add-node ref="addNode"
                        :nodetypes="nodetypes"
                        v-on:add-node="addNode"></funk-add-node>
-        <button id="funk-button-layout" type="button" class="btn btn-default funk-control"
-                v-on:click="layoutGraph">Layout</button>
-        <funk-save-button></funk-save-button>
+        <div id="funk-buttons" class="btn-group funk-control" role="group">
+            <button id="funk-button-layout" type="button" class="btn btn-default"
+                    v-on:click="layoutGraph">Layout</button>
+            <funk-save-button></funk-save-button>
+        </div>
         <funk-node
                 v-for="node in nodes"
                 :key="node.nodeid"
@@ -138,7 +140,7 @@
     </script>
 
     <script type="text/x-template" id="funk-save-button-template">
-        <button id="funk-button-save" type="button" class="btn btn-default funk-control"
+        <button id="funk-button-save" type="button" class="btn btn-default"
                 v-on:click="save" v-bind:disabled="!active">
             {{text}}
         </button>
