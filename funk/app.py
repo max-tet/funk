@@ -1,5 +1,6 @@
 import json
 
+import requests
 from flask import Flask, Response
 from flask.globals import request
 
@@ -50,6 +51,20 @@ def graphs():
 def graph(graph_name):
     with open('funk/static/graph.html') as f:
         return '\n'.join(f.readlines())
+
+
+@app.route('/api/nodetypes/<search_term>')
+def get_dynamic_types(search_term):
+    response = requests.get('https://uinames.com/api', {'amount': 25, 'region': 'germany'})
+    data = json.loads(response.text)
+    result = []
+    for user in data:
+        result.append({
+            'type': 'user',
+            'name': '{} {}'.format(user['name'], user['surname']),
+            'color': '#A58DD2'
+        })
+    return Response(json.dumps(result), mimetype='application/json')
 
 
 @app.route('/api/nodetypes')

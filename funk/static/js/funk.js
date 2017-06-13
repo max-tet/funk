@@ -188,7 +188,8 @@ Vue.component('funk-add-node', {
         isActive: false,
         filterText: '',
         selection: 0,
-        completeList: []
+        completeList: [],
+        dynamicNodetypes: []
     };},
     props: ['nodetypes'],
     methods: {
@@ -214,7 +215,9 @@ Vue.component('funk-add-node', {
         },
         getFilteredNodetypes: function () {
             var this_ = this;
-            var filteredList = this_.completeList.filter(function (item) {
+            console.log(this_.dynamicNodetypes);
+            console.log(this_.completeList);
+            var filteredList = this_.dynamicNodetypes.concat(this_.completeList).filter(function (item) {
                 if ('isCategory' in item) {return true;}
                 var regex = new RegExp('.*' + this_.filterText + '.*', 'i');
                 var catMatches = false;
@@ -238,6 +241,15 @@ Vue.component('funk-add-node', {
                 Vue.nextTick(function () {
                     $(this_.$el).find('input').focus();
                 });
+            }
+        },
+        filterText: function (val) {
+            this_ = this;
+            if (val.length > 0) {
+                $.get('/api/nodetypes/' + val)
+                    .done(function (data) {
+                        this_.dynamicNodetypes = data;
+                    });
             }
         }
     },

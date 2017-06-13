@@ -21,6 +21,14 @@ var dataTypes = {
 
 var nodeTypes = [
     {
+        type: 'user',
+        name: 'User',
+        color: colors.purple,
+        categories: ['Dynamic'],
+        connector_l: [],
+        connector_r: [{id: 'out', name: 'Out', type: 'resource', direction: 'out'}]
+    },
+    {
         type: 'source_rest_server',
         name: 'Source Rest Server',
         color: colors.purple,
