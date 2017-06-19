@@ -113,7 +113,7 @@ class LayoutException(Exception):
 def layout_graph(graph: str, nodetypes: str) -> str:
     graph_json = json.loads(graph)
     nodetypes_json = json.loads(nodetypes)
-    nodes = load_graph(graph_json, nodetypes_json)
+    nodes = load_graph(graph_json, nodetypes_json['nodetypes'])
     apply_topo_layout(nodes)
     randomize_positions(nodes.values(), 10.0)
     apply_phys_layout(nodes)

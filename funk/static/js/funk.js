@@ -2,6 +2,10 @@ var funkInstance = {
     isDirty: false,
     jsPlumbInstance: undefined,
     graphname: undefined,
+    datatypes: [],
+    getDatatype: function (name) {return this.datatypes.find(function (type) {return type.id == name})},
+    nodetypes: [],
+    getNodetype: function (name) {return this.nodetypes.find(function (type) {return type.type == name})},
     endpointArgsFactory: function (isLeft, connector, type) {
         endpointArgs = {
             endpoint: 'Dot',
@@ -43,14 +47,11 @@ Vue.config.keyCodes = {
 
 Vue.component('funk-node', {
     template: '#funk-node-template',
-    data: function () {return {
-        funkInstance: funkInstance
-    };},
-    props: ['node'],
+    props: ['funkInstance', 'node'],
     computed: {
         type: function () {
             var typeId = this.node.type;
-            return nodeTypes.find(function (type) {return type.type == typeId;});
+            return this.funkInstance.getNodetype(typeId);
         },
         style: function () {
             return {
@@ -79,24 +80,27 @@ Vue.component('funk-node', {
     components: {
         'funk-node-connector': {
             template: '#funk-node-connector-template',
-            props: ['connector', 'side', 'nodeid'],
+            props: ['funkInstance', 'connector', 'side', 'nodeid'],
             computed: {
                 elId: function () {
                     if (this.connector == undefined) {return undefined;}
                     else {return this.nodeid + '-' + this.connector.id;}
+                },
+                datatype: function () {
+                    return this.funkInstance.getDatatype(this.connector.type);
                 }
             },
             mounted: function () {
                 if (this.connector == undefined) {return;}
 
                 var endpointArgs = funkInstance.endpointArgsFactory(
-                    this.side == 'left', this.connector, dataTypes[this.connector.type]);
-                endpointArgs.uuid = 'funk-connector-' + this.nodeid + '-' + this.connector.id;
+                    this.side == 'left', this.connector, this.datatype);
+                endpointArgs.uuid = 'funk-connector-' + this.elId;
                 funkInstance.jsPlumbInstance.addEndpoint(this.$el, endpointArgs);
 
                 $(this.$el).tooltip({
                     placement: this.side,
-                    title: dataTypes[this.connector.type].name,
+                    title: this.datatype.name,
                     delay: {show: 500, hide: 100}
                 });
             },
@@ -145,15 +149,15 @@ Vue.component('funk-save-button', {
     },
     methods: {
         save: function () {
-            component = this;
-            component.isSaving = true;
+            this_ = this;
+            this_.isSaving = true;
             $.ajax({
-                url: '/api/graph/' + component.funkInstance.graphname,
+                url: '/api/graph/' + this_.funkInstance.graphname,
                 type: 'PUT',
                 contentType: 'application/json',
                 data: funkCanvas.serializeGraph(),
-                success: function () {component.funkInstance.isDirty = false;},
-                complete: function () {component.isSaving = false;}
+                success: function () {this_.funkInstance.isDirty = false;},
+                complete: function () {this_.isSaving = false;}
             });
         }
     }
@@ -308,7 +312,6 @@ funkCanvas = new Vue({
     el: '#funk-canvas',
     data: {
         nodes: [],
-        nodetypes: nodeTypes,
         funkInstance: funkInstance,
         graphNotFound: false,
         nodeUnderModification: ''
@@ -457,7 +460,15 @@ funkCanvas = new Vue({
             });
         }
     },
-    mounted: function () {this.loadGraph();}
+    mounted: function () {
+        this_ = this;
+        $.get('/static/nodetypes.json')
+            .done(function (data) {
+                this_.funkInstance.datatypes = data.datatypes;
+                this_.funkInstance.nodetypes = data.nodetypes;
+                this_.loadGraph();
+            });
+    }
 
 });
 
