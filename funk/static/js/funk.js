@@ -389,8 +389,15 @@ funkCanvas = new Vue({
                 outJson.nodes.push(outNode);
             });
             $.each(this.funkInstance.jsPlumbInstance.getConnections('*'), function (i, connection) {
-                var ids_in = $(connection.endpoints[0].getElement()).attr('id').split('-');
-                var ids_out = $(connection.endpoints[1].getElement()).attr('id').split('-');
+                var element_0 = $(connection.endpoints[0].getElement());
+                var element_1 = $(connection.endpoints[1].getElement());
+                if (element_0.hasClass('funk-attr-r')) {
+                    var ids_in = $(connection.endpoints[1].getElement()).attr('id').split('-');
+                    var ids_out = $(connection.endpoints[0].getElement()).attr('id').split('-');
+                } else {
+                    var ids_in = $(connection.endpoints[0].getElement()).attr('id').split('-');
+                    var ids_out = $(connection.endpoints[1].getElement()).attr('id').split('-');
+                }
                 var outConnection = {
                     out_node: ids_out[0],
                     out_connector: ids_out[1],
