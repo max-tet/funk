@@ -2,10 +2,8 @@ var funkInstance = {
     isDirty: false,
     jsPlumbInstance: undefined,
     graphname: undefined,
-    datatypes: [],
-    getDatatype: function (name) {return this.datatypes.find(function (type) {return type.id == name})},
-    nodetypes: [],
-    getNodetype: function (name) {return this.nodetypes.find(function (type) {return type.type == name})},
+    datatypes: {},
+    nodetypes: {},
     endpointArgsFactory: function (isLeft, connector, type) {
         endpointArgs = {
             endpoint: 'Dot',
@@ -51,7 +49,7 @@ Vue.component('funk-node', {
     computed: {
         type: function () {
             var typeId = this.node.type;
-            return this.funkInstance.getNodetype(typeId);
+            return this.funkInstance.nodetypes[typeId];
         },
         style: function () {
             return {
@@ -87,7 +85,7 @@ Vue.component('funk-node', {
                     else {return this.nodeid + '-' + this.connector.id;}
                 },
                 datatype: function () {
-                    return this.funkInstance.getDatatype(this.connector.type);
+                    return this.funkInstance.datatypes[this.connector.type];
                 }
             },
             mounted: function () {
@@ -192,8 +190,7 @@ Vue.component('funk-add-node', {
         isActive: false,
         filterText: '',
         selection: 0,
-        completeList: [],
-        dynamicNodetypes: []
+        completeList: []
     };},
     props: ['nodetypes'],
     methods: {
@@ -219,9 +216,7 @@ Vue.component('funk-add-node', {
         },
         getFilteredNodetypes: function () {
             var this_ = this;
-            console.log(this_.dynamicNodetypes);
-            console.log(this_.completeList);
-            var filteredList = this_.dynamicNodetypes.concat(this_.completeList).filter(function (item) {
+            var filteredList = this_.completeList.filter(function (item) {
                 if ('isCategory' in item) {return true;}
                 var regex = new RegExp('.*' + this_.filterText + '.*', 'i');
                 var catMatches = false;
@@ -250,17 +245,14 @@ Vue.component('funk-add-node', {
         filterText: function (val) {
             this_ = this;
             if (val.length > 0) {
-                $.get('/api/nodetypes/' + val)
-                    .done(function (data) {
-                        this_.dynamicNodetypes = data;
-                    });
+                this_.$emit('text-input', val);
             }
         },
         nodetypes: function () {
             var this_ = this;
             var categories = {};
-            for (t in this_.nodetypes) {
-                var nodetype = this.nodetypes[t];
+            for (var t in this_.nodetypes) {
+                var nodetype = this_.nodetypes[t];
                 if ('categories' in nodetype) {
                     for (c in nodetype.categories) {
                         var category = nodetype.categories[c];
@@ -464,14 +456,27 @@ funkCanvas = new Vue({
                 success: function () {this_.loadGraph()},
                 complete: function () {console.log('failed layout')}
             });
+        },
+        loadDynamicNodetypes: function (searchString) {
+            var this_ = this;
+            $.get('/api/nodetypes/' + searchString)
+                .done(function (data) {
+                    $.each(data, function (index, nodetype) {
+                        Vue.set(this_.funkInstance.nodetypes, nodetype.type, nodetype);
+                    });
+                });
         }
     },
     mounted: function () {
-        this_ = this;
+        var this_ = this;
         $.get('/static/nodetypes.json')
             .done(function (data) {
-                this_.funkInstance.datatypes = data.datatypes;
-                this_.funkInstance.nodetypes = data.nodetypes;
+                $.each(data.datatypes, function (index, datatype) {
+                    Vue.set(this_.funkInstance.datatypes, datatype.id, datatype);
+                });
+                $.each(data.nodetypes, function (index, nodetype) {
+                    Vue.set(this_.funkInstance.nodetypes, nodetype.type, nodetype);
+                });
                 this_.loadGraph();
             });
     }

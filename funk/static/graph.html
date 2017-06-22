@@ -21,7 +21,8 @@
                 v-on:cancel="nodeUnderModification = ''"></funk-node-properties-modal>
         <funk-add-node ref="addNode"
                        :nodetypes="funkInstance.nodetypes"
-                       v-on:add-node="addNode"></funk-add-node>
+                       v-on:add-node="addNode"
+                       v-on:text-input="loadDynamicNodetypes"></funk-add-node>
         <div id="funk-buttons" class="btn-group funk-control" role="group">
             <button id="funk-button-layout" type="button" class="btn btn-default"
                     v-on:click="layoutGraph">Layout</button>
