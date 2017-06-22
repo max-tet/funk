@@ -49,7 +49,9 @@
                 v-on:click.shift.stop="shiftClick">
             <strong>{{node.name}}</strong><br/>
             <small>{{type.name}}</small>
-            <div class="funk-node-edit-button" v-if="node.ephemeral.isHovered" v-on:click.stop="edit">
+            <div class="funk-node-edit-button"
+                 v-if="node.ephemeral.isHovered && !type.isStatic"
+                 v-on:click.stop="edit">
                 <span class="badge"><span class="glyphicon glyphicon-pencil"></span></span>
             </div>
             <funk-node-property

@@ -48,6 +48,24 @@
   ],
   "nodetypes": [
     {
+      "type": "final_user",
+      "name": "User",
+      "color": "#A58DD2",
+      "isStatic": true,
+      "categories": [
+        "Final"
+      ],
+      "connector_l": [],
+      "connector_r": [
+        {
+          "id": "out",
+          "name": "Out",
+          "type": "string",
+          "direction": "out"
+        }
+      ]
+    },
+    {
       "type": "source_rest_server",
       "name": "Source Rest Server",
       "color": "#A58DD2",
