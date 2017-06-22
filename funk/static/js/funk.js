@@ -219,13 +219,19 @@ Vue.component('funk-add-node', {
             var filteredList = this_.completeList.filter(function (item) {
                 if ('isCategory' in item) {return true;}
                 var regex = new RegExp('.*' + this_.filterText + '.*', 'i');
+
                 var catMatches = false;
                 if ('categories' in item) {
                     $.each(item.categories, function (index, cat) {
                         if (cat.match(regex) != null) {catMatches = true;}
                     });
                 }
-                return catMatches || item.name.match(regex) != null;
+
+                var nameMatches = item.name.match(regex) != null;
+
+                var nodeNameMatches = item.hasOwnProperty('nodeName') && item.nodeName.match(regex) != null;
+
+                return catMatches || nameMatches || nodeNameMatches;
             });
             this.selection = Math.min(this.selection, filteredList.length - 1);
             return $.map(filteredList, function (value, index) {
@@ -402,7 +408,7 @@ funkCanvas = new Vue({
         addNode: function (nodeType) {
             var node = {
                 nodeid: nodeType.type + '_' + randomString(6),
-                name: nodeType.name,
+                name: nodeType.nodeName || nodeType.name,
                 type: nodeType.type,
                 top: '30px',
                 left: '30px',

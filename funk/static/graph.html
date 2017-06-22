@@ -191,7 +191,7 @@
              :style="style"
              v-if="!('isCategory' in nodetype)"
              v-on:click="addNode">
-            <span>{{nodetype.name}}</span>
+            <span>{{nodetype.nodeName || nodetype.name}}</span>
         </div>
         <div v-else
              class="funk-nodetype-category"
