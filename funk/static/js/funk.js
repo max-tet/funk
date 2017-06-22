@@ -255,34 +255,33 @@ Vue.component('funk-add-node', {
                         this_.dynamicNodetypes = data;
                     });
             }
-        }
-    },
-    mounted: function () {
-        this_ = this;
-        var categories = {};
-        for (t in this.nodetypes) {
-            var nodetype = this.nodetypes[t];
-            if ('categories' in nodetype) {
-                for (c in nodetype.categories) {
-                    var category = nodetype.categories[c];
-                    if (!(category in categories)) {
-                        categories[category] = [];
+        },
+        nodetypes: function () {
+            var this_ = this;
+            var categories = {};
+            for (t in this_.nodetypes) {
+                var nodetype = this.nodetypes[t];
+                if ('categories' in nodetype) {
+                    for (c in nodetype.categories) {
+                        var category = nodetype.categories[c];
+                        if (!(category in categories)) {
+                            categories[category] = [];
+                        }
+                        categories[category].push(nodetype);
                     }
-                    categories[category].push(nodetype);
+                } else {
+                    if (!('Misc' in categories)) {
+                        categories['Misc'] = [];
+                    }
+                    categories.Misc.push(nodetype);
                 }
-            } else {
-                if (!('Misc' in categories)) {
-                    categories['Misc'] = [];
-                }
-                categories.Misc.push(nodetype);
             }
+            $.each(categories, function (category, nodetypes) {
+                this_.completeList.push({name: category, isCategory: true});
+                $.each(nodetypes, function (index, nodetype) {this_.completeList.push(nodetype);});
+            });
         }
-        $.each(categories, function (category, nodetypes) {
-            this_.completeList.push({name: category, isCategory: true});
-            $.each(nodetypes, function (index, nodetype) {this_.completeList.push(nodetype);});
-        });
     }
-
 });
 
 Vue.component('funk-nodetype-preview', {
