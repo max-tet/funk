@@ -1,6 +1,7 @@
 import json
+import re
+from itertools import islice
 
-import requests
 from flask import Flask, Response
 from flask.globals import request
 
@@ -55,16 +56,26 @@ def graph(graph_name):
 
 @app.route('/api/nodetypes/<search_term>')
 def get_dynamic_types(search_term):
-    response = requests.get('https://uinames.com/api', {'amount': 25, 'region': 'germany'})
-    data = json.loads(response.text)
-    result = []
-    for user in data:
-        result.append({
-            'type': 'user',
-            'name': '{} {}'.format(user['name'], user['surname']),
-            'color': '#A58DD2'
-        })
-    return Response(json.dumps(result), mimetype='application/json')
+    regex = re.compile(search_term)
+    with open('names.txt') as file:
+        matched_names = islice((name for name in file.readlines() if regex.search(name)), 10)
+
+    items = [{
+        'type': 'user {}'.format(name),
+        'name': 'User',
+        'nodeName': name,
+        'color': '#A58DD2',
+        'isStatic': True,
+        'categories': ['Users'],
+        'connector_l': [],
+        'connector_r': [{
+            'id': 'out',
+            'name': 'Out',
+            'type': 'resource',
+            'direction': 'out'
+        }]
+    } for name in matched_names]
+    return Response(json.dumps(items), mimetype='application/json')
 
 
 @app.route('/api/nodetypes')
