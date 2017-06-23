@@ -274,6 +274,7 @@ Vue.component('funk-add-node', {
                     categories.Misc.push(nodetype);
                 }
             }
+            this_.completeList = [];
             $.each(categories, function (category, nodetypes) {
                 this_.completeList.push({name: category, isCategory: true});
                 $.each(nodetypes, function (index, nodetype) {this_.completeList.push(nodetype);});
