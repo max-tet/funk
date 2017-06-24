@@ -259,6 +259,7 @@ Vue.component('funk-add-node', {
             var categories = {};
             for (var t in this_.nodetypes) {
                 var nodetype = this_.nodetypes[t];
+                if (nodetype.isAbstract) {continue;}
                 if ('categories' in nodetype) {
                     for (c in nodetype.categories) {
                         var category = nodetype.categories[c];
