@@ -61,19 +61,8 @@ def get_dynamic_types(search_term):
         matched_names = islice((name for name in file.readlines() if regex.search(name)), 10)
 
     items = [{
-        'type': 'user {}'.format(name),
-        'name': 'User',
-        'nodeName': name,
-        'color': '#A58DD2',
-        'isStatic': True,
-        'categories': ['Users'],
-        'connector_l': [],
-        'connector_r': [{
-            'id': 'out',
-            'name': 'Out',
-            'type': 'resource',
-            'direction': 'out'
-        }]
+        'type': 'abstract_user',
+        'defaultNodeName': name[:-1],
     } for name in matched_names]
     return Response(json.dumps(items), mimetype='application/json')
 

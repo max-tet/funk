@@ -229,7 +229,7 @@ Vue.component('funk-add-node', {
 
                 var nameMatches = item.name.match(regex) != null;
 
-                var nodeNameMatches = item.hasOwnProperty('nodeName') && item.nodeName.match(regex) != null;
+                var nodeNameMatches = item.hasOwnProperty('defaultNodeName') && item.defaultNodeName.match(regex) != null;
 
                 return catMatches || nameMatches || nodeNameMatches;
             });
@@ -410,7 +410,7 @@ funkCanvas = new Vue({
         addNode: function (nodeType) {
             var node = {
                 nodeid: nodeType.type + '_' + randomString(6),
-                name: nodeType.nodeName || nodeType.name,
+                name: nodeType.defaultNodeName || nodeType.name,
                 type: nodeType.type,
                 top: '30px',
                 left: '30px',
@@ -470,7 +470,15 @@ funkCanvas = new Vue({
             $.get('/api/nodetypes/' + searchString)
                 .done(function (data) {
                     $.each(data, function (index, nodetype) {
-                        Vue.set(this_.funkInstance.nodetypes, nodetype.type, nodetype);
+                        var typename = nodetype.type;
+                        var newTypename = typename + '-' + nodetype.defaultNodeName
+                        var abstractType = this_.funkInstance.nodetypes[typename];
+                        var newType = $.extend({},
+                            abstractType,
+                            nodetype,
+                            {'isAbstract': false},
+                            {'name': newTypename});
+                        Vue.set(this_.funkInstance.nodetypes, newTypename, newType);
                     });
                 });
         }

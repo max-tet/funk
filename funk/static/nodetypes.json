@@ -48,9 +48,12 @@
   ],
   "nodetypes": [
     {
-      "type": "user",
+      "type": "abstract_user",
+      "name": "User",
       "isAbstract": true,
+      "isStatic": true,
       "color": "#A58DD2",
+      "categories": ["Users"],
       "connector_l": [],
       "connector_r": [
         {
