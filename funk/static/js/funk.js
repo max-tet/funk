@@ -469,16 +469,15 @@ funkCanvas = new Vue({
             var this_ = this;
             $.get('/api/nodetypes/' + searchString)
                 .done(function (data) {
-                    $.each(data, function (index, nodetype) {
-                        var typename = nodetype.type;
-                        var newTypename = typename + '-' + nodetype.defaultNodeName
-                        var abstractType = this_.funkInstance.nodetypes[typename];
+                    $.each(data, function (index, subtype) {
+                        var typename = subtype.type;
+                        var typeIndex = typename + '-' + subtype.defaultNodeName
+                        var supertype = this_.funkInstance.nodetypes[typename];
                         var newType = $.extend({},
-                            abstractType,
-                            nodetype,
-                            {'isAbstract': false},
-                            {'name': newTypename});
-                        Vue.set(this_.funkInstance.nodetypes, newTypename, newType);
+                            supertype,
+                            subtype,
+                            {'isAbstract': false});
+                        Vue.set(this_.funkInstance.nodetypes, typeIndex, newType);
                     });
                 });
         }
