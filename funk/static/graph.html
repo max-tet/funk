@@ -20,8 +20,9 @@
                 v-on:save="modifyNode"
                 v-on:cancel="nodeUnderModification = ''"></funk-node-properties-modal>
         <funk-add-node ref="addNode"
-                       :nodetypes="nodetypes"
-                       v-on:add-node="addNode"></funk-add-node>
+                       :nodetypes="funkInstance.nodetypes"
+                       v-on:add-node="addNode"
+                       v-on:text-input="loadDynamicNodetypes"></funk-add-node>
         <div id="funk-buttons" class="btn-group funk-control" role="group">
             <button id="funk-button-layout" type="button" class="btn btn-default"
                     v-on:click="layoutGraph">Layout</button>
@@ -30,7 +31,8 @@
         <funk-node
                 v-for="node in nodes"
                 :key="node.nodeid"
-                v-bind:node="node"
+                :funk-instance="funkInstance"
+                :node="node"
                 v-on:edit="editNode"
                 v-on:shift-clicked="toggleNodeSelection"></funk-node>
         <div id="not-found" v-if="graphNotFound">
@@ -41,14 +43,16 @@
 
     <script type="text/x-template" id="funk-node-template">
         <div class="funk-node"
-                v-bind:id="node.nodeid"
-                v-bind:style="style"
+                :id="node.nodeid"
+                :style="style"
                 v-on:mouseover="node.ephemeral.isHovered = true"
                 v-on:mouseleave="node.ephemeral.isHovered = false"
                 v-on:click.shift.stop="shiftClick">
             <strong>{{node.name}}</strong><br/>
             <small>{{type.name}}</small>
-            <div class="funk-node-edit-button" v-if="node.ephemeral.isHovered" v-on:click.stop="edit">
+            <div class="funk-node-edit-button"
+                 v-if="node.ephemeral.isHovered && !type.isStatic"
+                 v-on:click.stop="edit">
                 <span class="badge"><span class="glyphicon glyphicon-pencil"></span></span>
             </div>
             <funk-node-property
@@ -59,12 +63,14 @@
                 <tr v-for="i in nrOfRows">
                     <td is="funk-node-connector"
                         side="left"
-                        v-bind:connector="type.connector_l[i-1]"
-                        v-bind:nodeid="node.nodeid"></td>
+                        :funk-instance="funkInstance"
+                        :connector="type.connector_l[i-1]"
+                        :nodeid="node.nodeid"></td>
                     <td is="funk-node-connector"
                         side="right"
-                        v-bind:connector="type.connector_r[i-1]"
-                        v-bind:nodeid="node.nodeid"
+                        :funk-instance="funkInstance"
+                        :connector="type.connector_r[i-1]"
+                        :nodeid="node.nodeid"
                         class="funk-attr-r"></td>
                 </tr>
             </table>
@@ -163,7 +169,7 @@
                     <div class="nodetype-list">
                         <funk-nodetype-preview
                                 v-on:add-node="addNode"
-                                v-for="nodetype in filteredNodetypes"
+                                v-for="nodetype in getFilteredNodetypes()"
                                 :nodetype="nodetype"></funk-nodetype-preview>
                     </div>
                 </div>
@@ -185,7 +191,7 @@
              :style="style"
              v-if="!('isCategory' in nodetype)"
              v-on:click="addNode">
-            <span>{{nodetype.name}}</span>
+            <span>{{nodetype.defaultNodeName || nodetype.name}}</span>
         </div>
         <div v-else
              class="funk-nodetype-category"
@@ -196,7 +202,6 @@
         </div>
     </script>
 
-    <script type="text/javascript" src="/api/nodetypes"></script>
     <script type="text/javascript" src="/static/js/jquery-3.1.1.min.js"></script>
     <script type="text/javascript" src="/static/js/jquery.hotkeys.js"></script>
     <script type="text/javascript" src="/static/js/jquery.scrollintoview.js"></script>

@@ -2,6 +2,8 @@ var funkInstance = {
     isDirty: false,
     jsPlumbInstance: undefined,
     graphname: undefined,
+    datatypes: {},
+    nodetypes: {},
     endpointArgsFactory: function (isLeft, connector, type) {
         endpointArgs = {
             endpoint: 'Dot',
@@ -43,14 +45,11 @@ Vue.config.keyCodes = {
 
 Vue.component('funk-node', {
     template: '#funk-node-template',
-    data: function () {return {
-        funkInstance: funkInstance
-    };},
-    props: ['node'],
+    props: ['funkInstance', 'node'],
     computed: {
         type: function () {
             var typeId = this.node.type;
-            return nodeTypes.find(function (type) {return type.type == typeId;});
+            return this.funkInstance.nodetypes[typeId];
         },
         style: function () {
             return {
@@ -79,24 +78,27 @@ Vue.component('funk-node', {
     components: {
         'funk-node-connector': {
             template: '#funk-node-connector-template',
-            props: ['connector', 'side', 'nodeid'],
+            props: ['funkInstance', 'connector', 'side', 'nodeid'],
             computed: {
                 elId: function () {
                     if (this.connector == undefined) {return undefined;}
                     else {return this.nodeid + '-' + this.connector.id;}
+                },
+                datatype: function () {
+                    return this.funkInstance.datatypes[this.connector.type];
                 }
             },
             mounted: function () {
                 if (this.connector == undefined) {return;}
 
                 var endpointArgs = funkInstance.endpointArgsFactory(
-                    this.side == 'left', this.connector, dataTypes[this.connector.type]);
-                endpointArgs.uuid = 'funk-connector-' + this.nodeid + '-' + this.connector.id;
+                    this.side == 'left', this.connector, this.datatype);
+                endpointArgs.uuid = 'funk-connector-' + this.elId;
                 funkInstance.jsPlumbInstance.addEndpoint(this.$el, endpointArgs);
 
                 $(this.$el).tooltip({
                     placement: this.side,
-                    title: dataTypes[this.connector.type].name,
+                    title: this.datatype.name,
                     delay: {show: 500, hide: 100}
                 });
             },
@@ -145,15 +147,15 @@ Vue.component('funk-save-button', {
     },
     methods: {
         save: function () {
-            component = this;
-            component.isSaving = true;
+            this_ = this;
+            this_.isSaving = true;
             $.ajax({
-                url: '/api/graph/' + component.funkInstance.graphname,
+                url: '/api/graph/' + this_.funkInstance.graphname,
                 type: 'PUT',
                 contentType: 'application/json',
                 data: funkCanvas.serializeGraph(),
-                success: function () {component.funkInstance.isDirty = false;},
-                complete: function () {component.isSaving = false;}
+                success: function () {this_.funkInstance.isDirty = false;},
+                complete: function () {this_.isSaving = false;}
             });
         }
     }
@@ -188,41 +190,16 @@ Vue.component('funk-add-node', {
         isActive: false,
         filterText: '',
         selection: 0,
+        completeList: []
     };},
     props: ['nodetypes'],
-    computed: {
-        filteredNodetypes: function () {
-            var this_ = this;
-            var completeList = [];
-            $.each(this_.categories, function (category, nodetypes) {
-                completeList.push({name: category, isCategory: true});
-                $.each(nodetypes, function (index, nodetype) {completeList.push(nodetype);});
-            });
-
-            var filteredList = completeList.filter(function (item) {
-                if ('isCategory' in item) {return true;}
-                var regex = new RegExp('.*' + this_.filterText + '.*', 'i');
-                var catMatches = false;
-                if ('categories' in item) {
-                    $.each(item.categories, function (index, cat) {
-                        if (cat.match(regex) != null) {catMatches = true;}
-                    });
-                }
-                return catMatches || item.name.match(regex) != null;
-            });
-            this.selection = Math.min(this.selection, filteredList.length - 1);
-            return $.map(filteredList, function (value, index) {
-                return $.extend({}, value, {isSelected: (index == this_.selection)});
-            });
-        }
-    },
     methods: {
         addNode: function (nodetype) {
             this.isActive = false;
             this.$emit('add-node', nodetype);
         },
         selectionDown: function () {
-            var maxSelection = this.filteredNodetypes.length - 1;
+            var maxSelection = this.getFilteredNodetypes().length - 1;
             this.selection = Math.min(maxSelection, this.selection + 1);
         },
         selectionUp: function () {
@@ -232,10 +209,34 @@ Vue.component('funk-add-node', {
             this.selection = 0;
         },
         selectionEnd: function () {
-            this.selection = this.filteredNodetypes.length - 1;
+            this.selection = this.getFilteredNodetypes().length - 1;
         },
         addSelectedNode: function () {
-            this.addNode(this.filteredNodetypes[this.selection]);
+            this.addNode(this.getFilteredNodetypes()[this.selection]);
+        },
+        getFilteredNodetypes: function () {
+            var this_ = this;
+            var filteredList = this_.completeList.filter(function (item) {
+                if ('isCategory' in item) {return true;}
+                var regex = new RegExp('.*' + this_.filterText + '.*', 'i');
+
+                var catMatches = false;
+                if ('categories' in item) {
+                    $.each(item.categories, function (index, cat) {
+                        if (cat.match(regex) != null) {catMatches = true;}
+                    });
+                }
+
+                var nameMatches = item.name.match(regex) != null;
+
+                var nodeNameMatches = item.hasOwnProperty('defaultNodeName') && item.defaultNodeName.match(regex) != null;
+
+                return catMatches || nameMatches || nodeNameMatches;
+            });
+            this.selection = Math.min(this.selection, filteredList.length - 1);
+            return $.map(filteredList, function (value, index) {
+                return $.extend({}, value, {isSelected: (index == this_.selection)});
+            });
         }
     },
     watch: {
@@ -246,28 +247,41 @@ Vue.component('funk-add-node', {
                     $(this_.$el).find('input').focus();
                 });
             }
-        }
-    },
-    mounted: function () {
-        for (t in this.nodetypes) {
-            var nodetype = this.nodetypes[t];
-            if ('categories' in nodetype) {
-                for (c in nodetype.categories) {
-                    var category = nodetype.categories[c];
-                    if (!(category in this.categories)) {
-                        this.categories[category] = [];
-                    }
-                    this.categories[category].push(nodetype);
-                }
-            } else {
-                if (!('Misc' in this.categories)) {
-                    this.categories['Misc'] = [];
-                }
-                this.categories.Misc.push(nodetype);
+        },
+        filterText: function (val) {
+            this_ = this;
+            if (val.length > 0) {
+                this_.$emit('text-input', val);
             }
+        },
+        nodetypes: function () {
+            var this_ = this;
+            var categories = {};
+            for (var t in this_.nodetypes) {
+                var nodetype = this_.nodetypes[t];
+                if (nodetype.isAbstract) {continue;}
+                if ('categories' in nodetype) {
+                    for (c in nodetype.categories) {
+                        var category = nodetype.categories[c];
+                        if (!(category in categories)) {
+                            categories[category] = [];
+                        }
+                        categories[category].push(nodetype);
+                    }
+                } else {
+                    if (!('Misc' in categories)) {
+                        categories['Misc'] = [];
+                    }
+                    categories.Misc.push(nodetype);
+                }
+            }
+            this_.completeList = [];
+            $.each(categories, function (category, nodetypes) {
+                this_.completeList.push({name: category, isCategory: true});
+                $.each(nodetypes, function (index, nodetype) {this_.completeList.push(nodetype);});
+            });
         }
     }
-
 });
 
 Vue.component('funk-nodetype-preview', {
@@ -297,7 +311,6 @@ funkCanvas = new Vue({
     el: '#funk-canvas',
     data: {
         nodes: [],
-        nodetypes: nodeTypes,
         funkInstance: funkInstance,
         graphNotFound: false,
         nodeUnderModification: ''
@@ -375,8 +388,15 @@ funkCanvas = new Vue({
                 outJson.nodes.push(outNode);
             });
             $.each(this.funkInstance.jsPlumbInstance.getConnections('*'), function (i, connection) {
-                var ids_in = $(connection.endpoints[0].getElement()).attr('id').split('-');
-                var ids_out = $(connection.endpoints[1].getElement()).attr('id').split('-');
+                var element_0 = $(connection.endpoints[0].getElement());
+                var element_1 = $(connection.endpoints[1].getElement());
+                if (element_0.hasClass('funk-attr-r')) {
+                    var ids_in = $(connection.endpoints[1].getElement()).attr('id').split('-');
+                    var ids_out = $(connection.endpoints[0].getElement()).attr('id').split('-');
+                } else {
+                    var ids_in = $(connection.endpoints[0].getElement()).attr('id').split('-');
+                    var ids_out = $(connection.endpoints[1].getElement()).attr('id').split('-');
+                }
                 var outConnection = {
                     out_node: ids_out[0],
                     out_connector: ids_out[1],
@@ -390,7 +410,7 @@ funkCanvas = new Vue({
         addNode: function (nodeType) {
             var node = {
                 nodeid: nodeType.type + '_' + randomString(6),
-                name: nodeType.name,
+                name: nodeType.defaultNodeName || nodeType.name,
                 type: nodeType.type,
                 top: '30px',
                 left: '30px',
@@ -444,9 +464,37 @@ funkCanvas = new Vue({
                 success: function () {this_.loadGraph()},
                 complete: function () {console.log('failed layout')}
             });
+        },
+        loadDynamicNodetypes: function (searchString) {
+            var this_ = this;
+            $.get('/api/nodetypes/' + searchString)
+                .done(function (data) {
+                    $.each(data, function (index, subtype) {
+                        var typename = subtype.type;
+                        var typeIndex = typename + '-' + subtype.defaultNodeName
+                        var supertype = this_.funkInstance.nodetypes[typename];
+                        var newType = $.extend({},
+                            supertype,
+                            subtype,
+                            {'isAbstract': false});
+                        Vue.set(this_.funkInstance.nodetypes, typeIndex, newType);
+                    });
+                });
         }
     },
-    mounted: function () {this.loadGraph();}
+    mounted: function () {
+        var this_ = this;
+        $.get('/static/nodetypes.json')
+            .done(function (data) {
+                $.each(data.datatypes, function (index, datatype) {
+                    Vue.set(this_.funkInstance.datatypes, datatype.id, datatype);
+                });
+                $.each(data.nodetypes, function (index, nodetype) {
+                    Vue.set(this_.funkInstance.nodetypes, nodetype.type, nodetype);
+                });
+                this_.loadGraph();
+            });
+    }
 
 });
 
