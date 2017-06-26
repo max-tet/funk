@@ -5,7 +5,7 @@ from itertools import islice
 from flask import Flask, Response
 from flask.globals import request
 
-from funk import nodetypes, model, persistence, graphlayout
+from funk import model, persistence, graphlayout, nodetypes
 
 app = Flask(__name__)
 
@@ -34,6 +34,11 @@ def handle_graph_does_not_exist_error(e: persistence.GraphDoesNotExistError):
 @app.errorhandler(persistence.GraphAlreadyExistsError)
 def handle_graph_already_exists_error(e: persistence.GraphAlreadyExistsError):
     return str(e), 409
+
+
+@app.errorhandler(persistence.InvalidGraphError)
+def handle_invalid_graph_error(e: persistence.InvalidGraphError):
+    return str(e), 422
 
 
 @app.route('/')
@@ -144,7 +149,7 @@ def del_graph(graph_name):
 @app.route('/api/graph/<graph_name>', methods=['PUT'])
 def update_graph(graph_name):
     persistence.save_graph(graph_name, request.get_json())
-    return ''
+    return Response(status=200)
 
 
 @app.route('/api/trigger/layout/<graph_name>', methods=['POST'])
@@ -154,4 +159,4 @@ def layout_graph(graph_name):
         nodetypes = '\n'.join(f.readlines())
     new_graph = graphlayout.layout_graph(graph, nodetypes)
     persistence.save_graph(graph_name, json.loads(new_graph))
-    return ''
+    return Response(status=200)
