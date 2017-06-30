@@ -1,11 +1,12 @@
 import json
 import re
 from itertools import islice
+from pathlib import Path
 
 from flask import Flask, Response
 from flask.globals import request
 
-from funk import model, persistence, graphlayout, nodetypes
+from funk import model, persistence, graphlayout, nodetypes, exporthook
 
 app = Flask(__name__)
 
@@ -149,6 +150,7 @@ def del_graph(graph_name):
 @app.route('/api/graph/<graph_name>', methods=['PUT'])
 def update_graph(graph_name):
     persistence.save_graph(graph_name, request.get_json())
+    exporthook.export_as_json_file(Path(__file__).parent, graph_name, request.get_json())
     return Response(status=200)
 
 
