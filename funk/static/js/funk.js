@@ -471,6 +471,10 @@ funkCanvas = new Vue({
                 .done(function (data) {
                     $.each(data, function (index, subtype) {
                         var typename = subtype.type;
+                        if (!(typename in this_.funkInstance.nodetypes)) {
+                            console.log('dynamic nodetype not found: ' + typename);
+                            return;
+                        }
                         var typeIndex = typename + '-' + subtype.defaultNodeName
                         var supertype = this_.funkInstance.nodetypes[typename];
                         var newType = $.extend({},
