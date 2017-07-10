@@ -1,3 +1,6 @@
+#!/usr/bin/env python3
+
+import argparse
 import json
 import re
 from itertools import islice
@@ -14,6 +17,8 @@ db = model.init_db('graphs.db')
 db.connect()
 model.create_tables(db)
 db.close()
+
+save_hooks = []
 
 
 @app.before_request
@@ -149,8 +154,10 @@ def del_graph(graph_name):
 
 @app.route('/api/graph/<graph_name>', methods=['PUT'])
 def update_graph(graph_name):
-    persistence.save_graph(graph_name, request.get_json())
-    exporthook.export_as_json_file(Path(__file__).parent, graph_name, request.get_json())
+    graph_json = request.get_json()
+    persistence.save_graph(graph_name, graph_json)
+    for hook in save_hooks:
+        hook(graph_name, graph_json)
     return Response(status=200)
 
 
@@ -162,3 +169,16 @@ def layout_graph(graph_name):
     new_graph = graphlayout.layout_graph(graph, nodetypes)
     persistence.save_graph(graph_name, json.loads(new_graph))
     return Response(status=200)
+
+
+def get_args():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-e', '--export', type=Path)
+    return parser.parse_args()
+
+
+if __name__ == '__main__':
+    args = get_args()
+    if args.export:
+        save_hooks.append(exporthook.make_exporter(args.export))
+    app.run('localhost', 5000)
