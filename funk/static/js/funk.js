@@ -456,6 +456,12 @@ funkCanvas = new Vue({
                 this_.funkInstance.jsPlumbInstance.repaintEverything();
             });
         },
+        zoomIn: function () {
+            $('#funk-canvas').panzoom('zoom');
+        },
+        zoomOut: function () {
+            $('#funk-canvas').panzoom('zoom', true);
+        },
         layoutGraph: function () {
             var this_ = this;
             $.ajax({
@@ -506,7 +512,11 @@ $(document).bind("keyup", "del", function() {funkCanvas.deleteSelectedNodes();})
 $(document).bind("keydown", "ctrl+a", function() {funkCanvas.$refs.addNode.isActive=true;});
 $(document).bind("keydown", "esc", function() {funkCanvas.$refs.addNode.isActive=false;});
 
-$('#funk-canvas').panzoom({eventNamespace: '.panzoom', contain: 'invert'});
+$('#funk-canvas').panzoom({
+    eventNamespace: '.panzoom',
+    contain: 'invert',
+    increment: 0.1
+});
 
 function shadeColor(color, percent) {
     var f=parseInt(color.slice(1),16),t=percent<0?0:255,p=percent<0?percent*-1:percent,R=f>>16,G=f>>8&0x00FF,B=f&0x0000FF;

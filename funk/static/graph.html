@@ -37,6 +37,12 @@
                     v-on:click="layoutGraph">Layout</button>
             <funk-save-button></funk-save-button>
         </div>
+        <div id="funk-zoom-buttons" class="btn-group funk-control" role="group">
+            <button id="funk-button-zoom-in" type="button" class="btn btn-default"
+                    v-on:click="zoomIn">+</button>
+            <button id="funk-button-zoom-out" type="button" class="btn btn-default"
+                    v-on:click="zoomOut">-</button>
+        </div>
         <div id="not-found" v-if="graphNotFound">
             <h1>Graph <i>{{funkInstance.graphname}}</i> does not exist</h1>
             <div class="coverup"></div>
