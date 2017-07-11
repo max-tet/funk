@@ -117,7 +117,7 @@ def layout_graph(graph: str, nodetypes: str) -> str:
     apply_topo_layout(nodes)
     randomize_positions(nodes.values(), 10.0)
     apply_phys_layout(nodes)
-    apply_border_offset(nodes)
+    apply_border_offset(nodes, left_border=5100, top_border=5100)
 
     apply_positions(graph_json, nodes)
     return json.dumps(graph_json)

@@ -457,10 +457,12 @@ funkCanvas = new Vue({
             });
         },
         zoomIn: function () {
-            $('#funk-canvas').panzoom('zoom');
+            $('#funk-canvas').panzoom('zoom', false,
+                {focal: {clientX: $(window).width() / 2, clientY: $(window).height() / 2}});
         },
         zoomOut: function () {
-            $('#funk-canvas').panzoom('zoom', true);
+            $('#funk-canvas').panzoom('zoom', true,
+                {focal: {clientX: $(window).width() / 2, clientY: $(window).height() / 2}});
         },
         layoutGraph: function () {
             var this_ = this;
@@ -514,9 +516,8 @@ $(document).bind("keydown", "esc", function() {funkCanvas.$refs.addNode.isActive
 
 $('#funk-canvas').panzoom({
     eventNamespace: '.panzoom',
-    contain: 'invert',
-    increment: 0.1
-});
+    increment: 0.3
+}).panzoom('pan', -5000, -5000);
 
 function shadeColor(color, percent) {
     var f=parseInt(color.slice(1),16),t=percent<0?0:255,p=percent<0?percent*-1:percent,R=f>>16,G=f>>8&0x00FF,B=f&0x0000FF;
