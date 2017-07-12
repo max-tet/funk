@@ -408,12 +408,13 @@ funkCanvas = new Vue({
             return JSON.stringify(outJson);
         },
         addNode: function (nodeType) {
+            var position = screenCenterInCanvasSpace();
             var node = {
                 nodeid: nodeType.type + '_' + randomString(6),
                 name: nodeType.defaultNodeName || nodeType.name,
                 type: nodeType.type,
-                top: '30px',
-                left: '30px',
+                left: position.x + 'px',
+                top: position.y + 'px',
                 ephemeral: {
                     isSelected: false,
                     isHovered: false
@@ -458,11 +459,11 @@ funkCanvas = new Vue({
         },
         zoomIn: function () {
             $('#funk-canvas').panzoom('zoom', false,
-                {focal: {clientX: $(window).width() / 2, clientY: $(window).height() / 2}});
+                {focal: {clientX: $(window).width() / 2 + 5000, clientY: $(window).height() / 2 + 5000}});
         },
         zoomOut: function () {
             $('#funk-canvas').panzoom('zoom', true,
-                {focal: {clientX: $(window).width() / 2, clientY: $(window).height() / 2}});
+                {focal: {clientX: $(window).width() / 2 + 5000, clientY: $(window).height() / 2 + 5000}});
         },
         layoutGraph: function () {
             var this_ = this;
@@ -517,7 +518,22 @@ $(document).bind("keydown", "esc", function() {funkCanvas.$refs.addNode.isActive
 $('#funk-canvas').panzoom({
     eventNamespace: '.panzoom',
     increment: 0.3
-}).panzoom('pan', -5000, -5000);
+});
+
+function screenCenterInScreenSpace() {
+    return {x: $(window).width() / 2, y: $(window).height() / 2}
+}
+
+function screenCenterInCanvasSpace() {
+    var currentMatrix = $('#funk-canvas').panzoom('getMatrix');
+    var mx = currentMatrix[4];
+    var my = currentMatrix[5];
+    var z = currentMatrix[0];
+    var topLeft = {x: -1 * (mx / z - 5000), y:  -1 * (my / z - 5000)};
+    var unscaledOffset = screenCenterInScreenSpace();
+    var scaledOffset = {x: unscaledOffset.x / z, y: unscaledOffset.y / z};
+    return {x: topLeft.x + scaledOffset.x, y: topLeft.y + scaledOffset.y};
+}
 
 function shadeColor(color, percent) {
     var f=parseInt(color.slice(1),16),t=percent<0?0:255,p=percent<0?percent*-1:percent,R=f>>16,G=f>>8&0x00FF,B=f&0x0000FF;

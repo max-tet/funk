@@ -50,6 +50,8 @@ html {
 #funk-canvas {
 	width: 10000px;
 	height: 10000px;
+	left: -5000px;
+	top: -5000px;
 
     background: -webkit-linear-gradient(90deg, #dcdcdc 0, #8c8c8c 1px, rgba(180,180,180,1) 1px, rgba(180,180,180,0) 2px, rgba(255,255,255,0) 100%), -webkit-linear-gradient(0deg, #b4b4b4 0, rgba(90,90,90,0) 1px, rgba(0,0,0,0) 100%), -webkit-linear-gradient(90deg, rgba(180,180,180,1) 0, rgba(255,255,255,0.298039) 1px, rgba(0,0,0,0) 1px, rgba(0,0,0,0) 100%), -webkit-linear-gradient(0deg, rgba(180,180,180,1) 0, rgba(255,255,255,0.298039) 1px, rgba(0,0,0,0) 1px, rgba(0,0,0,0) 100%), rgba(220,220,220,1);
     background: -moz-linear-gradient(0deg, #dcdcdc 0, #8c8c8c 1px, rgba(180,180,180,1) 1px, rgba(180,180,180,0) 2px, rgba(255,255,255,0) 100%), -moz-linear-gradient(90deg, #b4b4b4 0, rgba(90,90,90,0) 1px, rgba(0,0,0,0) 100%), -moz-linear-gradient(0deg, rgba(180,180,180,1) 0, rgba(255,255,255,0.298039) 1px, rgba(0,0,0,0) 1px, rgba(0,0,0,0) 100%), -moz-linear-gradient(90deg, rgba(180,180,180,1) 0, rgba(255,255,255,0.298039) 1px, rgba(0,0,0,0) 1px, rgba(0,0,0,0) 100%), rgba(220,220,220,1);
