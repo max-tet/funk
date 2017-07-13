@@ -11,17 +11,19 @@
 </head>
 <body>
 
-    <div id="funk-canvas-container">
-        <div class="permission-demo jtk-surface"
-             id="funk-canvas"
-             v-on:click="onCanvasClick($event)">
-            <funk-node
-                    v-for="node in nodes"
-                    :key="node.nodeid"
-                    :funk-instance="funkInstance"
-                    :node="node"
-                    v-on:edit="editNode"
-                    v-on:shift-clicked="toggleNodeSelection"></funk-node>
+    <div id="funk-body">
+        <div id="funk-canvas-container">
+            <div class="permission-demo jtk-surface"
+                 id="funk-canvas"
+                 v-on:click="onCanvasClick($event)">
+                <funk-node
+                        v-for="node in nodes"
+                        :key="node.nodeid"
+                        :funk-instance="funkInstance"
+                        :node="node"
+                        v-on:edit="editNode"
+                        v-on:shift-clicked="toggleNodeSelection"></funk-node>
+            </div>
         </div>
         <funk-node-properties-modal
                 :node="nodeUnderModification"

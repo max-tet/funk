@@ -308,7 +308,7 @@ Vue.component('funk-nodetype-preview', {
 });
 
 funkCanvas = new Vue({
-    el: '#funk-canvas-container',
+    el: '#funk-body',
     data: {
         nodes: [],
         funkInstance: funkInstance,
