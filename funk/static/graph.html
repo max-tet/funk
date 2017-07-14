@@ -41,9 +41,11 @@
         </div>
         <div id="funk-zoom-buttons" class="btn-group funk-control" role="group">
             <button id="funk-button-zoom-in" type="button" class="btn btn-default"
-                    v-on:click="zoomIn">+</button>
+                    v-on:click="zoomIn"><span class="glyphicon glyphicon-plus"></span></button>
+            <button id="funk-button-zoom-center" type="button" class="btn btn-default"
+                    v-on:click="zoomCenter"><span class="glyphicon glyphicon-record"></span></button>
             <button id="funk-button-zoom-out" type="button" class="btn btn-default"
-                    v-on:click="zoomOut">-</button>
+                    v-on:click="zoomOut"><span class="glyphicon glyphicon-minus"></span></button>
         </div>
         <div id="not-found" v-if="graphNotFound">
             <h1>Graph <i>{{funkInstance.graphname}}</i> does not exist</h1>

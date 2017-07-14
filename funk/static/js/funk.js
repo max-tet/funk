@@ -465,6 +465,9 @@ funkCanvas = new Vue({
             $('#funk-canvas').panzoom('zoom', true,
                 {focal: {clientX: $(window).width() / 2 + 5000, clientY: $(window).height() / 2 + 5000}});
         },
+        zoomCenter: function () {
+            $('#funk-canvas').panzoom('reset');
+        },
         layoutGraph: function () {
             var this_ = this;
             $.ajax({
