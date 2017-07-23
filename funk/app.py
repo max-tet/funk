@@ -9,7 +9,8 @@ from pathlib import Path
 from flask import Flask, Response
 from flask.globals import request
 
-from funk import model, persistence, graphlayout, nodetypes, exporthook
+from funk import model, persistence, graphlayout, nodetypes, hook
+from funk.hook import HookType
 
 app = Flask(__name__)
 
@@ -18,7 +19,7 @@ db.connect()
 model.create_tables(db)
 db.close()
 
-save_hooks = []
+hooks = []
 
 
 @app.before_request
@@ -149,6 +150,10 @@ def post_graph(graph_name):
 @app.route('/api/graph/<graph_name>', methods=['DELETE'])
 def del_graph(graph_name):
     persistence.delete_graph(graph_name)
+
+    for h in hooks:
+        h(HookType.DELETE_GRAPH, graph_name=graph_name)
+
     return Response(status=200)
 
 
@@ -156,8 +161,10 @@ def del_graph(graph_name):
 def update_graph(graph_name):
     graph_json = request.get_json()
     persistence.save_graph(graph_name, graph_json)
-    for hook in save_hooks:
-        hook(graph_name, graph_json)
+
+    for h in hooks:
+        h(HookType.UPDATE_GRAPH, graph_name=graph_name, graph_json=graph_json)
+
     return Response(status=200)
 
 
@@ -166,8 +173,13 @@ def layout_graph(graph_name):
     graph = persistence.load_graph(graph_name)
     with open('funk/static/nodetypes.json') as f:
         nodetypes = '\n'.join(f.readlines())
-    new_graph = graphlayout.layout_graph(graph, nodetypes)
-    persistence.save_graph(graph_name, json.loads(new_graph))
+
+    new_graph_json = json.loads(graphlayout.layout_graph(graph, nodetypes))
+    persistence.save_graph(graph_name, new_graph_json)
+
+    for h in hooks:
+        h(HookType.UPDATE_GRAPH, graph_name=graph_name, graph_json=new_graph_json)
+
     return Response(status=200)
 
 
@@ -180,5 +192,6 @@ def get_args():
 if __name__ == '__main__':
     args = get_args()
     if args.export:
-        save_hooks.append(exporthook.make_exporter(args.export))
+        hooks.append(hook.make_export_hook(args.export))
+        hooks.append(hook.make_delete_hook(args.export))
     app.run('localhost', 5000)
