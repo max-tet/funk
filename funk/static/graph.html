@@ -107,8 +107,13 @@
                     <div class="modal-body">
                             <div class="input-group">
                                 <div class="input-group-addon">Name</div>
-                                <input type="text" class="form-control" placeholder="Name"
-                                   v-model="node.name" v-bind:value="node.name">
+                                <input type="text"
+                                       class="form-control"
+                                       placeholder="Name"
+                                       v-model="node.name"
+                                       v-bind:value="node.name"
+                                       v-on:keyup.enter="save"
+                                       v-on:keyup.esc="cancel">
                             </div>
                             <template v-for="prop in node.props">
                                 <div v-if="prop.type == 'string'" class="input-group">
@@ -116,18 +121,24 @@
                                     <input type="text"
                                            class="form-control"
                                            v-model="prop.value"
-                                           v-bind:value="prop.value">
+                                           v-bind:value="prop.value"
+                                           v-on:keyup.enter="save"
+                                           v-on:keyup.esc="cancel">
                                 </div>
                                 <div v-if="prop.type == 'boolean'" class="input-group btn-group">
                                     <div class="input-group-addon">{{prop.name}}</div>
                                     <button class="btn" type="button"
                                             v-bind:class="{'btn-primary': prop.value, 'btn-default': !prop.value}"
-                                            v-on:click="prop.value = true">
+                                            v-on:click="prop.value = true"
+                                            v-on:keyup.enter="save"
+                                            v-on:keyup.esc="cancel">
                                         True
                                     </button>
                                     <button class="btn" type="button"
                                             v-bind:class="{'btn-primary': !prop.value, 'btn-default': prop.value}"
-                                            v-on:click="prop.value = false">
+                                            v-on:click="prop.value = false"
+                                            v-on:keyup.enter="save"
+                                            v-on:keyup.esc="cancel">
                                         False
                                     </button>
                                 </div>
@@ -136,7 +147,9 @@
                                     <input type="number"
                                            class="form-control"
                                            v-model="prop.value"
-                                           v-bind:value="prop.value">
+                                           v-bind:value="prop.value"
+                                           v-on:keyup.enter="save"
+                                           v-on:keyup.esc="cancel">
                                 </div>
                                 <div v-if="prop.type == 'float'" class="input-group">
                                     <div class="input-group-addon">{{prop.name}}</div>
@@ -144,7 +157,9 @@
                                            step="0.01"
                                            class="form-control"
                                            v-model="prop.value"
-                                           v-bind:value="prop.value">
+                                           v-bind:value="prop.value"
+                                           v-on:keyup.enter="save"
+                                           v-on:keyup.esc="cancel">
                                 </div>
                             </template>
                     </div>

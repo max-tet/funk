@@ -244,7 +244,7 @@ Vue.component('funk-add-node', {
             this_ = this;
             if (val) {
                 Vue.nextTick(function () {
-                    $(this_.$el).find('input').focus();
+                    $(this_.$el).find('input').select();
                 });
             }
         },

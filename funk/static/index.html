@@ -18,7 +18,11 @@
             <div class="col-md-4 text-right">
                 <h1>
                     <div class="input-group">
-                        <input type="text" v-model="graphname" class="form-control" placeholder="New Graph">
+                        <input type="text"
+                               v-model="graphname"
+                               v-on:keyup.enter="createGraph"
+                               class="form-control"
+                               placeholder="New Graph">
                         <span class="input-group-btn">
                             <button class="btn btn-default" type="button" v-on:click="createGraph">
                                 <span class="glyphicon glyphicon-plus"></span>
@@ -43,6 +47,7 @@
                     </thead>
                     <tr is="graph-tr"
                         v-for="graph in graphs"
+                        :key="graph.name"
                         :graph="graph"
                         v-on:delete-graph="deleteGraph"></tr>
                 </table>
