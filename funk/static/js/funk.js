@@ -316,6 +316,21 @@ funkCanvas = new Vue({
         nodeUnderModification: ''
     },
     methods: {
+        removeDups: function () {
+            var this_ = this;
+            var seenIds = [];
+            $.each(this.nodes, function (i, node) {
+                if (seenIds.indexOf(node.nodeid) == -1) {
+                    seenIds.push(node.nodeid);
+                } else {
+                    node.toDelete = true;
+                }
+            });
+            this.nodes = this.nodes.filter(function (node) {
+                if ('toDelete' in node) {return false;}
+                return true;
+            });
+        },
         initJsPlumbInstance: function () {
             if (this.funkInstance.jsPlumbInstance) {
                 this.funkInstance.jsPlumbInstance.reset();
@@ -355,6 +370,7 @@ funkCanvas = new Vue({
         },
         loadGraph: function () {
             var this_ = this;
+            this_.nodes = [];
             funkInstance.graphname = window.location.pathname.split('/')[2];
             $.get('/api/graph/' + this.funkInstance.graphname)
                 .done(function (data) {
@@ -473,8 +489,7 @@ funkCanvas = new Vue({
             $.ajax({
                 url: '/api/trigger/layout/' + this_.funkInstance.graphname,
                 type: 'POST',
-                success: function () {this_.loadGraph()},
-                complete: function () {console.log('failed layout')}
+                success: function () {this_.loadGraph()}
             });
         },
         loadDynamicNodetypes: function (searchString) {
