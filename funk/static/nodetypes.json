@@ -49,7 +49,8 @@
           "id": "in",
           "name": "In",
           "type": "boolean",
-          "direction": "in"
+          "direction": "in",
+          "maxConnections": 1
         }
       ],
       "connector_r": [
@@ -57,7 +58,8 @@
           "id": "out",
           "name": "Out",
           "type": "boolean",
-          "direction": "out"
+          "direction": "out",
+          "maxConnections": -1
         }
       ],
       "props": []
@@ -74,7 +76,8 @@
           "id": "in",
           "name": "In",
           "type": "boolean",
-          "direction": "in"
+          "direction": "in",
+          "maxConnections": 1
         }
       ],
       "connector_r": [
@@ -82,7 +85,8 @@
           "id": "out",
           "name": "Out",
           "type": "resource",
-          "direction": "out"
+          "direction": "out",
+          "maxConnections": -1
         }
       ],
       "props": []
@@ -99,7 +103,8 @@
           "id": "in",
           "name": "In",
           "type": "bytes",
-          "direction": "in"
+          "direction": "in",
+          "maxConnections": 1
         }
       ],
       "connector_r": [
@@ -107,7 +112,8 @@
           "id": "out",
           "name": "Out",
           "type": "string",
-          "direction": "out"
+          "direction": "out",
+          "maxConnections": -1
         }
       ],
       "props": []
@@ -124,7 +130,8 @@
           "id": "in",
           "name": "In",
           "type": "bytes",
-          "direction": "in"
+          "direction": "in",
+          "maxConnections": 1
         }
       ],
       "connector_r": [
@@ -132,7 +139,8 @@
           "id": "out",
           "name": "Out",
           "type": "string",
-          "direction": "out"
+          "direction": "out",
+          "maxConnections": -1
         }
       ],
       "props": []
@@ -151,7 +159,8 @@
           "id": "out",
           "name": "Out",
           "type": "boolean",
-          "direction": "out"
+          "direction": "out",
+          "maxConnections": -1
         }
       ],
       "props": [
@@ -177,7 +186,8 @@
           "id": "out",
           "name": "Out",
           "type": "float",
-          "direction": "out"
+          "direction": "out",
+          "maxConnections": -1
         }
       ],
       "props": [
@@ -203,7 +213,8 @@
           "id": "out",
           "name": "Out",
           "type": "integer",
-          "direction": "out"
+          "direction": "out",
+          "maxConnections": -1
         }
       ],
       "props": [
@@ -229,7 +240,8 @@
           "id": "out",
           "name": "Out",
           "type": "location",
-          "direction": "out"
+          "direction": "out",
+          "maxConnections": -1
         }
       ],
       "props": [
@@ -261,7 +273,8 @@
           "id": "out",
           "name": "Out",
           "type": "resource",
-          "direction": "out"
+          "direction": "out",
+          "maxConnections": -1
         }
       ],
       "props": [
@@ -287,7 +300,8 @@
           "id": "out",
           "name": "Out",
           "type": "string",
-          "direction": "out"
+          "direction": "out",
+          "maxConnections": -1
         }
       ],
       "props": [
@@ -311,13 +325,15 @@
           "id": "in",
           "name": "In",
           "type": "resource",
-          "direction": "in"
+          "direction": "in",
+          "maxConnections": 1
         },
         {
           "id": "continue",
           "name": "Continue",
           "type": "boolean",
-          "direction": "in"
+          "direction": "in",
+          "maxConnections": 1
         }
       ],
       "connector_r": [
@@ -325,7 +341,8 @@
           "id": "out",
           "name": "Out",
           "type": "resource",
-          "direction": "out"
+          "direction": "out",
+          "maxConnections": -1
         }
       ],
       "props": []
@@ -342,13 +359,15 @@
           "id": "in",
           "name": "In",
           "type": "resource",
-          "direction": "in"
+          "direction": "in",
+          "maxConnections": 1
         },
         {
           "id": "key",
           "name": "Key",
           "type": "string",
-          "direction": "in"
+          "direction": "in",
+          "maxConnections": 1
         }
       ],
       "connector_r": [
@@ -356,7 +375,8 @@
           "id": "out",
           "name": "Out",
           "type": "resource",
-          "direction": "out"
+          "direction": "out",
+          "maxConnections": -1
         }
       ],
       "props": []
@@ -373,13 +393,15 @@
           "id": "divident",
           "name": "Divident",
           "type": "float",
-          "direction": "in"
+          "direction": "in",
+          "maxConnections": 1
         },
         {
           "id": "divisor",
           "name": "Divisor",
           "type": "float",
-          "direction": "in"
+          "direction": "in",
+          "maxConnections": 1
         }
       ],
       "connector_r": [
@@ -387,7 +409,8 @@
           "id": "quotient",
           "name": "Quotient",
           "type": "float",
-          "direction": "out"
+          "direction": "out",
+          "maxConnections": -1
         }
       ],
       "props": []
@@ -404,7 +427,8 @@
           "id": "in",
           "name": "In",
           "type": "float",
-          "direction": "in"
+          "direction": "in",
+          "maxConnections": 1
         }
       ],
       "connector_r": [
@@ -412,7 +436,8 @@
           "id": "out",
           "name": "Out",
           "type": "resource",
-          "direction": "out"
+          "direction": "out",
+          "maxConnections": -1
         }
       ],
       "props": []
@@ -429,7 +454,8 @@
           "id": "in",
           "name": "In",
           "type": "float",
-          "direction": "in"
+          "direction": "in",
+          "maxConnections": 1
         }
       ],
       "connector_r": [
@@ -437,7 +463,8 @@
           "id": "out",
           "name": "Out",
           "type": "string",
-          "direction": "out"
+          "direction": "out",
+          "maxConnections": -1
         }
       ],
       "props": []
@@ -454,7 +481,8 @@
           "id": "in",
           "name": "In",
           "type": "bytes",
-          "direction": "in"
+          "direction": "in",
+          "maxConnections": 1
         }
       ],
       "connector_r": [
@@ -462,7 +490,8 @@
           "id": "out",
           "name": "Out",
           "type": "bytes",
-          "direction": "out"
+          "direction": "out",
+          "maxConnections": -1
         }
       ],
       "props": []
@@ -479,7 +508,8 @@
           "id": "line_no",
           "name": "Line Number",
           "type": "integer",
-          "direction": "in"
+          "direction": "in",
+          "maxConnections": 1
         }
       ],
       "connector_r": [
@@ -487,7 +517,8 @@
           "id": "out",
           "name": "Out",
           "type": "string",
-          "direction": "out"
+          "direction": "out",
+          "maxConnections": -1
         }
       ],
       "props": [
@@ -518,7 +549,8 @@
           "id": "out",
           "name": "Out",
           "type": "resource",
-          "direction": "out"
+          "direction": "out",
+          "maxConnections": -1
         }
       ],
       "props": [
@@ -543,7 +575,8 @@
           "id": "out",
           "name": "Out",
           "type": "resource",
-          "direction": "out"
+          "direction": "out",
+          "maxConnections": -1
         }
       ],
       "props": [
@@ -567,7 +600,8 @@
           "id": "in",
           "name": "In",
           "type": "integer",
-          "direction": "in"
+          "direction": "in",
+          "maxConnections": 1
         }
       ],
       "connector_r": [
@@ -575,7 +609,8 @@
           "id": "out",
           "name": "Out",
           "type": "integer",
-          "direction": "out"
+          "direction": "out",
+          "maxConnections": -1
         }
       ],
       "props": [
@@ -599,13 +634,15 @@
           "id": "in1",
           "name": "In 1",
           "type": "integer",
-          "direction": "in"
+          "direction": "in",
+          "maxConnections": 1
         },
         {
           "id": "in2",
           "name": "In 2",
           "type": "integer",
-          "direction": "in"
+          "direction": "in",
+          "maxConnections": 1
         }
       ],
       "connector_r": [
@@ -613,7 +650,8 @@
           "id": "out",
           "name": "In 1 > In 2",
           "type": "boolean",
-          "direction": "out"
+          "direction": "out",
+          "maxConnections": -1
         }
       ],
       "props": []
@@ -630,7 +668,8 @@
           "id": "in",
           "name": "In",
           "type": "integer",
-          "direction": "in"
+          "direction": "in",
+          "maxConnections": 1
         }
       ],
       "connector_r": [
@@ -638,7 +677,8 @@
           "id": "out",
           "name": "Out",
           "type": "resource",
-          "direction": "out"
+          "direction": "out",
+          "maxConnections": -1
         }
       ],
       "props": []
@@ -655,7 +695,8 @@
           "id": "in",
           "name": "In",
           "type": "integer",
-          "direction": "in"
+          "direction": "in",
+          "maxConnections": 1
         }
       ],
       "connector_r": [
@@ -663,7 +704,8 @@
           "id": "out",
           "name": "Out",
           "type": "string",
-          "direction": "out"
+          "direction": "out",
+          "maxConnections": -1
         }
       ],
       "props": []
@@ -680,7 +722,8 @@
           "id": "in",
           "name": "In",
           "type": "location",
-          "direction": "in"
+          "direction": "in",
+          "maxConnections": 1
         }
       ],
       "connector_r": [
@@ -688,7 +731,8 @@
           "id": "out",
           "name": "Out",
           "type": "resource",
-          "direction": "out"
+          "direction": "out",
+          "maxConnections": -1
         }
       ],
       "props": [
@@ -718,7 +762,8 @@
           "id": "in",
           "name": "In",
           "type": "float",
-          "direction": "in"
+          "direction": "in",
+          "maxConnections": 1
         }
       ],
       "connector_r": [
@@ -726,13 +771,15 @@
           "id": "out",
           "name": "Out",
           "type": "float",
-          "direction": "out"
+          "direction": "out",
+          "maxConnections": -1
         },
         {
           "id": "nr_of_values",
           "name": "Nr of Values",
           "type": "integer",
-          "direction": "out"
+          "direction": "out",
+          "maxConnections": -1
         }
       ],
       "props": [
@@ -756,7 +803,8 @@
           "id": "in",
           "name": "In",
           "type": "string",
-          "direction": "in"
+          "direction": "in",
+          "maxConnections": 1
         }
       ],
       "connector_r": [],
@@ -781,7 +829,8 @@
           "id": "in",
           "name": "In",
           "type": "resource",
-          "direction": "in"
+          "direction": "in",
+          "maxConnections": 1
         }
       ],
       "connector_r": [],
@@ -806,7 +855,8 @@
           "id": "in",
           "name": "In",
           "type": "resource",
-          "direction": "in"
+          "direction": "in",
+          "maxConnections": 1
         }
       ],
       "connector_r": [],
@@ -831,19 +881,22 @@
           "id": "in",
           "name": "In",
           "type": "resource",
-          "direction": "in"
+          "direction": "in",
+          "maxConnections": 1
         },
         {
           "id": "key",
           "name": "Key",
           "type": "string",
-          "direction": "in"
+          "direction": "in",
+          "maxConnections": 1
         },
         {
           "id": "to_insert",
           "name": "to Insert",
           "type": "resource",
-          "direction": "in"
+          "direction": "in",
+          "maxConnections": 1
         }
       ],
       "connector_r": [
@@ -851,7 +904,8 @@
           "id": "out",
           "name": "Out",
           "type": "resource",
-          "direction": "out"
+          "direction": "out",
+          "maxConnections": -1
         }
       ],
       "props": []
@@ -869,7 +923,8 @@
           "id": "out",
           "name": "Out",
           "type": "resource",
-          "direction": "out"
+          "direction": "out",
+          "maxConnections": -1
         }
       ],
       "props": [
@@ -895,7 +950,8 @@
           "id": "out",
           "name": "Out",
           "type": "float",
-          "direction": "out"
+          "direction": "out",
+          "maxConnections": -1
         }
       ],
       "props": [
@@ -927,7 +983,8 @@
           "id": "out",
           "name": "Out",
           "type": "integer",
-          "direction": "out"
+          "direction": "out",
+          "maxConnections": -1
         }
       ],
       "props": [
@@ -959,7 +1016,8 @@
           "id": "out",
           "name": "Out",
           "type": "location",
-          "direction": "out"
+          "direction": "out",
+          "maxConnections": -1
         }
       ],
       "props": []
@@ -976,13 +1034,15 @@
           "id": "in",
           "name": "In",
           "type": "resource",
-          "direction": "in"
+          "direction": "in",
+          "maxConnections": 1
         },
         {
           "id": "delay",
           "name": "Delay",
           "type": "float",
-          "direction": "in"
+          "direction": "in",
+          "maxConnections": 1
         }
       ],
       "connector_r": [
@@ -990,7 +1050,8 @@
           "id": "out",
           "name": "Out",
           "type": "resource",
-          "direction": "out"
+          "direction": "out",
+          "maxConnections": -1
         }
       ],
       "props": []
@@ -1007,7 +1068,8 @@
           "id": "in",
           "name": "In",
           "type": "resource",
-          "direction": "in"
+          "direction": "in",
+          "maxConnections": 1
         }
       ],
       "connector_r": [
@@ -1015,7 +1077,8 @@
           "id": "out",
           "name": "Out",
           "type": "resource",
-          "direction": "out"
+          "direction": "out",
+          "maxConnections": -1
         }
       ],
       "props": [
@@ -1039,7 +1102,8 @@
           "id": "in",
           "name": "In",
           "type": "resource",
-          "direction": "in"
+          "direction": "in",
+          "maxConnections": 1
         }
       ],
       "connector_r": [
@@ -1047,7 +1111,8 @@
           "id": "out",
           "name": "Out",
           "type": "float",
-          "direction": "out"
+          "direction": "out",
+          "maxConnections": -1
         }
       ],
       "props": []
@@ -1064,7 +1129,8 @@
           "id": "in",
           "name": "In",
           "type": "resource",
-          "direction": "in"
+          "direction": "in",
+          "maxConnections": 1
         }
       ],
       "connector_r": [
@@ -1072,7 +1138,8 @@
           "id": "out",
           "name": "Out",
           "type": "location",
-          "direction": "out"
+          "direction": "out",
+          "maxConnections": -1
         }
       ],
       "props": [
@@ -1102,7 +1169,8 @@
           "id": "in",
           "name": "In",
           "type": "resource",
-          "direction": "in"
+          "direction": "in",
+          "maxConnections": 1
         }
       ],
       "connector_r": [
@@ -1110,7 +1178,8 @@
           "id": "out",
           "name": "Out",
           "type": "string",
-          "direction": "out"
+          "direction": "out",
+          "maxConnections": -1
         }
       ],
       "props": []
@@ -1128,7 +1197,8 @@
           "id": "out",
           "name": "Out",
           "type": "integer",
-          "direction": "out"
+          "direction": "out",
+          "maxConnections": -1
         }
       ],
       "props": []
@@ -1145,7 +1215,8 @@
           "id": "in",
           "name": "In",
           "type": "float",
-          "direction": "in"
+          "direction": "in",
+          "maxConnections": 1
         }
       ],
       "connector_r": [
@@ -1153,7 +1224,8 @@
           "id": "out",
           "name": "Out",
           "type": "float",
-          "direction": "out"
+          "direction": "out",
+          "maxConnections": -1
         }
       ],
       "props": [
@@ -1177,7 +1249,8 @@
           "id": "in",
           "name": "In",
           "type": "location",
-          "direction": "in"
+          "direction": "in",
+          "maxConnections": 1
         }
       ],
       "connector_r": [
@@ -1185,7 +1258,8 @@
           "id": "out",
           "name": "Out",
           "type": "location",
-          "direction": "out"
+          "direction": "out",
+          "maxConnections": -1
         }
       ],
       "props": [
@@ -1209,13 +1283,15 @@
           "id": "in",
           "name": "In",
           "type": "resource",
-          "direction": "in"
+          "direction": "in",
+          "maxConnections": 1
         },
         {
           "id": "selector",
           "name": "Selector",
           "type": "string",
-          "direction": "in"
+          "direction": "in",
+          "maxConnections": 1
         }
       ],
       "connector_r": [
@@ -1223,7 +1299,8 @@
           "id": "out",
           "name": "Out",
           "type": "resource",
-          "direction": "out"
+          "direction": "out",
+          "maxConnections": -1
         }
       ],
       "props": []
@@ -1240,13 +1317,15 @@
           "id": "value1",
           "name": "Value 1",
           "type": "string",
-          "direction": "in"
+          "direction": "in",
+          "maxConnections": 1
         },
         {
           "id": "value2",
           "name": "Value 2",
           "type": "string",
-          "direction": "in"
+          "direction": "in",
+          "maxConnections": 1
         }
       ],
       "connector_r": [
@@ -1254,7 +1333,8 @@
           "id": "result",
           "name": "Result",
           "type": "string",
-          "direction": "out"
+          "direction": "out",
+          "maxConnections": -1
         }
       ],
       "props": []
@@ -1271,13 +1351,15 @@
           "id": "value1",
           "name": "Value 1",
           "type": "string",
-          "direction": "in"
+          "direction": "in",
+          "maxConnections": 1
         },
         {
           "id": "value2",
           "name": "Value 2",
           "type": "string",
-          "direction": "in"
+          "direction": "in",
+          "maxConnections": 1
         }
       ],
       "connector_r": [
@@ -1285,7 +1367,8 @@
           "id": "result",
           "name": "Result",
           "type": "boolean",
-          "direction": "out"
+          "direction": "out",
+          "maxConnections": -1
         }
       ],
       "props": []
@@ -1302,19 +1385,22 @@
           "id": "in",
           "name": "In",
           "type": "string",
-          "direction": "in"
+          "direction": "in",
+          "maxConnections": 1
         },
         {
           "id": "start",
           "name": "Start",
           "type": "integer",
-          "direction": "in"
+          "direction": "in",
+          "maxConnections": 1
         },
         {
           "id": "end",
           "name": "End",
           "type": "integer",
-          "direction": "in"
+          "direction": "in",
+          "maxConnections": 1
         }
       ],
       "connector_r": [
@@ -1322,7 +1408,8 @@
           "id": "result",
           "name": "Result",
           "type": "string",
-          "direction": "out"
+          "direction": "out",
+          "maxConnections": -1
         }
       ],
       "props": []
@@ -1339,7 +1426,8 @@
           "id": "in",
           "name": "In",
           "type": "string",
-          "direction": "in"
+          "direction": "in",
+          "maxConnections": 1
         }
       ],
       "connector_r": [
@@ -1347,7 +1435,8 @@
           "id": "out",
           "name": "Out",
           "type": "bytes",
-          "direction": "out"
+          "direction": "out",
+          "maxConnections": -1
         }
       ],
       "props": []
@@ -1364,7 +1453,8 @@
           "id": "in",
           "name": "In",
           "type": "string",
-          "direction": "in"
+          "direction": "in",
+          "maxConnections": 1
         }
       ],
       "connector_r": [
@@ -1372,7 +1462,8 @@
           "id": "out",
           "name": "Out",
           "type": "integer",
-          "direction": "out"
+          "direction": "out",
+          "maxConnections": -1
         }
       ],
       "props": []
@@ -1389,7 +1480,8 @@
           "id": "in",
           "name": "In",
           "type": "string",
-          "direction": "in"
+          "direction": "in",
+          "maxConnections": 1
         }
       ],
       "connector_r": [
@@ -1397,7 +1489,8 @@
           "id": "out",
           "name": "Out",
           "type": "resource",
-          "direction": "out"
+          "direction": "out",
+          "maxConnections": -1
         }
       ],
       "props": []
@@ -1415,7 +1508,8 @@
           "id": "out",
           "name": "Out",
           "type": "float",
-          "direction": "out"
+          "direction": "out",
+          "maxConnections": -1
         }
       ],
       "props": []
