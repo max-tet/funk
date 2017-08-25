@@ -1,9 +1,9 @@
 {
   "datatypes": [
     {
-      "id": "actor",
-      "name": "Actor",
-      "color": "#297E13"
+      "id": "bytes",
+      "name": "Bytes",
+      "color": "#C3227D"
     },
     {
       "id": "boolean",
@@ -26,197 +26,53 @@
       "color": "#EAA700"
     },
     {
-      "id": "resource",
-      "name": "Resource",
-      "color": "#351F99"
-    },
-    {
-      "id": "timeseries",
-      "name": "Timeseries",
-      "color": "#923158"
-    },
-    {
       "id": "location",
       "name": "Location",
       "color": "#69AB54"
     },
     {
-      "id": "geo_region",
-      "name": "Geographical Region",
-      "color": "#69AB54"
+      "id": "resource",
+      "name": "Resource",
+      "color": "#351F99"
     }
   ],
   "nodetypes": [
     {
-      "type": "abstract_user",
-      "name": "User",
-      "isAbstract": true,
-      "isStatic": true,
-      "color": "#A58DD2",
-      "categories": ["Users"],
-      "connector_l": [],
+      "type": "boolean_not",
+      "name": "Boolean Not",
+      "color": "#d1a994",
+      "categories": [
+        "Boolean"
+      ],
+      "connector_l": [
+        {
+          "id": "in",
+          "name": "In",
+          "type": "boolean",
+          "direction": "in"
+        }
+      ],
       "connector_r": [
         {
           "id": "out",
           "name": "Out",
-          "type": "resource",
+          "type": "boolean",
           "direction": "out"
         }
-      ]
-    },
-    {
-      "type": "source_rest_server",
-      "name": "Source Rest Server",
-      "color": "#A58DD2",
-      "categories": [
-        "Source"
       ],
-      "connector_l": [],
-      "connector_r": [
-        {
-          "id": "out",
-          "name": "Out",
-          "type": "resource",
-          "direction": "out"
-        }
-      ]
+      "props": []
     },
     {
-      "type": "source_dataflow",
-      "name": "Source Dataflow",
-      "color": "#A58DD2",
+      "type": "boolean_to_resource",
+      "name": "Boolean to Resource",
+      "color": "#9f94d1",
       "categories": [
-        "Source"
-      ],
-      "connector_l": [],
-      "connector_r": [
-        {
-          "id": "out",
-          "name": "Out",
-          "type": "resource",
-          "direction": "out"
-        }
-      ]
-    },
-    {
-      "type": "dest_rest_server",
-      "name": "Destination Rest Server",
-      "color": "#A58DD2",
-      "categories": [
-        "Destination"
+        "Conversion"
       ],
       "connector_l": [
         {
           "id": "in",
           "name": "In",
-          "type": "resource",
-          "direction": "in"
-        }
-      ],
-      "connector_r": []
-    },
-    {
-      "type": "dest_rest_client",
-      "name": "Destination Rest Client",
-      "color": "#A58DD2",
-      "categories": [
-        "Destination"
-      ],
-      "connector_l": [
-        {
-          "id": "in",
-          "name": "In",
-          "type": "resource",
-          "direction": "in"
-        }
-      ],
-      "connector_r": []
-    },
-    {
-      "type": "dest_file_writer",
-      "name": "Destination File Writer",
-      "color": "#A58DD2",
-      "categories": [
-        "Destination"
-      ],
-      "connector_l": [
-        {
-          "id": "in",
-          "name": "In",
-          "type": "resource",
-          "direction": "in"
-        }
-      ],
-      "connector_r": []
-    },
-    {
-      "type": "dest_dataflow",
-      "name": "Destination Dataflow",
-      "color": "#A58DD2",
-      "categories": [
-        "Destination"
-      ],
-      "connector_l": [
-        {
-          "id": "in",
-          "name": "In",
-          "type": "resource",
-          "direction": "in"
-        }
-      ],
-      "connector_r": []
-    },
-    {
-      "type": "dest_email",
-      "name": "Destination Email",
-      "color": "#A58DD2",
-      "categories": [
-        "Destination"
-      ],
-      "connector_l": [
-        {
-          "id": "in",
-          "name": "In",
-          "type": "resource",
-          "direction": "in"
-        }
-      ],
-      "connector_r": []
-    },
-    {
-      "type": "dest_sql",
-      "name": "Destination SQL",
-      "color": "#A58DD2",
-      "categories": [
-        "Destination"
-      ],
-      "connector_l": [
-        {
-          "id": "in",
-          "name": "In",
-          "type": "resource",
-          "direction": "in"
-        }
-      ],
-      "connector_r": []
-    },
-    {
-      "type": "filter_resource",
-      "name": "Filter Resource",
-      "color": "#A58DD2",
-      "categories": [
-        "Resource"
-      ],
-      "connector_l": [
-        {
-          "id": "in",
-          "name": "In",
-          "type": "resource",
-          "direction": "in"
-        },
-        {
-          "id": "if",
-          "name": "If",
           "type": "boolean",
           "direction": "in"
         }
@@ -228,26 +84,21 @@
           "type": "resource",
           "direction": "out"
         }
-      ]
+      ],
+      "props": []
     },
     {
-      "type": "constrain_time_sampling",
-      "name": "Constrain Time Sampling",
-      "color": "#A58DD2",
+      "type": "bytes_to_hex_string",
+      "name": "Bytes to Hex String",
+      "color": "#d1c094",
       "categories": [
-        "Resource"
+        "Conversion"
       ],
       "connector_l": [
         {
           "id": "in",
           "name": "In",
-          "type": "resource",
-          "direction": "in"
-        },
-        {
-          "id": "secs_between_items",
-          "name": "Seconds between Items",
-          "type": "integer",
+          "type": "bytes",
           "direction": "in"
         }
       ],
@@ -255,29 +106,24 @@
         {
           "id": "out",
           "name": "Out",
-          "type": "resource",
+          "type": "string",
           "direction": "out"
         }
-      ]
+      ],
+      "props": []
     },
     {
-      "type": "constrain_resolution",
-      "name": "Constrain Resolution",
-      "color": "#A58DD2",
+      "type": "bytes_to_string",
+      "name": "Bytes to String",
+      "color": "#d1c094",
       "categories": [
-        "Resource"
+        "Conversion"
       ],
       "connector_l": [
         {
           "id": "in",
           "name": "In",
-          "type": "resource",
-          "direction": "in"
-        },
-        {
-          "id": "bucket_size",
-          "name": "Bucket Size",
-          "type": "integer",
+          "type": "bytes",
           "direction": "in"
         }
       ],
@@ -285,211 +131,152 @@
         {
           "id": "out",
           "name": "Out",
-          "type": "resource",
+          "type": "string",
           "direction": "out"
         }
-      ]
+      ],
+      "props": []
     },
     {
-      "type": "set_res_prop_str",
-      "name": "Set Resource Property String",
-      "color": "#A58DD2",
+      "type": "constant_boolean",
+      "name": "Constant Boolean",
+      "color": "#d1a994",
       "categories": [
-        "Resource",
-        "String"
+        "Constant",
+        "Boolean"
       ],
-      "connector_l": [
-        {
-          "id": "in",
-          "name": "In",
-          "type": "resource",
-          "direction": "in"
-        },
-        {
-          "id": "key",
-          "name": "Key",
-          "type": "string",
-          "direction": "in"
-        },
-        {
-          "id": "value",
-          "name": "Value",
-          "type": "string",
-          "direction": "in"
-        }
-      ],
+      "connector_l": [],
       "connector_r": [
         {
           "id": "out",
           "name": "Out",
-          "type": "resource",
-          "direction": "out"
-        }
-      ]
-    },
-    {
-      "type": "get_res_prop_str",
-      "name": "Get Resource Property String",
-      "color": "#A58DD2",
-      "categories": [
-        "Resource",
-        "String"
-      ],
-      "connector_l": [
-        {
-          "id": "in",
-          "name": "In",
-          "type": "resource",
-          "direction": "in"
-        },
-        {
-          "id": "key",
-          "name": "Key",
-          "type": "string",
-          "direction": "in"
-        }
-      ],
-      "connector_r": [
-        {
-          "id": "value",
-          "name": "Value",
-          "type": "string",
-          "direction": "out"
-        }
-      ]
-    },
-    {
-      "type": "set_res_prop_location",
-      "name": "Set Resource Property Location",
-      "color": "#A58DD2",
-      "categories": [
-        "Resource",
-        "Location"
-      ],
-      "connector_l": [
-        {
-          "id": "in",
-          "name": "In",
-          "type": "resource",
-          "direction": "in"
-        },
-        {
-          "id": "key",
-          "name": "Key",
-          "type": "string",
-          "direction": "in"
-        },
-        {
-          "id": "value",
-          "name": "Value",
-          "type": "location",
-          "direction": "in"
-        }
-      ],
-      "connector_r": [
-        {
-          "id": "out",
-          "name": "Out",
-          "type": "resource",
-          "direction": "out"
-        }
-      ]
-    },
-    {
-      "type": "get_res_prop_location",
-      "name": "Get Resource Property Location",
-      "color": "#A58DD2",
-      "categories": [
-        "Resource",
-        "Location"
-      ],
-      "connector_l": [
-        {
-          "id": "in",
-          "name": "In",
-          "type": "resource",
-          "direction": "in"
-        },
-        {
-          "id": "key",
-          "name": "Key",
-          "type": "string",
-          "direction": "in"
-        }
-      ],
-      "connector_r": [
-        {
-          "id": "value",
-          "name": "Value",
-          "type": "location",
-          "direction": "out"
-        }
-      ]
-    },
-    {
-      "type": "distance",
-      "name": "Distance",
-      "color": "#A1D490",
-      "categories": [
-        "Location"
-      ],
-      "connector_l": [
-        {
-          "id": "in1",
-          "name": "In 1",
-          "type": "location",
-          "direction": "in"
-        },
-        {
-          "id": "in2",
-          "name": "In 2",
-          "type": "location",
-          "direction": "in"
-        }
-      ],
-      "connector_r": [
-        {
-          "id": "distance",
-          "name": "Distance",
-          "type": "integer",
-          "direction": "out"
-        }
-      ]
-    },
-    {
-      "type": "location_in_region",
-      "name": "Location in Region",
-      "color": "#A1D490",
-      "categories": [
-        "Location"
-      ],
-      "connector_l": [
-        {
-          "id": "location",
-          "name": "Location",
-          "type": "location",
-          "direction": "in"
-        },
-        {
-          "id": "region",
-          "name": "Region",
-          "type": "geo_region",
-          "direction": "in"
-        }
-      ],
-      "connector_r": [
-        {
-          "id": "result",
-          "name": "Result",
           "type": "boolean",
           "direction": "out"
         }
+      ],
+      "props": [
+        {
+          "propid": "value",
+          "name": "Value",
+          "type": "boolean",
+          "value": false
+        }
       ]
     },
     {
-      "type": "const_string",
+      "type": "constant_float",
+      "name": "Constant Float",
+      "color": "#94d1cc",
+      "categories": [
+        "Constant",
+        "Float"
+      ],
+      "connector_l": [],
+      "connector_r": [
+        {
+          "id": "out",
+          "name": "Out",
+          "type": "float",
+          "direction": "out"
+        }
+      ],
+      "props": [
+        {
+          "propid": "value",
+          "name": "Value",
+          "type": "float",
+          "value": 0.0
+        }
+      ]
+    },
+    {
+      "type": "constant_integer",
+      "name": "Constant Integer",
+      "color": "#94b4d1",
+      "categories": [
+        "Constant",
+        "Integer"
+      ],
+      "connector_l": [],
+      "connector_r": [
+        {
+          "id": "out",
+          "name": "Out",
+          "type": "integer",
+          "direction": "out"
+        }
+      ],
+      "props": [
+        {
+          "propid": "value",
+          "name": "Value",
+          "type": "integer",
+          "value": 0
+        }
+      ]
+    },
+    {
+      "type": "constant_location",
+      "name": "Constant Location",
+      "color": "#a3d194",
+      "categories": [
+        "Constant",
+        "Location"
+      ],
+      "connector_l": [],
+      "connector_r": [
+        {
+          "id": "out",
+          "name": "Out",
+          "type": "location",
+          "direction": "out"
+        }
+      ],
+      "props": [
+        {
+          "propid": "latitude",
+          "name": "Latitude",
+          "type": "float",
+          "value": 0.0
+        },
+        {
+          "propid": "longitude",
+          "name": "Longitude",
+          "type": "float",
+          "value": 0.0
+        }
+      ]
+    },
+    {
+      "type": "constant_resource",
+      "name": "Constant Resource",
+      "color": "#9f94d1",
+      "categories": [
+        "Constant",
+        "Resource"
+      ],
+      "connector_l": [],
+      "connector_r": [
+        {
+          "id": "out",
+          "name": "Out",
+          "type": "resource",
+          "direction": "out"
+        }
+      ],
+      "props": [
+        {
+          "propid": "json_value",
+          "name": "Json Value",
+          "type": "string",
+          "value": "{}"
+        }
+      ]
+    },
+    {
+      "type": "constant_string",
       "name": "Constant String",
-      "color": "#deb887",
+      "color": "#d1c094",
       "categories": [
         "Constant",
         "String"
@@ -513,23 +300,135 @@
       ]
     },
     {
-      "type": "fill_template_str",
-      "name": "Fill Template String",
-      "color": "#deb887",
+      "type": "continuous_executor",
+      "name": "Continuous Executor",
+      "color": "#9f94d1",
       "categories": [
-        "String"
+        "Execution"
       ],
       "connector_l": [
         {
-          "id": "template",
-          "name": "Template",
-          "type": "string",
+          "id": "in",
+          "name": "In",
+          "type": "resource",
           "direction": "in"
         },
         {
-          "id": "resource",
-          "name": "Resource",
+          "id": "continue",
+          "name": "Continue",
+          "type": "boolean",
+          "direction": "in"
+        }
+      ],
+      "connector_r": [
+        {
+          "id": "out",
+          "name": "Out",
           "type": "resource",
+          "direction": "out"
+        }
+      ],
+      "props": []
+    },
+    {
+      "type": "delete_from_resource",
+      "name": "Delete from Resource",
+      "color": "#9f94d1",
+      "categories": [
+        "Resource"
+      ],
+      "connector_l": [
+        {
+          "id": "in",
+          "name": "In",
+          "type": "resource",
+          "direction": "in"
+        },
+        {
+          "id": "key",
+          "name": "Key",
+          "type": "string",
+          "direction": "in"
+        }
+      ],
+      "connector_r": [
+        {
+          "id": "out",
+          "name": "Out",
+          "type": "resource",
+          "direction": "out"
+        }
+      ],
+      "props": []
+    },
+    {
+      "type": "divide_float",
+      "name": "Divide Float",
+      "color": "#94d1cc",
+      "categories": [
+        "Float"
+      ],
+      "connector_l": [
+        {
+          "id": "divident",
+          "name": "Divident",
+          "type": "float",
+          "direction": "in"
+        },
+        {
+          "id": "divisor",
+          "name": "Divisor",
+          "type": "float",
+          "direction": "in"
+        }
+      ],
+      "connector_r": [
+        {
+          "id": "quotient",
+          "name": "Quotient",
+          "type": "float",
+          "direction": "out"
+        }
+      ],
+      "props": []
+    },
+    {
+      "type": "float_to_resource",
+      "name": "Float to Resource",
+      "color": "#9f94d1",
+      "categories": [
+        "Conversion"
+      ],
+      "connector_l": [
+        {
+          "id": "in",
+          "name": "In",
+          "type": "float",
+          "direction": "in"
+        }
+      ],
+      "connector_r": [
+        {
+          "id": "out",
+          "name": "Out",
+          "type": "resource",
+          "direction": "out"
+        }
+      ],
+      "props": []
+    },
+    {
+      "type": "float_to_string",
+      "name": "Float to String",
+      "color": "#d1c094",
+      "categories": [
+        "Conversion"
+      ],
+      "connector_l": [
+        {
+          "id": "in",
+          "name": "In",
+          "type": "float",
           "direction": "in"
         }
       ],
@@ -540,20 +439,134 @@
           "type": "string",
           "direction": "out"
         }
-      ]
+      ],
+      "props": []
     },
     {
-      "type": "string_to_integer",
-      "name": "Convert String to Integer",
-      "color": "#deb887",
+      "type": "hash_sha256",
+      "name": "Hash SHA256",
+      "color": "#d194b6",
       "categories": [
-        "Conversion"
+        "Crypto"
       ],
       "connector_l": [
         {
           "id": "in",
           "name": "In",
+          "type": "bytes",
+          "direction": "in"
+        }
+      ],
+      "connector_r": [
+        {
+          "id": "out",
+          "name": "Out",
+          "type": "bytes",
+          "direction": "out"
+        }
+      ],
+      "props": []
+    },
+    {
+      "type": "input_file_single_line",
+      "name": "Input File Single Line",
+      "color": "#9f94d1",
+      "categories": [
+        "Input"
+      ],
+      "connector_l": [
+        {
+          "id": "line_no",
+          "name": "Line Number",
+          "type": "integer",
+          "direction": "in"
+        }
+      ],
+      "connector_r": [
+        {
+          "id": "out",
+          "name": "Out",
           "type": "string",
+          "direction": "out"
+        }
+      ],
+      "props": [
+        {
+          "propid": "file",
+          "name": "File",
+          "type": "string",
+          "value": ""
+        },
+        {
+          "propid": "default_line",
+          "name": "Default Line",
+          "type": "string",
+          "value": ""
+        }
+      ]
+    },
+    {
+      "type": "input_http_get",
+      "name": "Input Http Get",
+      "color": "#9f94d1",
+      "categories": [
+        "Input"
+      ],
+      "connector_l": [],
+      "connector_r": [
+        {
+          "id": "out",
+          "name": "Out",
+          "type": "resource",
+          "direction": "out"
+        }
+      ],
+      "props": [
+        {
+          "propid": "target",
+          "name": "Target",
+          "type": "string",
+          "value": ""
+        }
+      ]
+    },
+    {
+      "type": "input_http_listen",
+      "name": "Input Http Listen",
+      "color": "#9f94d1",
+      "categories": [
+        "Input"
+      ],
+      "connector_l": [],
+      "connector_r": [
+        {
+          "id": "out",
+          "name": "Out",
+          "type": "resource",
+          "direction": "out"
+        }
+      ],
+      "props": [
+        {
+          "propid": "endpoint_name",
+          "name": "Endpoint Name",
+          "type": "string",
+          "value": ""
+        }
+      ]
+    },
+    {
+      "type": "integer_interval_executor",
+      "name": "Integer Interval Executor",
+      "color": "#94b4d1",
+      "categories": [
+        "Execution"
+      ],
+      "connector_l": [
+        {
+          "id": "in",
+          "name": "In",
+          "type": "integer",
           "direction": "in"
         }
       ],
@@ -564,44 +577,348 @@
           "type": "integer",
           "direction": "out"
         }
+      ],
+      "props": [
+        {
+          "propid": "interval",
+          "name": "Interval (sec)",
+          "type": "integer",
+          "value": 5
+        }
       ]
     },
     {
-      "type": "eq_string",
-      "name": "Check String Equals",
-      "color": "#deb887",
+      "type": "integer_is_greater",
+      "name": "Integer Is Greater",
+      "color": "#94b4d1",
       "categories": [
-        "String"
+        "Math"
       ],
       "connector_l": [
         {
-          "id": "val1",
-          "name": "Value 1",
-          "type": "string",
+          "id": "in1",
+          "name": "In 1",
+          "type": "integer",
           "direction": "in"
         },
         {
-          "id": "val2",
-          "name": "Value 2",
-          "type": "string",
+          "id": "in2",
+          "name": "In 2",
+          "type": "integer",
           "direction": "in"
         }
       ],
       "connector_r": [
         {
-          "id": "result",
-          "name": "Result",
+          "id": "out",
+          "name": "In 1 > In 2",
           "type": "boolean",
           "direction": "out"
+        }
+      ],
+      "props": []
+    },
+    {
+      "type": "integer_to_resource",
+      "name": "Integer to Resource",
+      "color": "#9f94d1",
+      "categories": [
+        "Conversion"
+      ],
+      "connector_l": [
+        {
+          "id": "in",
+          "name": "In",
+          "type": "integer",
+          "direction": "in"
+        }
+      ],
+      "connector_r": [
+        {
+          "id": "out",
+          "name": "Out",
+          "type": "resource",
+          "direction": "out"
+        }
+      ],
+      "props": []
+    },
+    {
+      "type": "integer_to_string",
+      "name": "Integer to String",
+      "color": "#d1c094",
+      "categories": [
+        "Conversion"
+      ],
+      "connector_l": [
+        {
+          "id": "in",
+          "name": "In",
+          "type": "integer",
+          "direction": "in"
+        }
+      ],
+      "connector_r": [
+        {
+          "id": "out",
+          "name": "Out",
+          "type": "string",
+          "direction": "out"
+        }
+      ],
+      "props": []
+    },
+    {
+      "type": "location_to_resource",
+      "name": "Location to Resource",
+      "color": "#9f94d1",
+      "categories": [
+        "Conversion"
+      ],
+      "connector_l": [
+        {
+          "id": "in",
+          "name": "In",
+          "type": "location",
+          "direction": "in"
+        }
+      ],
+      "connector_r": [
+        {
+          "id": "out",
+          "name": "Out",
+          "type": "resource",
+          "direction": "out"
+        }
+      ],
+      "props": [
+        {
+          "propid": "lat_key",
+          "name": "Latitude Key",
+          "type": "string",
+          "value": "lat"
+        },
+        {
+          "propid": "lng_key",
+          "name": "Longitude Key",
+          "type": "string",
+          "value": "lng"
         }
       ]
     },
     {
-      "type": "const_integer",
-      "name": "Constant Integer",
-      "color": "#deb887",
+      "type": "mean_over_time",
+      "name": "Mean over Time",
+      "color": "#94d1cc",
       "categories": [
-        "Constant",
+        "Float"
+      ],
+      "connector_l": [
+        {
+          "id": "in",
+          "name": "In",
+          "type": "float",
+          "direction": "in"
+        }
+      ],
+      "connector_r": [
+        {
+          "id": "out",
+          "name": "Out",
+          "type": "float",
+          "direction": "out"
+        },
+        {
+          "id": "nr_of_values",
+          "name": "Nr of Values",
+          "type": "integer",
+          "direction": "out"
+        }
+      ],
+      "props": [
+        {
+          "propid": "seconds",
+          "name": "Seconds",
+          "type": "float",
+          "value": 10.0
+        }
+      ]
+    },
+    {
+      "type": "output_file_string",
+      "name": "Output File",
+      "color": "#9f94d1",
+      "categories": [
+        "Output"
+      ],
+      "connector_l": [
+        {
+          "id": "in",
+          "name": "In",
+          "type": "string",
+          "direction": "in"
+        }
+      ],
+      "connector_r": [],
+      "props": [
+        {
+          "propid": "file",
+          "name": "File",
+          "type": "string",
+          "value": "log.txt"
+        }
+      ]
+    },
+    {
+      "type": "output_http_listen",
+      "name": "Output Http Listen",
+      "color": "#9f94d1",
+      "categories": [
+        "Output"
+      ],
+      "connector_l": [
+        {
+          "id": "in",
+          "name": "In",
+          "type": "resource",
+          "direction": "in"
+        }
+      ],
+      "connector_r": [],
+      "props": [
+        {
+          "propid": "endpoint_name",
+          "name": "Endpoint Name",
+          "type": "string",
+          "value": ""
+        }
+      ]
+    },
+    {
+      "type": "output_http_post",
+      "name": "Output Http Post",
+      "color": "#9f94d1",
+      "categories": [
+        "Output"
+      ],
+      "connector_l": [
+        {
+          "id": "in",
+          "name": "In",
+          "type": "resource",
+          "direction": "in"
+        }
+      ],
+      "connector_r": [],
+      "props": [
+        {
+          "propid": "destination",
+          "name": "Destination",
+          "type": "string",
+          "value": ""
+        }
+      ]
+    },
+    {
+      "type": "put_in_resource",
+      "name": "Put in Resource",
+      "color": "#9f94d1",
+      "categories": [
+        "Resource"
+      ],
+      "connector_l": [
+        {
+          "id": "in",
+          "name": "In",
+          "type": "resource",
+          "direction": "in"
+        },
+        {
+          "id": "key",
+          "name": "Key",
+          "type": "string",
+          "direction": "in"
+        },
+        {
+          "id": "to_insert",
+          "name": "to Insert",
+          "type": "resource",
+          "direction": "in"
+        }
+      ],
+      "connector_r": [
+        {
+          "id": "out",
+          "name": "Out",
+          "type": "resource",
+          "direction": "out"
+        }
+      ],
+      "props": []
+    },
+    {
+      "type": "raise_error",
+      "name": "Raise Error",
+      "color": "#9f94d1",
+      "categories": [
+        "Error"
+      ],
+      "connector_l": [],
+      "connector_r": [
+        {
+          "id": "out",
+          "name": "Out",
+          "type": "resource",
+          "direction": "out"
+        }
+      ],
+      "props": [
+        {
+          "propid": "message",
+          "name": "Message",
+          "type": "string",
+          "value": "Error"
+        }
+      ]
+    },
+    {
+      "type": "random_float",
+      "name": "Random Float",
+      "color": "#94d1cc",
+      "categories": [
+        "Random",
+        "Float"
+      ],
+      "connector_l": [],
+      "connector_r": [
+        {
+          "id": "out",
+          "name": "Out",
+          "type": "float",
+          "direction": "out"
+        }
+      ],
+      "props": [
+        {
+          "propid": "min",
+          "name": "Min",
+          "type": "float",
+          "value": 0.0
+        },
+        {
+          "propid": "max",
+          "name": "Max",
+          "type": "float",
+          "value": 1.0
+        }
+      ]
+    },
+    {
+      "type": "random_integer",
+      "name": "Random Integer",
+      "color": "#94b4d1",
+      "categories": [
+        "Random",
         "Integer"
       ],
       "connector_l": [],
@@ -615,77 +932,131 @@
       ],
       "props": [
         {
-          "propid": "value",
-          "name": "Value",
+          "propid": "min",
+          "name": "Min",
           "type": "integer",
           "value": 0
+        },
+        {
+          "propid": "max",
+          "name": "Max",
+          "type": "integer",
+          "value": 100
         }
       ]
     },
     {
-      "type": "compare_integer",
-      "name": "Compare Integers",
-      "color": "#deb887",
+      "type": "random_location",
+      "name": "Random Location",
+      "color": "#a3d194",
       "categories": [
-        "Integer"
+        "Random",
+        "Location"
+      ],
+      "connector_l": [],
+      "connector_r": [
+        {
+          "id": "out",
+          "name": "Out",
+          "type": "location",
+          "direction": "out"
+        }
+      ],
+      "props": []
+    },
+    {
+      "type": "resource_execution_delay",
+      "name": "Resource Execution Delay",
+      "color": "#9f94d1",
+      "categories": [
+        "Execution"
       ],
       "connector_l": [
         {
-          "id": "val1",
-          "name": "Value 1",
-          "type": "integer",
+          "id": "in",
+          "name": "In",
+          "type": "resource",
           "direction": "in"
         },
         {
-          "id": "val2",
-          "name": "Value 2",
-          "type": "integer",
+          "id": "delay",
+          "name": "Delay",
+          "type": "float",
           "direction": "in"
         }
       ],
       "connector_r": [
         {
-          "id": "result",
-          "name": "Result",
-          "type": "boolean",
+          "id": "out",
+          "name": "Out",
+          "type": "resource",
           "direction": "out"
         }
-      ]
+      ],
+      "props": []
     },
     {
-      "type": "has_changed_bool",
-      "name": "Has Changed (Boolean)",
-      "color": "#deb887",
+      "type": "resource_interval_executor",
+      "name": "Resource Interval Executor",
+      "color": "#9f94d1",
+      "categories": [
+        "Execution"
+      ],
       "connector_l": [
         {
-          "id": "val",
-          "name": "Value",
-          "type": "boolean",
-          "direction": "in"
-        },
-        {
-          "id": "context",
-          "name": "Context",
-          "type": "string",
+          "id": "in",
+          "name": "In",
+          "type": "resource",
           "direction": "in"
         }
       ],
       "connector_r": [
         {
-          "id": "has_changed",
-          "name": "Has changed",
-          "type": "boolean",
+          "id": "out",
+          "name": "Out",
+          "type": "resource",
           "direction": "out"
+        }
+      ],
+      "props": [
+        {
+          "propid": "interval",
+          "name": "Interval (sec)",
+          "type": "integer",
+          "value": 5
         }
       ]
     },
     {
-      "type": "convert_resource_to_location",
-      "name": "Convert Resource to Location",
-      "color": "#A1D490",
+      "type": "resource_to_float",
+      "name": "Resource to Float",
+      "color": "#94d1cc",
       "categories": [
-        "Location",
-        "Resource",
+        "Conversion"
+      ],
+      "connector_l": [
+        {
+          "id": "in",
+          "name": "In",
+          "type": "resource",
+          "direction": "in"
+        }
+      ],
+      "connector_r": [
+        {
+          "id": "out",
+          "name": "Out",
+          "type": "float",
+          "direction": "out"
+        }
+      ],
+      "props": []
+    },
+    {
+      "type": "resource_to_location",
+      "name": "Resource to Location",
+      "color": "#a3d194",
+      "categories": [
         "Conversion"
       ],
       "connector_l": [
@@ -703,22 +1074,147 @@
           "type": "location",
           "direction": "out"
         }
+      ],
+      "props": [
+        {
+          "propid": "lat_key",
+          "name": "Latitude Key",
+          "type": "string",
+          "value": "lat"
+        },
+        {
+          "propid": "lng_key",
+          "name": "Longitude Key",
+          "type": "string",
+          "value": "lng"
+        }
       ]
     },
     {
-      "type": "convert_boolean_to_resource",
-      "name": "Convert Boolean to Resource",
-      "color": "#deb887",
+      "type": "resource_to_string",
+      "name": "Resource to String",
+      "color": "#d1c094",
       "categories": [
-        "Boolean",
-        "Resource",
         "Conversion"
       ],
       "connector_l": [
         {
           "id": "in",
           "name": "In",
-          "type": "boolean",
+          "type": "resource",
+          "direction": "in"
+        }
+      ],
+      "connector_r": [
+        {
+          "id": "out",
+          "name": "Out",
+          "type": "string",
+          "direction": "out"
+        }
+      ],
+      "props": []
+    },
+    {
+      "type": "round_count",
+      "name": "Round Count",
+      "color": "#94b4d1",
+      "categories": [
+        "Integer"
+      ],
+      "connector_l": [],
+      "connector_r": [
+        {
+          "id": "out",
+          "name": "Out",
+          "type": "integer",
+          "direction": "out"
+        }
+      ],
+      "props": []
+    },
+    {
+      "type": "round_float",
+      "name": "Round Float",
+      "color": "#94d1cc",
+      "categories": [
+        "Float"
+      ],
+      "connector_l": [
+        {
+          "id": "in",
+          "name": "In",
+          "type": "float",
+          "direction": "in"
+        }
+      ],
+      "connector_r": [
+        {
+          "id": "out",
+          "name": "Out",
+          "type": "float",
+          "direction": "out"
+        }
+      ],
+      "props": [
+        {
+          "propid": "digits",
+          "name": "Decimal Digits",
+          "type": "integer",
+          "value": 0
+        }
+      ]
+    },
+    {
+      "type": "round_location",
+      "name": "Round Location",
+      "color": "#a3d194",
+      "categories": [
+        "Location"
+      ],
+      "connector_l": [
+        {
+          "id": "in",
+          "name": "In",
+          "type": "location",
+          "direction": "in"
+        }
+      ],
+      "connector_r": [
+        {
+          "id": "out",
+          "name": "Out",
+          "type": "location",
+          "direction": "out"
+        }
+      ],
+      "props": [
+        {
+          "propid": "digits",
+          "name": "Decimal Digits",
+          "type": "integer",
+          "value": 0
+        }
+      ]
+    },
+    {
+      "type": "select_in_resource",
+      "name": "Select in Resource",
+      "color": "#9f94d1",
+      "categories": [
+        "Resource"
+      ],
+      "connector_l": [
+        {
+          "id": "in",
+          "name": "In",
+          "type": "resource",
+          "direction": "in"
+        },
+        {
+          "id": "selector",
+          "name": "Selector",
+          "type": "string",
           "direction": "in"
         }
       ],
@@ -729,15 +1225,163 @@
           "type": "resource",
           "direction": "out"
         }
-      ]
+      ],
+      "props": []
     },
     {
-      "type": "convert_string_to_resource",
-      "name": "Convert String to Resource",
-      "color": "#deb887",
+      "type": "string_concat",
+      "name": "String Concatenate",
+      "color": "#d1c094",
       "categories": [
-        "String",
-        "Resource",
+        "String"
+      ],
+      "connector_l": [
+        {
+          "id": "value1",
+          "name": "Value 1",
+          "type": "string",
+          "direction": "in"
+        },
+        {
+          "id": "value2",
+          "name": "Value 2",
+          "type": "string",
+          "direction": "in"
+        }
+      ],
+      "connector_r": [
+        {
+          "id": "result",
+          "name": "Result",
+          "type": "string",
+          "direction": "out"
+        }
+      ],
+      "props": []
+    },
+    {
+      "type": "string_equals",
+      "name": "String Equals",
+      "color": "#d1c094",
+      "categories": [
+        "String"
+      ],
+      "connector_l": [
+        {
+          "id": "value1",
+          "name": "Value 1",
+          "type": "string",
+          "direction": "in"
+        },
+        {
+          "id": "value2",
+          "name": "Value 2",
+          "type": "string",
+          "direction": "in"
+        }
+      ],
+      "connector_r": [
+        {
+          "id": "result",
+          "name": "Result",
+          "type": "boolean",
+          "direction": "out"
+        }
+      ],
+      "props": []
+    },
+    {
+      "type": "string_splice",
+      "name": "String Splice",
+      "color": "#d1c094",
+      "categories": [
+        "String"
+      ],
+      "connector_l": [
+        {
+          "id": "in",
+          "name": "In",
+          "type": "string",
+          "direction": "in"
+        },
+        {
+          "id": "start",
+          "name": "Start",
+          "type": "integer",
+          "direction": "in"
+        },
+        {
+          "id": "end",
+          "name": "End",
+          "type": "integer",
+          "direction": "in"
+        }
+      ],
+      "connector_r": [
+        {
+          "id": "result",
+          "name": "Result",
+          "type": "string",
+          "direction": "out"
+        }
+      ],
+      "props": []
+    },
+    {
+      "type": "string_to_bytes",
+      "name": "String to Bytes",
+      "color": "#d194b6",
+      "categories": [
+        "Conversion"
+      ],
+      "connector_l": [
+        {
+          "id": "in",
+          "name": "In",
+          "type": "string",
+          "direction": "in"
+        }
+      ],
+      "connector_r": [
+        {
+          "id": "out",
+          "name": "Out",
+          "type": "bytes",
+          "direction": "out"
+        }
+      ],
+      "props": []
+    },
+    {
+      "type": "string_to_integer",
+      "name": "String to Integer",
+      "color": "#94b4d1",
+      "categories": [
+        "Conversion"
+      ],
+      "connector_l": [
+        {
+          "id": "in",
+          "name": "In",
+          "type": "string",
+          "direction": "in"
+        }
+      ],
+      "connector_r": [
+        {
+          "id": "out",
+          "name": "Out",
+          "type": "integer",
+          "direction": "out"
+        }
+      ],
+      "props": []
+    },
+    {
+      "type": "string_to_resource",
+      "name": "String to Resource",
+      "color": "#9f94d1",
+      "categories": [
         "Conversion"
       ],
       "connector_l": [
@@ -755,48 +1399,13 @@
           "type": "resource",
           "direction": "out"
         }
-      ]
+      ],
+      "props": []
     },
     {
-      "type": "between_integer",
-      "name": "Integer is between",
-      "color": "#deb887",
-      "categories": [
-        "Integer"
-      ],
-      "connector_l": [
-        {
-          "id": "min",
-          "name": "Minimum",
-          "type": "integer",
-          "direction": "in"
-        },
-        {
-          "id": "val",
-          "name": "Value",
-          "type": "integer",
-          "direction": "in"
-        },
-        {
-          "id": "max",
-          "name": "Maximum",
-          "type": "integer",
-          "direction": "in"
-        }
-      ],
-      "connector_r": [
-        {
-          "id": "result",
-          "name": "Result",
-          "type": "boolean",
-          "direction": "out"
-        }
-      ]
-    },
-    {
-      "type": "time_of_day",
-      "name": "Current time of day",
-      "color": "#deb887",
+      "type": "timestamp_current",
+      "name": "Timestamp Current",
+      "color": "#94d1cc",
       "categories": [
         "Time"
       ],
@@ -805,158 +1414,11 @@
         {
           "id": "out",
           "name": "Out",
-          "type": "integer",
-          "direction": "out"
-        }
-      ]
-    },
-    {
-      "type": "const_bool",
-      "name": "Constant Boolean",
-      "color": "#deb887",
-      "categories": [
-        "Boolean",
-        "Constant"
-      ],
-      "connector_l": [],
-      "connector_r": [
-        {
-          "id": "out",
-          "name": "Out",
-          "type": "boolean",
-          "direction": "out"
-        }
-      ],
-      "props": [
-        {
-          "propid": "value",
-          "name": "Value",
-          "type": "boolean",
-          "value": false
-        }
-      ]
-    },
-    {
-      "type": "and_bool",
-      "name": "And",
-      "color": "#deb887",
-      "categories": [
-        "Boolean"
-      ],
-      "connector_l": [
-        {
-          "id": "val1",
-          "name": "Value 1",
-          "type": "boolean",
-          "direction": "in"
-        },
-        {
-          "id": "val2",
-          "name": "Value 2",
-          "type": "boolean",
-          "direction": "in"
-        }
-      ],
-      "connector_r": [
-        {
-          "id": "result",
-          "name": "Result",
-          "type": "boolean",
-          "direction": "out"
-        }
-      ]
-    },
-    {
-      "type": "not_bool",
-      "name": "Not",
-      "color": "#deb887",
-      "categories": [
-        "Boolean"
-      ],
-      "connector_l": [
-        {
-          "id": "in",
-          "name": "In",
-          "type": "boolean",
-          "direction": "in"
-        }
-      ],
-      "connector_r": [
-        {
-          "id": "out",
-          "name": "Out",
-          "type": "boolean",
-          "direction": "out"
-        }
-      ]
-    },
-    {
-      "type": "const_resource",
-      "name": "Constant Resource",
-      "color": "#A58DD2",
-      "categories": [
-        "Resource",
-        "Constant"
-      ],
-      "connector_l": [],
-      "connector_r": [
-        {
-          "id": "out",
-          "name": "Out",
-          "type": "resource",
-          "direction": "out"
-        }
-      ]
-    },
-    {
-      "type": "const_location",
-      "name": "Constant Location",
-      "color": "#A1D490",
-      "categories": [
-        "Location",
-        "Constant"
-      ],
-      "connector_l": [],
-      "connector_r": [
-        {
-          "id": "out",
-          "name": "Out",
-          "type": "location",
-          "direction": "out"
-        }
-      ],
-      "props": [
-        {
-          "propid": "lat",
-          "name": "Latitude",
           "type": "float",
-          "value": 0
-        },
-        {
-          "propid": "lng",
-          "name": "Longitude",
-          "type": "float",
-          "value": 0
-        }
-      ]
-    },
-    {
-      "type": "const_geo_region",
-      "name": "Constant Geographical Region",
-      "color": "#A1D490",
-      "categories": [
-        "Location",
-        "Constant"
-      ],
-      "connector_l": [],
-      "connector_r": [
-        {
-          "id": "out",
-          "name": "Out",
-          "type": "geo_region",
           "direction": "out"
         }
-      ]
+      ],
+      "props": []
     }
   ]
 }
