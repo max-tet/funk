@@ -29,6 +29,7 @@ var funkInstance = {
                 lineWidth: 4
             },
             maxConnections: connector.maxConnections,
+            enabled: !this.isReadOnly,
             scope: connector.type,
             cssClass: (connector.direction == 'in') ? 'funk-endpoint-in' : 'funk-endpoint-out',
             anchor: (isLeft) ? [0, 0.5, -1, 0, -7, 0] : [1, 0.5, 1, 0, 7, 0]
