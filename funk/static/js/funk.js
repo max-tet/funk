@@ -4,6 +4,8 @@ var funkInstance = {
     graphname: undefined,
     datatypes: {},
     nodetypes: {},
+    isReadOnly: false,
+    isActive: true,
     endpointArgsFactory: function (isLeft, connector, type) {
         endpointArgs = {
             endpoint: 'Dot',
@@ -375,10 +377,14 @@ funkCanvas = new Vue({
             $.get('/api/graph/' + this.funkInstance.graphname)
                 .done(function (data) {
                     this_.initJsPlumbInstance();
+                    try {this_.funkInstance.isReadOnly = data.meta.isReadOnly;} catch(err) {}
+                    try {this_.funkInstance.isActive = data.meta.isActive;} catch(err) {}
+
                     $.each(data.nodes, function (i, node) {
                         var newNode = $.extend({ephemeral: {isSelected: false, isHovered: false}}, node);
                         this_.nodes.push(newNode);
                     });
+
                     this_.$nextTick(function () {
                         $.each(data.connections, function (i, connection) {
                             connector_id_out = 'funk-connector-' + connection.out_node + '-' + connection.out_connector;
@@ -397,7 +403,14 @@ funkCanvas = new Vue({
                 });
         },
         serializeGraph: function () {
-            var outJson = {nodes: [], connections: []};
+            var outJson = {
+                meta: {
+                    isReadOnly: this.funkInstance.isReadOnly,
+                    isActive: this.funkInstance.isActive
+                },
+                nodes: [],
+                connections: []
+            };
             $.each(this.nodes, function (i, node) {
                 var outNode = $.extend({}, node);
                 delete outNode.ephemeral;
