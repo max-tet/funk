@@ -164,6 +164,25 @@ Vue.component('funk-save-button', {
     }
 });
 
+Vue.component('funk-active-button', {
+    template: '#funk-active-button-template',
+    data: function () {return {
+        funkInstance: funkInstance
+    };},
+    computed: {
+        text: function () {
+            if (this.funkInstance.isActive) {return 'Active';}
+            return 'Inactive';
+        }
+    },
+    methods: {
+        toggleActive: function () {
+            this.funkInstance.isActive = !this.funkInstance.isActive;
+            this.funkInstance.isDirty = true;
+        }
+    }
+});
+
 Vue.component('funk-node-properties-modal', {
     template: '#funk-node-properties-modal-template',
     props: ['node', 'isOpen'],

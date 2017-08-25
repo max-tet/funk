@@ -38,6 +38,7 @@
         <div id="funk-buttons" class="btn-group funk-control" role="group">
             <button id="funk-button-layout" type="button" class="btn btn-default"
                     v-on:click="layoutGraph">Layout</button>
+            <funk-active-button></funk-active-button>
             <funk-save-button></funk-save-button>
         </div>
         <div id="funk-zoom-buttons" class="btn-group funk-control" role="group">
@@ -176,6 +177,16 @@
     <script type="text/x-template" id="funk-save-button-template">
         <button id="funk-button-save" type="button" class="btn btn-default"
                 v-on:click="save" v-bind:disabled="!active">
+            {{text}}
+        </button>
+    </script>
+
+    <script type="text/x-template" id="funk-active-button-template">
+        <button id="funk-button-active"
+                type="button"
+                class="btn"
+                :class="{ 'btn-primary': funkInstance.isActive, 'btn-default': !funkInstance.isActive }"
+                v-on:click="toggleActive">
             {{text}}
         </button>
     </script>
