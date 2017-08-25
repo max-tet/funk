@@ -32,6 +32,7 @@
                 v-on:cancel="nodeUnderModification = ''"></funk-node-properties-modal>
         <funk-add-node ref="addNode"
                        :nodetypes="funkInstance.nodetypes"
+                       :funk-instance="funkInstance"
                        v-on:add-node="addNode"
                        v-on:text-input="loadDynamicNodetypes"></funk-add-node>
         <div id="funk-buttons" class="btn-group funk-control" role="group">
@@ -180,7 +181,7 @@
     </script>
 
     <script type="text/x-template" id="funk-add-node-template">
-        <div id="funk-add-node">
+        <div id="funk-add-node" v-if="!funkInstance.isReadOnly">
             <div id="funk-add-node-active" v-if="isActive">
                 <div id="funk-add-node-active-panel">
                     <input type="text"

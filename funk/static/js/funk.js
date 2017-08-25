@@ -195,7 +195,7 @@ Vue.component('funk-add-node', {
         selection: 0,
         completeList: []
     };},
-    props: ['nodetypes'],
+    props: ['nodetypes', 'funkInstance'],
     methods: {
         addNode: function (nodetype) {
             this.isActive = false;
