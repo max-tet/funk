@@ -4,6 +4,8 @@ var funkInstance = {
     graphname: undefined,
     datatypes: {},
     nodetypes: {},
+    isReadOnly: false,
+    isActive: true,
     endpointArgsFactory: function (isLeft, connector, type) {
         endpointArgs = {
             endpoint: 'Dot',
@@ -27,6 +29,7 @@ var funkInstance = {
                 lineWidth: 4
             },
             maxConnections: connector.maxConnections,
+            enabled: !this.isReadOnly,
             scope: connector.type,
             cssClass: (connector.direction == 'in') ? 'funk-endpoint-in' : 'funk-endpoint-out',
             anchor: (isLeft) ? [0, 0.5, -1, 0, -7, 0] : [1, 0.5, 1, 0, 7, 0]
@@ -161,6 +164,25 @@ Vue.component('funk-save-button', {
     }
 });
 
+Vue.component('funk-active-button', {
+    template: '#funk-active-button-template',
+    data: function () {return {
+        funkInstance: funkInstance
+    };},
+    computed: {
+        text: function () {
+            if (this.funkInstance.isActive) {return 'Active';}
+            return 'Inactive';
+        }
+    },
+    methods: {
+        toggleActive: function () {
+            this.funkInstance.isActive = !this.funkInstance.isActive;
+            this.funkInstance.isDirty = true;
+        }
+    }
+});
+
 Vue.component('funk-node-properties-modal', {
     template: '#funk-node-properties-modal-template',
     props: ['node', 'isOpen'],
@@ -192,7 +214,7 @@ Vue.component('funk-add-node', {
         selection: 0,
         completeList: []
     };},
-    props: ['nodetypes'],
+    props: ['nodetypes', 'funkInstance'],
     methods: {
         addNode: function (nodetype) {
             this.isActive = false;
@@ -375,10 +397,14 @@ funkCanvas = new Vue({
             $.get('/api/graph/' + this.funkInstance.graphname)
                 .done(function (data) {
                     this_.initJsPlumbInstance();
+                    try {this_.funkInstance.isReadOnly = data.meta.isReadOnly;} catch(err) {}
+                    try {this_.funkInstance.isActive = data.meta.isActive;} catch(err) {}
+
                     $.each(data.nodes, function (i, node) {
                         var newNode = $.extend({ephemeral: {isSelected: false, isHovered: false}}, node);
                         this_.nodes.push(newNode);
                     });
+
                     this_.$nextTick(function () {
                         $.each(data.connections, function (i, connection) {
                             connector_id_out = 'funk-connector-' + connection.out_node + '-' + connection.out_connector;
@@ -397,7 +423,14 @@ funkCanvas = new Vue({
                 });
         },
         serializeGraph: function () {
-            var outJson = {nodes: [], connections: []};
+            var outJson = {
+                meta: {
+                    isReadOnly: this.funkInstance.isReadOnly,
+                    isActive: this.funkInstance.isActive
+                },
+                nodes: [],
+                connections: []
+            };
             $.each(this.nodes, function (i, node) {
                 var outNode = $.extend({}, node);
                 delete outNode.ephemeral;
