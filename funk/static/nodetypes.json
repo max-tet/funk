@@ -870,6 +870,52 @@
       ]
     },
     {
+      "type": "output_null_resource",
+      "name": "Output Null",
+      "color": "#9f94d1",
+      "categories": [
+        "Output"
+      ],
+      "connector_l": [
+        {
+          "id": "in",
+          "name": "In",
+          "type": "resource",
+          "direction": "in",
+          "maxConnections": 1
+        }
+      ],
+      "connector_r": [],
+      "props": []
+    },
+    {
+      "type": "pass_resource",
+      "name": "Pass Resource",
+      "color": "#9f94d1",
+      "categories": [
+        "resource"
+      ],
+      "connector_l": [
+        {
+          "id": "in",
+          "name": "In",
+          "type": "resource",
+          "direction": "in",
+          "maxConnections": 1
+        }
+      ],
+      "connector_r": [
+        {
+          "id": "out",
+          "name": "Out",
+          "type": "resource",
+          "direction": "out",
+          "maxConnections": -1
+        }
+      ],
+      "props": []
+    },
+    {
       "type": "put_in_resource",
       "name": "Put in Resource",
       "color": "#9f94d1",
