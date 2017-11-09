@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-
 import argparse
 import json
 import re
@@ -189,7 +187,7 @@ def get_args():
     return parser.parse_args()
 
 
-if __name__ == '__main__':
+def run():
     args = get_args()
     if args.export:
         hooks.append(hook.make_export_hook(args.export))
