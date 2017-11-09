@@ -183,7 +183,7 @@ def layout_graph(graph_name):
 
 def get_args():
     parser = argparse.ArgumentParser()
-    parser.add_argument('-e', '--export', type=Path)
+    parser.add_argument('-e', '--export', type=Path, help='a folder to which flows are exported upon saving')
     return parser.parse_args()
 
 
